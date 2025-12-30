@@ -1,0 +1,112 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Dec 31, 2025, 12:30:47 AM
+    Author     : mahmoud
+*/
+.root {
+    -fx-font-family: "Spline Sans", "Segoe UI", sans-serif;
+}
+
+.bg-grid {
+    -fx-background-color: #121121;
+    -fx-background-image:
+        linear-gradient(from 0% 0% to 100% 0%, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.03) 2%, transparent 2%, transparent 100%),
+        linear-gradient(from 0% 0% to 0% 100%, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.03) 2%, transparent 2%, transparent 100%);
+    -fx-background-size: 40px 40px;
+}
+
+.settings-btn {
+    -fx-background-color: #1d1c26;
+    -fx-text-fill: white;
+    -fx-font-size: 18;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 44;
+    -fx-pref-height: 44;
+}
+.logo {
+    -fx-font-size: 100;
+    -fx-font-weight: 900;
+    -fx-text-fill: linear-gradient(to right, #5048e5, white);
+    -fx-effect: dropshadow(gaussian, rgba(80,72,229,0.7), 30, 0.4, 0, 0);
+}
+
+.title {
+    -fx-text-fill: white;
+    -fx-font-size: 26;
+    -fx-font-weight: bold;
+}
+
+.subtitle {
+    -fx-text-fill: #9f9eb7;
+}
+
+.card {
+    -fx-background-color: #1d1c26;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: #2a2938;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 30, 0.3, 0, 12);
+}
+
+.card:hover {
+    -fx-border-color: #5048e5;
+    -fx-effect: dropshadow(gaussian, rgba(80,72,229,0.5), 40, 0.4, 0, 12);
+    -fx-translate-y: -8;
+}
+
+
+.card-image {
+    -fx-pref-height: 200;
+    
+}
+
+.image-overlay {
+    -fx-background-color: linear-gradient(
+        to top,
+        rgba(29,28,38,0.95),
+        rgba(29,28,38,0.2),
+        transparent
+    );
+}
+
+.card-icon {
+    -fx-text-fill: #5048e5;
+    -fx-font-size: 20;
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+    -fx-margin: 15;
+}
+
+
+.card-content {
+    -fx-padding: 20;
+}
+
+.card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.card-desc {
+    -fx-text-fill: #9f9eb7;
+}
+
+.card-action {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.card:hover .card-action {
+    -fx-text-fill: #5048e5;
+}
+
+.footer {
+    -fx-text-fill: rgba(159,158,183,0.5);
+    -fx-font-size: 12;
+}
+
