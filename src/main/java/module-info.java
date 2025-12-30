@@ -4,4 +4,6 @@ module com.boredxgames.tictactoeclient {
 
     opens com.boredxgames.tictactoeclient to javafx.fxml;
     exports com.boredxgames.tictactoeclient;
+    exports com.boredxgames.tictactoeclient.presentation;
+    opens com.boredxgames.tictactoeclient.presentation to javafx.fxml;
 }
