@@ -1,4 +1,4 @@
-package com.boredxgames.tictactoeclient;
+package com.boredxgames.tictactoeclient.presentation;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
