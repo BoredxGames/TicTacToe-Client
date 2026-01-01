@@ -59,7 +59,7 @@
                 <version>0.0.8</version>
 
                 <configuration>
-                    <mainClass>com.mycompany.tictactoeserver.App</mainClass>
+                    <mainClass>com.boredxgames.tictactoeclient.App</mainClass>
                     <options>
                         <option>--enable-native-access=javafx.graphics</option>
                     </options>
