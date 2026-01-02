@@ -26,13 +26,6 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyclient</artifactId>
-            <version>10.9.1.0</version>
-        </dependency>
-
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -59,7 +52,7 @@
                 <version>0.0.8</version>
 
                 <configuration>
-                    <mainClass>com.mycompany.tictactoeserver.App</mainClass>
+                    <mainClass>com.boredxgames.tictactoeclient.App</mainClass>
                     <options>
                         <option>--enable-native-access=javafx.graphics</option>
                     </options>
