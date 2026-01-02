@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.boredxgames.tictactoeclient.presentation.SecondaryController"
+      spacing="16"
+      alignment="CENTER"
+      styleClass="primary-root">
+
+    <Label text="Secondary Theme Toggler"
+           styleClass="primary-title"/>
+
+    <HBox spacing="12" alignment="CENTER">
+        <Button text="Back" onAction="#back"/>
+        <Button text="Replace" onAction="#replace"/>
+        <Button text="Replace All" onAction="#clear"/>
+        <Button text="Push Primary" onAction="#pushPrimary"/>
+    </HBox>
+    <stylesheets>
+        <URL value="@../css/features/primary.css" />
+    </stylesheets>
+</VBox>
