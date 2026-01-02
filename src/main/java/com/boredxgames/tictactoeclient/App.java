@@ -13,18 +13,11 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
-    private static ResourceBundle currentBundle;
 
     @Override
     public void start(Stage stage) throws IOException {
-        Locale currentLocale = Locale.of("ar", "EG");
 
-      
-        currentBundle = ResourceBundle.getBundle("localization.message", currentLocale);
-
-        scene = new Scene(loadFXML("presentation/primary"), 640, 480);
-        
-        scene.getRoot().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        scene = new Scene(loadFXML("/fxml/primary"), 640, 480);
 
         stage.setScene(scene);
         stage.show();
@@ -37,9 +30,6 @@ public class App extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        
-        fxmlLoader.setResources(currentBundle);
-        
         return fxmlLoader.load();
     }
 
