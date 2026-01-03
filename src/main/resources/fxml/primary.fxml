@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0">
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.boredxgames.tictactoeclient.presentation.PrimaryController"
+      stylesheets="@../css/features/primary.css"
+      styleClass="primary-root"
+      spacing="16"
+      alignment="CENTER">
 
-</AnchorPane>
+   <Label text="Theme Toggler -- Navigation Tester"
+          styleClass="primary-title"/>
+
+   <HBox spacing="12" alignment="CENTER">
+      <Button text="Purple" onAction="#usePurple"/>
+      <Button text="Red" onAction="#useRed"/>
+      <Button text="Green" onAction="#useGreen"/>
+   </HBox>
+   <HBox spacing="12" alignment="CENTER">
+      <Button text="Push Secondary" onAction="#pushSecondary"/>
+      <Button text="Pop Me" onAction="#pop"/>
+      <Button text="Increment" onAction="#incrementCounter"/>
+      <Button text="Decrement" onAction="#decrementCounter"/>
+   </HBox>
+</VBox>
