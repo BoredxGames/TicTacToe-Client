@@ -8,18 +8,18 @@ package com.boredxgames.tictactoeclient.domain.model;
  *
  * @author Hazem
  */
-public class Player {
+public class AuthRequestEntity {
     private String id ;
     private String userName ;
     private int Score;
 
-    public Player(String id, String userName, int Score) {
+    public AuthRequestEntity(String id, String userName, int Score) {
         this.id = id;
         this.userName = userName;
         this.Score = Score;
     }
 
-    public Player() {
+    public AuthRequestEntity() {
     }
 
     public void setId(String id) {
@@ -44,6 +44,11 @@ public class Player {
 
     public int getScore() {
         return Score;
+    }
+
+    @Override
+    public String toString() {
+        return "AuthRequestEntity{" + "id=" + id + ", userName=" + userName + ", Score=" + Score + '}';
     }
     
 }
