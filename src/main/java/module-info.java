@@ -2,6 +2,7 @@ module com.boredxgames.tictactoeclient {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.json;
+    requires java.base;
     opens com.boredxgames.tictactoeclient to javafx.fxml;
     exports com.boredxgames.tictactoeclient;
     exports com.boredxgames.tictactoeclient.presentation;

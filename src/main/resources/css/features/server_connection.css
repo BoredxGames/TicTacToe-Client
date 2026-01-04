@@ -1,0 +1,110 @@
+.root-pane {
+    -fx-background-color: #0b0a15; /* Very dark background */
+    -fx-font-family: "Segoe UI", sans-serif; /* Fallback font */
+}
+
+.navbar {
+    -fx-background-color: transparent;
+    -fx-padding: 0 40;
+}
+
+.navbar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-content-display: LEFT;
+    -fx-graphic-text-gap: 10;
+}
+
+.nav-link {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.logo-icon-bg, .user-profile-icon {
+    -fx-background-color: #2e2c49;
+    -fx-background-radius: 8;
+    -fx-padding: 5 10;
+}
+
+.user-profile-icon > Label, .logo-icon-bg > Label {
+    -fx-text-fill: #6366f1;
+    -fx-font-weight: bold;
+}
+
+.content-card {
+    -fx-background-color: #161523; /* Lighter than root */
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 20, 0, 0, 4);
+}
+
+.card-icon-bg {
+    -fx-background-color: #1f1e31;
+    -fx-padding: 15;
+    -fx-background-radius: 12;
+    -fx-min-width: 50;
+    -fx-min-height: 50;
+}
+
+.card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.card-subtitle {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 14px;
+}
+
+.back-link {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-translate-y: -40; 
+}
+
+.input-label {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.input-container {
+    -fx-background-color: #0b0a15; 
+    -fx-border-color: #2d2c45;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 12 15;
+}
+
+.transparent-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #4b5563;
+    -fx-font-size: 14px;
+    -fx-padding: 0; 
+}
+
+.connect-button {
+    -fx-background-color: linear-gradient(to right, #4f46e5, #4338ca); /* Purple gradient */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 20;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.connect-button:hover {
+    -fx-background-color: linear-gradient(to right, #4338ca, #3730a3);
+}
+
+.status-label {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+}
