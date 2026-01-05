@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane prefHeight="700" prefWidth="900" styleClass="root-pane" stylesheets="@../css/features/server_connection.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" 
+    fx:controller="com.boredxgames.tictactoeclient.presentation.PrimaryController">
+
+    <HBox alignment="CENTER_LEFT" prefHeight="70" spacing="10" styleClass="navbar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <Label styleClass="navbar-title" text="Tic-Tac-Toe Online">
+            <graphic>
+                <StackPane styleClass="logo-icon-bg"><Label text="::" textFill="white" /></StackPane>
+            </graphic>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+    </HBox>
+
+    <StackPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="70">
+        
+        <VBox alignment="CENTER" maxHeight="450" maxWidth="450" spacing="25" styleClass="content-card">
+            <padding>
+                <Insets bottom="40" left="40" right="40" top="40" />
+            </padding>
+
+            <StackPane styleClass="card-icon-bg">
+                <Label style="-fx-font-size: 20px;" text="🖥️" />
+            </StackPane>
+
+            <VBox alignment="CENTER" spacing="8">
+                <Label styleClass="card-title" text="Connect to Server" />
+                <Label styleClass="card-subtitle" text="Enter the host IP address to join the game lobby securely." textAlignment="CENTER" wrapText="true" />
+            </VBox>
+
+            <VBox alignment="CENTER_LEFT" spacing="10">
+                <Label styleClass="input-label" text="Server Address" />
+                
+                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="input-container">
+                    <Label text="📶" textFill="#6b7280" />
+                    <TextField fx:id="serverIpField" promptText="e.g. 192.168.1.1:8080" styleClass="transparent-field" HBox.hgrow="ALWAYS" />
+                </HBox>
+            </VBox>
+
+            <Button fx:id="connectButton" maxWidth="Infinity" styleClass="connect-button" text="Connect ➔" />
+
+            <HBox alignment="CENTER" spacing="5">
+                <Circle fill="#6b7280" radius="3" />
+                <Label fx:id="statusLabel" styleClass="status-label" text="Status: Waiting for input..." />
+            </HBox>
+        </VBox>
+    </StackPane>
+    
+    <Label alignment="CENTER" styleClass="back-link" text="← Back to Mode Selection" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="120" /> 
+
+</AnchorPane>

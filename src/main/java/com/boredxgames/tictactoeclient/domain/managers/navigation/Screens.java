@@ -3,8 +3,10 @@ package com.boredxgames.tictactoeclient.domain.managers.navigation;
 public enum Screens {
     PRIMARY("primary"),
     SECONDARY("secondary"),
-    SETTINGS("settings");
+    SETTINGS("settings"),
+    SERVER_CONNECTION("server_connection");
 
+   
 
     private final String name;
 

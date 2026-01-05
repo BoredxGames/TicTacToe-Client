@@ -7,10 +7,9 @@ import com.boredxgames.tictactoeclient.domain.managers.state.StatefulController;
 import com.boredxgames.tictactoeclient.domain.managers.state.records.PrimaryScreenRecord;
 import com.boredxgames.tictactoeclient.domain.managers.theme.Theme;
 import com.boredxgames.tictactoeclient.domain.managers.theme.ThemeManager;
-import javafx.fxml.Initializable;
-
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
 
 public class PrimaryController implements Initializable, StatefulController {
     private PrimaryScreenRecord primaryScreenState;
@@ -42,7 +41,7 @@ public class PrimaryController implements Initializable, StatefulController {
         NavigationManager.pop();
     }
     public void pushSecondary() {
-        NavigationManager.navigate(Screens.SECONDARY, NavigationAction.PUSH);
+        NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
     }
 
 
