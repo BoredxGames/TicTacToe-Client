@@ -1,17 +1,40 @@
+
+
 .root-pane {
-    -fx-background-color: #0b0a15; /* Very dark background */
-    -fx-font-family: "Segoe UI", sans-serif; /* Fallback font */
+
+    -fx-background-color:
+        radial-gradient(
+            center 50% 30%,
+            radius 80%,
+            #1c1b3d 0%,
+            #14132c 40%,
+            #0f0e22 65%,
+            #0b0a15 100%
+        );
+
+    -fx-font-family: "Segoe UI", "Inter", sans-serif;
+}
+
+
+.background-overlay {
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.04),
+            rgba(0,0,0,0.35)
+        );
 }
 
 .navbar {
     -fx-background-color: transparent;
-    -fx-padding: 0 40;
+    -fx-padding: 18 40;
 }
 
 .navbar-title {
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
+    -fx-letter-spacing: 0.5px;
     -fx-content-display: LEFT;
     -fx-graphic-text-gap: 10;
 }
@@ -23,31 +46,56 @@
     -fx-cursor: hand;
 }
 
-.logo-icon-bg, .user-profile-icon {
-    -fx-background-color: #2e2c49;
-    -fx-background-radius: 8;
-    -fx-padding: 5 10;
+.nav-link:hover {
+    -fx-text-fill: #e5e7eb;
 }
 
-.user-profile-icon > Label, .logo-icon-bg > Label {
+
+.logo-icon-bg,
+.user-profile-icon {
+    -fx-background-color: #2e2c49;
+    -fx-background-radius: 10;
+    -fx-padding: 6 12;
+}
+
+.logo-icon-bg > Label,
+.user-profile-icon > Label {
     -fx-text-fill: #6366f1;
     -fx-font-weight: bold;
 }
 
-.content-card {
-    -fx-background-color: #161523; /* Lighter than root */
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 20, 0, 0, 4);
+
+.back-link {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-translate-y: -40;
 }
+
+.back-link:hover {
+    -fx-text-fill: #e5e7eb;
+}
+
+
+.content-card {
+    -fx-background-color: rgba(22, 21, 35, 0.96);
+    -fx-background-radius: 22;
+    -fx-border-radius: 22;
+
+    -fx-effect:
+        dropshadow(gaussian, rgba(99,102,241,0.10), 45, 0, 0, 12),
+        dropshadow(three-pass-box, rgba(0,0,0,0.65), 30, 0, 0, 14);
+}
+
 
 .card-icon-bg {
     -fx-background-color: #1f1e31;
     -fx-padding: 15;
-    -fx-background-radius: 12;
-    -fx-min-width: 50;
-    -fx-min-height: 50;
+    -fx-background-radius: 14;
+    -fx-min-width: 52;
+    -fx-min-height: 52;
 }
+
 
 .card-title {
     -fx-text-fill: white;
@@ -60,12 +108,7 @@
     -fx-font-size: 14px;
 }
 
-.back-link {
-    -fx-text-fill: #9ca3af;
-    -fx-font-size: 13px;
-    -fx-cursor: hand;
-    -fx-translate-y: -40; 
-}
+
 
 .input-label {
     -fx-text-fill: white;
@@ -73,11 +116,12 @@
     -fx-font-weight: bold;
 }
 
+
 .input-container {
-    -fx-background-color: #0b0a15; 
-    -fx-border-color: #2d2c45;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
+    -fx-background-color: rgba(11,10,21,0.85);
+    -fx-border-color: rgba(99,102,241,0.25);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
     -fx-padding: 12 15;
 }
 
@@ -87,22 +131,30 @@
     -fx-text-fill: white;
     -fx-prompt-text-fill: #4b5563;
     -fx-font-size: 14px;
-    -fx-padding: 0; 
+    -fx-padding: 0;
 }
 
+
 .connect-button {
-    -fx-background-color: linear-gradient(to right, #4f46e5, #4338ca); /* Purple gradient */
+    -fx-background-color:
+        linear-gradient(to right, #4f46e5, #4338ca);
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-padding: 12 20;
-    -fx-background-radius: 10;
+    -fx-padding: 14 20;
+    -fx-background-radius: 12;
     -fx-cursor: hand;
+
+    -fx-effect:
+        dropshadow(gaussian, rgba(79,70,229,0.35), 22, 0, 0, 6);
 }
 
 .connect-button:hover {
-    -fx-background-color: linear-gradient(to right, #4338ca, #3730a3);
+    -fx-background-color:
+        linear-gradient(to right, #4338ca, #3730a3);
 }
+
+
 
 .status-label {
     -fx-text-fill: #6b7280;
