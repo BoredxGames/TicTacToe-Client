@@ -4,12 +4,14 @@
  */
 package com.boredxgames.tictactoeclient.domain.network;
 
+import com.boredxgames.tictactoeclient.domain.model.AuthResponseEntity;
 import com.boredxgames.tictactoeclient.domain.services.communication.Message;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
 import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -22,11 +24,16 @@ public class ServerConnectionManager {
     private DataInputStream dis;
     private DataOutputStream dos;
     private Thread th;
-    private Gson gson;
+    private Gson gson = new Gson();
+    private AuthResponseEntity player ;
+
+    public void setPlayer(AuthResponseEntity player) {
+        this.player = player;
+    }
     private static ServerConnectionManager instance;
-    
 
     private ServerConnectionManager() {
+
     }
 
     public static ServerConnectionManager getInstance() {
@@ -37,12 +44,15 @@ public class ServerConnectionManager {
         return instance;
     }
 
-    public void connect(String host, int port) throws IOException {
-        socket = new Socket(host, port);
-        dis = new DataInputStream(socket.getInputStream());
-        dos = new DataOutputStream(socket.getOutputStream());
-        th = new Thread(this::readMessages);
-        th.start();
+    public void connect(String host, int port  ) throws IOException {
+       InetAddress ip = InetAddress.getByName("localhost");
+            socket = new Socket(ip, port);
+            dis = new DataInputStream(socket.getInputStream());
+            dos = new DataOutputStream(socket.getOutputStream());
+            th = new Thread(this::readMessages);     
+            th.start();
+
+      
     }
 
     private void readMessages() {
@@ -50,23 +60,28 @@ public class ServerConnectionManager {
         while (!socket.isClosed()) {
             try {
                 String response = dis.readUTF();
-                Message message = gson.fromJson(response, Message.class);
+                System.out.println(response);
+               
+                
                 MessageRouter router = MessageRouter.getInstance();
-                router.navigateMessage(message);
+                router.navigateMessage(response);
             } catch (IOException ex) {
-                System.getLogger(ServerConnectionManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                close();
             }
 
         }
 
     }
 
-    public synchronized void sendMessage(Message msg) throws IOException {
-        String jsonMessage = null;
-        if (jsonMessage != null) {
-            dos.writeUTF(jsonMessage);
-        }
+    public synchronized void sendMessage(Message msg) {
+        try {
+        String jsonMessage = gson.toJson(msg);
+      
+        dos.writeUTF(jsonMessage);
         dos.flush();
+    } catch (IOException ex) {
+        ex.printStackTrace();
+    }
 
     }
 
@@ -85,6 +100,5 @@ public class ServerConnectionManager {
             System.getLogger(ServerConnectionManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
 
-       
     }
 }
