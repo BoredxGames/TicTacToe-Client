@@ -9,46 +9,43 @@ package com.boredxgames.tictactoeclient.domain.model;
  * @author Hazem
  */
 public class AuthRequestEntity {
-    private String id ;
     private String userName ;
-    private int Score;
+    private String password;
 
-    public AuthRequestEntity(String id, String userName, int Score) {
-        this.id = id;
+    public AuthRequestEntity(String userName, String password) {
         this.userName = userName;
-        this.Score = Score;
-    }
-
-    public AuthRequestEntity() {
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.password = password;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public void setScore(int Score) {
-        this.Score = Score;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getId() {
-        return id;
+    @Override
+    public String toString() {
+        return "AuthRequestEntity{" + "userName=" + userName + ", password=" + password + '}';
+    }
+
+    public AuthRequestEntity() {
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public int getScore() {
-        return Score;
+    public String getPassword() {
+        return password;
     }
-
-    @Override
-    public String toString() {
-        return "AuthRequestEntity{" + "id=" + id + ", userName=" + userName + ", Score=" + Score + '}';
+    
+    public static AuthRequestEntity createAuthEntity(String username , String password)
+    {
+        return new AuthRequestEntity(username , password );
     }
+   
+  
     
 }
