@@ -1,5 +1,8 @@
 package com.boredxgames.tictactoeclient.domain.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Tasneem
@@ -186,5 +189,17 @@ public class GameBoard {
             return EMPTY;
         }
         return board[row][col];
+    }
+    
+    public List<int[]> getAvailableMoves() {
+        List<int[]> availableMoves = new ArrayList<>();
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (board[i][j] == EMPTY) {
+                    availableMoves.add(new int[]{i, j});
+                }
+            }
+        }
+        return availableMoves;
     }
 }
