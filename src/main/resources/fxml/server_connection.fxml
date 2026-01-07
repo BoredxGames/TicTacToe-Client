@@ -2,61 +2,78 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane prefHeight="700" prefWidth="900" styleClass="root-pane" stylesheets="@../css/features/server_connection.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" 
-    fx:controller="com.boredxgames.tictactoeclient.presentation.PrimaryController">
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" styleClass="root-pane" stylesheets="@../css/features/server_connection.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boredxgames.tictactoeclient.presentation.Server_connectionController">
 
-    <HBox alignment="CENTER_LEFT" prefHeight="70" spacing="10" styleClass="navbar" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-        <Label styleClass="navbar-title" text="Tic-Tac-Toe Online">
-            <graphic>
-                <StackPane styleClass="logo-icon-bg"><Label text="::" textFill="white" /></StackPane>
-            </graphic>
-        </Label>
-        <Region HBox.hgrow="ALWAYS" />
+    <Pane fx:id="backgroundPane" opacity="0.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+    <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="10.0" styleClass="top-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets left="40.0" right="40.0" />
+        </padding>
+        <children>
+            <SVGPath content="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="#4f5ef7" scaleX="0.8" scaleY="0.8" />
+            <Label styleClass="logo-text" text="Tic-Tac-Toe Online" />
+            <Region HBox.hgrow="ALWAYS" />
+        </children>
     </HBox>
 
-    <StackPane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="70">
-        
-        <VBox alignment="CENTER" maxHeight="450" maxWidth="450" spacing="25" styleClass="content-card">
-            <padding>
-                <Insets bottom="40" left="40" right="40" top="40" />
-            </padding>
+    <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
+        <children>
+            <VBox fx:id="contentContainer" alignment="CENTER" spacing="30.0">
+                <children>
+                    <Label onMouseClicked="#onBackClicked" styleClass="back-link" text="← Back to Mode Selection" />
 
-            <StackPane styleClass="card-icon-bg">
-                <Label style="-fx-font-size: 20px;" text="🖥️" />
-            </StackPane>
+                    <VBox alignment="CENTER" maxWidth="450.0" spacing="25.0" styleClass="login-card">
+                        <padding>
+                            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+                        </padding>
+                        <children>
+                            
+                            <VBox alignment="CENTER" spacing="10.0">
+                                <children>
+                                    <StackPane style="-fx-background-color: rgba(79, 94, 247, 0.1); -fx-background-radius: 50; -fx-padding: 15;">
+                                        <SVGPath content="M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5zm0 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2z" fill="#4f5ef7" scaleX="1.2" scaleY="1.2" />
+                                    </StackPane>
+                                    <Label styleClass="card-title" text="Connect to Server" />
+                                    <Label styleClass="card-subtitle" text="Select a saved server or enter a new Host IP." textAlignment="CENTER" wrapText="true" />
+                                </children>
+                            </VBox>
 
-            <VBox alignment="CENTER" spacing="8">
-                <Label styleClass="card-title" text="Connect to Server" />
-                <Label styleClass="card-subtitle" text="Enter the host IP address to join the game lobby securely." textAlignment="CENTER" wrapText="true" />
+                            <VBox alignment="CENTER_LEFT" spacing="10.0">
+                                <children>
+                                    <Label styleClass="field-label" text="Server Address" />
+                                    
+                                    <HBox alignment="CENTER_LEFT" styleClass="input-field-container">
+                                        <children>
+                                            <SVGPath content="M15.354 2.646a.5.5 0 0 1 0 .708c-4.686 4.687-12.284 4.687-16.97 0a.5.5 0 1 1 .708-.708c4.294 4.294 11.266 4.294 15.56 0a.5.5 0 0 1 .708 0z" styleClass="input-icon" />
+                                            <ComboBox fx:id="ipComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Select or type IP..." styleClass="combo-box-transparent" HBox.hgrow="ALWAYS" />
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </VBox>
+
+                            <Button fx:id="connectButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#connect" styleClass="primary-button" text="Connect ➔" />
+
+                            <HBox alignment="CENTER" spacing="8.0">
+                                <children>
+                                    <SVGPath content="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" scaleX="0.8" scaleY="0.8" style="-fx-fill: #6b7280;" />
+                                    <Label fx:id="statusLabel" styleClass="footer-text" text="Status: Waiting for input..." />
+                                </children>
+                            </HBox>
+                        </children>
+                    </VBox>
+                </children>
             </VBox>
-
-            <VBox alignment="CENTER_LEFT" spacing="10">
-                <Label styleClass="input-label" text="Server Address" />
-                
-                <HBox alignment="CENTER_LEFT" spacing="10" styleClass="input-container">
-                    <Label text="📶" textFill="#6b7280" />
-                    <TextField fx:id="serverIpField" promptText="e.g. 192.168.1.1:8080" styleClass="transparent-field" HBox.hgrow="ALWAYS" />
-                </HBox>
-            </VBox>
-
-            <Button fx:id="connectButton" maxWidth="Infinity" styleClass="connect-button" text="Connect ➔" />
-
-            <HBox alignment="CENTER" spacing="5">
-                <Circle fill="#6b7280" radius="3" />
-                <Label fx:id="statusLabel" styleClass="status-label" text="Status: Waiting for input..." />
-            </HBox>
-        </VBox>
+        </children>
     </StackPane>
-    
-    <Label alignment="CENTER" styleClass="back-link" text="← Back to Mode Selection" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="120" /> 
-
 </AnchorPane>
