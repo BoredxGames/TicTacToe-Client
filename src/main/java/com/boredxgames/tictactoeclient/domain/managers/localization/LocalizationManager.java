@@ -10,7 +10,7 @@ public class LocalizationManager {
     private static ResourceBundle localizationBundle;
 
     static{
-        Languages initialLanguage = Languages.ARABIC;
+        Languages initialLanguage = Languages.ENGLISH;
         changeLocale(initialLanguage);
     }
 
@@ -31,4 +31,20 @@ public class LocalizationManager {
         localizationBundle = ResourceBundle.getBundle("assets/localization.message", locale);
     }
 
+    // Added: helper method to get the localized name of a language for UI (e.g., ComboBox)
+    public static String getLanguageName(Languages lang) {
+        ResourceBundle bundle = getLocalizationBundle();
+        if (lang == Languages.ENGLISH) {
+            return bundle.getString("language.english");
+        } else if (lang == Languages.ARABIC) {
+            return bundle.getString("language.arabic");
+        }
+        return "";
+    }
+
+    
+    // Added: helper method to get the other language (not currently selected)
+    public static Languages getOtherLanguage(Languages lang) {
+        return lang == Languages.ARABIC ? Languages.ENGLISH : Languages.ARABIC;
+    }
 }

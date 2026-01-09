@@ -30,12 +30,12 @@ public class PrimaryController implements Initializable, StatefulController {
 
 
     public void usePurple() {
-        ThemeManager.setTheme(Theme.PURPLE);
+        ThemeManager.setTheme(Theme.CYBER_PINK);
     }
     public void useGreen() {
-        ThemeManager.setTheme(Theme.GREEN);
+        ThemeManager.setTheme(Theme.CYBER_PINK);
     }
-    public void useRed() { ThemeManager.setTheme(Theme.RED); }
+    public void useRed() { ThemeManager.setTheme(Theme.TOXIC_GREEN); }
 
 
     public void pop() {

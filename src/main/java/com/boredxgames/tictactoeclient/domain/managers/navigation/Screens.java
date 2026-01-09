@@ -1,9 +1,9 @@
 package com.boredxgames.tictactoeclient.domain.managers.navigation;
 
 public enum Screens {
-    PRIMARY("primary"),
-    SECONDARY("secondary"),
-    SETTINGS("settings");
+    PRIMARY("SplashScreen"),
+    SECONDARY("GameModeScreen"),
+    SETTINGS("SettingsScreen");
 
 
     private final String name;
