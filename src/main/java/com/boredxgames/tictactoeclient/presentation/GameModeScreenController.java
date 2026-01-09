@@ -47,25 +47,19 @@ public class GameModeScreenController {
 
     private void setupActions() {
 
-        // عند الضغط على الكارد الخاص بالـ Offline
+        
         offlineCard.setOnMouseClicked(e -> {
             System.out.println("Offline Mode Selected");
-            // افتح شاشة Offline (لو عندك FXML جاهز)
            // NavigationManager.navigate(Screens.OFFLINE, NavigationAction.PUSH);
         });
 
-        // عند الضغط على الكارد الخاص بالـ Online
+        
         onlineCard.setOnMouseClicked(e -> {
             System.out.println("Online Mode Selected");
-            // افتح شاشة Online (لو عندك FXML جاهز)
+            
             //NavigationManager.navigate(Screens.ONLINE, NavigationAction.PUSH);
         });
 
-        // زرار الإعدادات ⚙
-//        settingsBtn.setOnAction(e -> {
-//            System.out.println("Settings Button Clicked");
-//            NavigationManager.navigate(Screens.SETTINGS, NavigationAction.PUSH);
-//        });
     }
 
     @FXML

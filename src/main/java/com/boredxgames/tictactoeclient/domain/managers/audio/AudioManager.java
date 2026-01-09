@@ -24,7 +24,7 @@ public class AudioManager {
             Media media = new Media(resource.toExternalForm());
             bgmPlayer = new MediaPlayer(media);
             bgmPlayer.setVolume(volume);
-            bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE); // تكرار مستمر
+            bgmPlayer.setCycleCount(MediaPlayer.INDEFINITE); 
             bgmPlayer.play();
         } catch (Exception e) {
             System.out.println("Failed to play music: " + e.getMessage());

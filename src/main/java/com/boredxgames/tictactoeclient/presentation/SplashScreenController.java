@@ -22,14 +22,14 @@ public class SplashScreenController {
     private ProgressBar progressBar;
     
     @FXML
-    private Label titleLabel; // Added for localization
+    private Label titleLabel; 
     @FXML
-    private Label subtitleLabel; // Added for localization
+    private Label subtitleLabel; 
 
     @FXML
     public void initialize() {
         
-        updateTexts(); // Added to set localized texts
+        updateTexts(); 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(50), e -> {
                     double progress = progressBar.getProgress();
@@ -50,9 +50,9 @@ public class SplashScreenController {
     }
     
     
-     // Added method to update title/subtitle based on current locale
+     
     private void updateTexts() {
-        ResourceBundle bundle = LocalizationManager.getLocalizationBundle(); // Get current language bundle
+        ResourceBundle bundle = LocalizationManager.getLocalizationBundle(); 
         if (titleLabel != null) {
             titleLabel.setText(bundle.getString("app.title"));
         }

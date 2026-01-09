@@ -53,39 +53,38 @@ public class SettingsScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // ===== Music Toggle =====
-        musicToggle.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-            if (isSelected) {
-                AudioManager.playMusic("/assets/sounds/bgm.mp3", musicSlider.getValue() / 100.0);
-            } else {
-                AudioManager.stopMusic();
-            }
-        });
-
-// ===== Music Toggle + Slider =====
-musicToggle.selectedProperty().addListener((obs, was, is) -> {
-    if (is) {
-        AudioManager.playMusic("/assets/sounds/bgm.mp3", musicSlider.getValue() / 100.0);
-    } else {
-        AudioManager.stopMusic();
-    }
-});
-
-musicSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-    AudioManager.setMusicVolume(newVal.doubleValue() / 100.0);
-});
-
-// ===== SFX Toggle + Slider =====
-sfxToggle.selectedProperty().addListener((obs, was, is) -> {
-    AudioManager.setSfxEnabled(is);
-    if (is) {
-        AudioManager.playSfx("/assets/sounds/bgm.mp3", sfxSlider.getValue() / 100.0); // مثال تجربة صوتية
-    }
-});
-
-sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-    AudioManager.setSfxVolume(newVal.doubleValue() / 100.0);
-});
+//        // ===== Music Toggle =====
+//        musicToggle.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+//            if (isSelected) {
+//                AudioManager.playMusic("/assets/sounds/bgm.mp3", musicSlider.getValue() / 100.0);
+//            } else {
+//                AudioManager.stopMusic();
+//            }
+//        });
+//
+//        musicToggle.selectedProperty().addListener((obs, was, is) -> {
+//            if (is) {
+//                AudioManager.playMusic("/assets/sounds/bgm.mp3", musicSlider.getValue() / 100.0);
+//            } else {
+//                AudioManager.stopMusic();
+//            }
+//        });
+//
+//        musicSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+//            AudioManager.setMusicVolume(newVal.doubleValue() / 100.0);
+//        });
+//
+//// ===== SFX Toggle + Slider =====
+//        sfxToggle.selectedProperty().addListener((obs, was, is) -> {
+//            AudioManager.setSfxEnabled(is);
+//            if (is) {
+//                AudioManager.playSfx("/assets/sounds/bgm.mp3", sfxSlider.getValue() / 100.0);
+//            }
+//        });
+//
+//        sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+//            AudioManager.setSfxVolume(newVal.doubleValue() / 100.0);
+//        });
 
         // ===== Languages =====
         languageCombo.getItems().addAll(
@@ -94,7 +93,6 @@ sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
         );
         languageCombo.getSelectionModel().selectFirst();
 
-        // ===== Listener لتغيير اللغة =====
         languageCombo.setOnAction(e -> {
             int selectedIndex = languageCombo.getSelectionModel().getSelectedIndex();
 
@@ -106,17 +104,16 @@ sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
                 LocalizationManager.changeLocale(Languages.ARABIC);
             }
 
-            // تحديث كل النصوص بعد تغيير اللغة
             updateTexts();
         });
 
-        // ===== Theme toggle group =====
+        // ===== Theme =====
         ToggleGroup themeGroup = new ToggleGroup();
         blueTheme.setToggleGroup(themeGroup);
         pinkTheme.setToggleGroup(themeGroup);
         greenTheme.setToggleGroup(themeGroup);
 
-        // ===== Set selected based on current theme =====
+        
         Theme current = ThemeManager.getTheme();
         if (current == Theme.NEON_BLUE) {
             blueTheme.setSelected(true);
@@ -126,7 +123,7 @@ sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             greenTheme.setSelected(true);
         }
 
-        // ===== Listener لتغيير الثيم فورًا =====
+        
         themeGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == blueTheme) {
                 ThemeManager.setTheme(Theme.NEON_BLUE);
@@ -137,7 +134,6 @@ sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             }
         });
 
-        // ===== Disable sliders when unchecked =====
         musicSlider.disableProperty().bind(musicToggle.selectedProperty().not());
         sfxSlider.disableProperty().bind(sfxToggle.selectedProperty().not());
 
@@ -147,7 +143,6 @@ sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             NavigationManager.pop();
         });
 
-        // ===== Initialize texts =====
         try {
             updateTexts();
         } catch (Exception e) {
@@ -155,7 +150,6 @@ sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
         }
 
     }
-    // ===== Helper Methods =====
 
     private String safeGet(ResourceBundle bundle, String key, String fallback) {
         try {
@@ -219,12 +213,6 @@ sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
                 safeGet(bundle, "language.arabic", "Arabic")
         );
 
-//        if (langCode.equals("ar")) {
-//            languageCombo.getSelectionModel().select(1);
-//        } else {
-//            languageCombo.getSelectionModel().select(0);
-//        }
-//        
         if ("ar".equals(LocalizationManager.getCurrentLocale().getLanguage())) {
             languageCombo.getSelectionModel().select(1); // Arabic
         } else {

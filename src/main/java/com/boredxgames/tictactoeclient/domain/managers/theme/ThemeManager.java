@@ -31,13 +31,7 @@ public final class ThemeManager {
         scene.getStylesheets().add(theme.getCssPath());
     }
 
-//    public static void applyThemeTo(Scene newScene) {
-//        // نحذف أي ثيم قديم
-//        newScene.getStylesheets().removeIf(s -> s.contains(commonPath));
-//        // نضيف الثيم الحالي
-//        newScene.getStylesheets().add(currentTheme.get().getCssPath());
-//    }
-// 
+ 
     
     public static void applyThemeTo(Scene newScene) {
     if (newScene == null) return;

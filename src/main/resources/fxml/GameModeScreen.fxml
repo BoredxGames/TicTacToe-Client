@@ -15,10 +15,10 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.boredxgames.tictactoeclient.presentation.GameModeScreenController">
 
-    <!-- الخلفية -->
+    
     <Pane styleClass="bg-grid" />
 
-    <!-- كل المحتوى -->
+    
     <VBox alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="40">
 
         <VBox alignment="CENTER" spacing="6">
@@ -29,7 +29,7 @@
 
         <FlowPane fx:id="cardsPane" alignment="CENTER" hgap="30" prefWrapLength="800" vgap="30">
 
-            <!-- Offline Card -->
+          
             <VBox fx:id="offlineCard" maxWidth="360" styleClass="card">
                 <StackPane styleClass="card-image">
                     <ImageView fitHeight="200" preserveRatio="true">
@@ -48,7 +48,7 @@
                 </VBox>
             </VBox>
 
-            <!-- Online Card -->
+            
             <VBox fx:id="onlineCard" maxWidth="360" styleClass="card">
                 <StackPane styleClass="card-image">
                     <ImageView fitHeight="200" preserveRatio="true" style="-fx-fit-width: 400;" styleClass="card-image">
@@ -72,7 +72,7 @@
         <Label fx:id="footerLabel" styleClass="footer" text="© BoredxGames" />
     </VBox>
 
-    <!-- زرار الإعدادات فوق كل شيء -->
+    
     <StackPane alignment="TOP_RIGHT" pickOnBounds="false">
         <padding>
             <Insets right="20" top="20" />
