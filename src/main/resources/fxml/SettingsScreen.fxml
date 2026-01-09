@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/25"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.boredxgames.tictactoeclient.presentation.SettingsScreenController"
+           stylesheets="@../css/features/settingsscreen.css">
+
+    <!-- Background -->
+    <Pane styleClass="settings-bg"/>
+
+    <VBox spacing="30" maxWidth="900" styleClass="settings-root">
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="settings-header">
+            <Button fx:id="backBtn" text="←" styleClass="back-btn"/>
+            <Label fx:id="settingsTitle" text="Settings" styleClass="settings-title"/>
+        </HBox>
+
+        <!-- Content -->
+        <VBox spacing="25" styleClass="settings-content">
+
+            <!-- Language Card -->
+            <VBox spacing="12" styleClass="settings-card">
+                <Label fx:id="languageTitle" text="Language" styleClass="card-title"/>
+                <Label fx:id="languageSubtitle" text="Interface Language" styleClass="card-subtitle"/>
+
+                <!-- فاضية وهنملاها من Controller -->
+                <ComboBox fx:id="languageCombo" styleClass="combo-box"/>
+            </VBox>
+
+            <!-- Theme Card -->
+            <VBox spacing="15" styleClass="settings-card">
+                <Label fx:id="themeTitle" text="Theme" styleClass="card-title"/>
+
+                <HBox spacing="20">
+                    <ToggleButton fx:id="blueTheme" text="Neon Blue" styleClass="theme-btn"/>
+                    <ToggleButton fx:id="pinkTheme" text="Cyber Pink" styleClass="theme-btn"/>
+                    <ToggleButton fx:id="greenTheme" text="Toxic Green" styleClass="theme-btn"/>
+                </HBox>
+            </VBox>
+
+            <!-- Audio Card -->
+            <VBox spacing="20" styleClass="settings-card">
+                <Label fx:id="audioTitle" text="Audio" styleClass="card-title"/>
+
+                <!-- Music -->
+                <VBox spacing="8">
+                    <HBox spacing="10">
+                        <Label fx:id="musicLabel" text="Music" styleClass="card-subtitle"/>
+                        <CheckBox fx:id="musicToggle" selected="true"/>
+                    </HBox>
+                    <Slider fx:id="musicSlider" value="70"/>
+                </VBox>
+
+                <!-- Sound Effects -->
+                <VBox spacing="8">
+                    <HBox spacing="10">
+                        <Label fx:id="sfxLabel" text="Sound Effects" styleClass="card-subtitle"/>
+                        <CheckBox fx:id="sfxToggle" selected="true"/>
+                    </HBox>
+                    <Slider fx:id="sfxSlider" value="60"/>
+                </VBox>
+            </VBox>
+
+            <!-- Footer -->
+            <Label fx:id="footerLabel" text="Tic-Tac-Toe v2.0.4 • Build 8821" styleClass="footer"/>
+
+        </VBox>
+    </VBox>
+</StackPane>

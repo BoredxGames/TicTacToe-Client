@@ -1,0 +1,105 @@
+.root {
+    -fx-font-family: "Spline Sans", "Segoe UI", sans-serif;
+}
+
+/* Background grid */
+.bg-grid {
+    -fx-background-color: -bg-main;
+    -fx-background-image:
+        linear-gradient(from 0% 0% to 100% 0%, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.03) 2%, transparent 2%, transparent 100%),
+        linear-gradient(from 0% 0% to 0% 100%, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.03) 2%, transparent 2%, transparent 100%);
+    -fx-background-size: 40px 40px;
+}
+
+/* Settings button */
+.settings-btn {
+    -fx-background-color: -bg-card;
+    -fx-text-fill: -text-main;
+    -fx-font-size: 18;
+    -fx-background-radius: 50%;
+    -fx-pref-width: 44;
+    -fx-pref-height: 44;
+}
+
+/* Logo */
+.logo {
+    -fx-font-size: 100;
+    -fx-font-weight: 900;
+    -fx-text-fill: linear-gradient(to right, -primary, -text-main);
+    -fx-effect: dropshadow(gaussian, -primary-soft, 30, 0.4, 0, 0);
+}
+
+/* Titles */
+.title {
+    -fx-text-fill: -text-main;
+    -fx-font-size: 26;
+    -fx-font-weight: bold;
+}
+
+.subtitle {
+    -fx-text-fill: -text-muted;
+}
+
+/* Cards */
+.card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 30, 0.3, 0, 12);
+}
+
+.card:hover {
+    -fx-border-color: -primary;
+    -fx-effect: dropshadow(gaussian, -primary-soft, 40, 0.4, 0, 12);
+    -fx-translate-y: -8;
+}
+
+.card-image {
+    -fx-pref-height: 200;
+}
+
+.image-overlay {
+    -fx-background-color: linear-gradient(
+        to top,
+        rgba(0,0,0,0.85),
+        rgba(0,0,0,0.2),
+        transparent
+    );
+}
+
+.card-icon {
+    -fx-text-fill: -primary;
+    -fx-font-size: 20;
+    -fx-background-color: rgba(0,0,0,0.5);
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+}
+
+.card-content {
+    -fx-padding: 20;
+}
+
+.card-title {
+    -fx-text-fill: -text-main;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.card-desc {
+    -fx-text-fill: -text-muted;
+}
+
+.card-action {
+    -fx-text-fill: -text-main;
+    -fx-font-weight: bold;
+}
+
+.card:hover .card-action {
+    -fx-text-fill: -primary;
+}
+
+.footer {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 12;
+}

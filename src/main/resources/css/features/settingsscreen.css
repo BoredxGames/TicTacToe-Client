@@ -1,0 +1,71 @@
+.settings-bg {
+    -fx-background-color: -bg-main;
+}
+
+.settings-root {
+    -fx-padding: 40;
+}
+
+.settings-header {
+    -fx-padding: 10 0 20 0;
+}
+
+.back-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: -primary;
+    -fx-font-size: 18;
+}
+
+.settings-title {
+    -fx-text-fill: -text-main;
+    -fx-font-size: 26;
+    -fx-font-weight: bold;
+}
+
+.settings-card {
+    -fx-background-color: -bg-card;
+    -fx-padding: 20;
+    -fx-background-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0.3, 0, 10);
+}
+
+.card-title {
+    -fx-text-fill: -text-main;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.card-subtitle {
+    -fx-text-fill: -text-muted;
+}
+
+.combo-box {
+    -fx-background-radius: 10;
+}
+
+.theme-btn {
+    -fx-background-color: -bg-card;
+    -fx-text-fill: -text-main;
+    -fx-background-radius: 12;
+    -fx-padding: 10 20;
+}
+
+.theme-btn:selected {
+    -fx-border-color: -primary;
+    -fx-border-radius: 12;
+    -fx-border-width: 2;
+}
+
+.slider .track {
+    -fx-background-color: -bg-card;
+}
+
+.slider .thumb {
+    -fx-background-color: -primary;
+}
+
+.footer {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 12;
+    -fx-padding: 10;
+}
