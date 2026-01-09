@@ -101,6 +101,11 @@ public class MessageRouter {
                 AuthenticationController.showUserAlert("Username not found");
                         
             }
+            case INTERNAL_SERVER_ERROR->{
+                 System.out.println("Internal Server Error");
+                AuthenticationController.showUserAlert("Internal Server Error");
+                
+            }
             default -> {
                 System.out.println("Unknown Action: " + action);
 
