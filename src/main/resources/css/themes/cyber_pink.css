@@ -1,0 +1,71 @@
+/* ===============================
+   CYBER PINK THEME
+   =============================== */
+
+.root {
+    /* Backgrounds */
+    -bg-main: #1a0b14;
+    -bg-card: #2a1420;
+
+    /* Primary colors */
+    -primary: #ff1493;
+    -primary-soft: rgba(255,20,147,0.4);
+
+    /* Text */
+    -text-main: #fff0f5;
+    -text-muted: #ffd6e8;
+}
+
+/* Global text */
+.label {
+    -fx-text-fill: -text-main;
+}
+
+/* Buttons */
+.button, .toggle-button {
+    -fx-background-color: -bg-card;
+    -fx-text-fill: -text-main;
+    -fx-background-radius: 12;
+}
+
+.button:hover, .toggle-button:hover {
+    -fx-border-color: -primary;
+    -fx-border-width: 1.5;
+}
+
+/* Selected toggle */
+.toggle-button:selected {
+    -fx-background-color: -primary;
+    -fx-text-fill: #ffffff;
+}
+
+/* Sliders */
+.slider .track {
+    -fx-background-color: -bg-card;
+}
+
+.slider .thumb {
+    -fx-background-color: -primary;
+}
+
+/* Progress bar */
+.progress-bar {
+    -fx-accent: -primary;
+}
+
+/* ComboBox */
+.combo-box {
+    -fx-background-color: -bg-card;
+    -fx-text-fill: -text-main;
+}
+
+/* Cards */
+.card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 18;
+}
+
+/* Footer */
+.footer {
+    -fx-text-fill: -text-muted;
+}
