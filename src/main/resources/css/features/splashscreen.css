@@ -1,0 +1,31 @@
+.anchor-pane {
+    -fx-background-color: linear-gradient(to bottom right, -bg-main, -bg-card);
+}
+
+.content-box {
+    -fx-padding: 40;
+}
+
+.title-label {
+    -fx-font-size: 4em;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, -primary, -text-main);
+}
+
+.subtitle-label {
+    -fx-font-size: 1.2em;
+    -fx-text-fill: -text-muted;
+}
+
+.progress-bar {
+    -fx-accent: -primary;
+    -fx-control-inner-background: -bg-card;
+    -fx-background-radius: 10;
+}
+
+.floating-char {
+    -fx-font-size: 3em;
+    -fx-text-fill: rgba(255,255,255,0.15);
+    -fx-font-weight: bold;
+    -fx-padding: 40;
+}
