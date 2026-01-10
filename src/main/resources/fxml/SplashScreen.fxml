@@ -9,13 +9,13 @@
 
 <StackPane styleClass="anchor-pane" stylesheets="@../css/features/splashscreen.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.boredxgames.tictactoeclient.presentation.SplashScreenController">
 
-      
+
     <Label styleClass="floating-char" text="X" StackPane.alignment="TOP_LEFT" />
     <Label styleClass="floating-char" text="O" StackPane.alignment="TOP_RIGHT" />
     <Label styleClass="floating-char" text="X" StackPane.alignment="BOTTOM_RIGHT" />
     <Label styleClass="floating-char" text="O" StackPane.alignment="BOTTOM_LEFT" />
 
-     
+
     <VBox alignment="CENTER" maxWidth="600" spacing="12" styleClass="content-box">
 
                     <ImageView fx:id="gameIcon" fitHeight="66.0" fitWidth="85.0" preserveRatio="true">

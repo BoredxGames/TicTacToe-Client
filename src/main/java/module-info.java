@@ -1,8 +1,9 @@
 module com.boredxgames.tictactoeclient {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.base;
     requires javafx.media;
+    requires java.base;
+    requires java.prefs;
 
     
     opens com.boredxgames.tictactoeclient.domain.managers.audio to javafx.fxml;

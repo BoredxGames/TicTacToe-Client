@@ -14,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -50,70 +52,134 @@ public class SettingsScreenController implements Initializable {
     @FXML
     private Label footerLabel;
 
+    @FXML
+    private ProgressBar musicProgressBar, sfxProgressBar;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // ===== Music Toggle & Slider Initialization =====
+musicToggle.setSelected(AudioManager.isMusicEnabled());
+musicSlider.setValue(AudioManager.getMusicVolume() * 100);
+musicProgressBar.prefWidthProperty().bind(musicSlider.widthProperty());
+musicProgressBar.setProgress(AudioManager.getMusicVolume());
 
-//        // ===== Music Toggle =====
-//        musicToggle.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-//            if (isSelected) {
-//                AudioManager.playMusic("/assets/sounds/bgm.mp3", musicSlider.getValue() / 100.0);
-//            } else {
-//                AudioManager.stopMusic();
-//            }
-//        });
-//
-//        musicToggle.selectedProperty().addListener((obs, was, is) -> {
-//            if (is) {
-//                AudioManager.playMusic("/assets/sounds/bgm.mp3", musicSlider.getValue() / 100.0);
-//            } else {
-//                AudioManager.stopMusic();
-//            }
-//        });
-//
-//        musicSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-//            AudioManager.setMusicVolume(newVal.doubleValue() / 100.0);
-//        });
-//
-//// ===== SFX Toggle + Slider =====
-//        sfxToggle.selectedProperty().addListener((obs, was, is) -> {
-//            AudioManager.setSfxEnabled(is);
-//            if (is) {
-//                AudioManager.playSfx("/assets/sounds/bgm.mp3", sfxSlider.getValue() / 100.0);
-//            }
-//        });
-//
-//        sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
-//            AudioManager.setSfxVolume(newVal.doubleValue() / 100.0);
-//        });
+musicSlider.disableProperty().bind(musicToggle.selectedProperty().not());
 
-        // ===== Languages =====
-        languageCombo.getItems().addAll(
-                "English (US)",
-                "Arabic (EG)"
-        );
-        languageCombo.getSelectionModel().selectFirst();
+musicToggle.selectedProperty().addListener((obs, oldVal, isOn) -> {
+    AudioManager.setMusicEnabled(isOn);
+    if (isOn && musicSlider.getValue() == 0) {
+        musicSlider.setValue(50); // قيمة افتراضية إذا كانت 0
+    } else if (!isOn) {
+        musicSlider.setValue(0);
+    }
+});
 
+musicSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+    double vol = newVal.doubleValue() / 100.0;
+    AudioManager.setMusicVolume(vol);
+
+    if (musicProgressBar != null) {
+        musicProgressBar.setProgress(vol);
+    }
+
+    // Synchronize toggle with slider
+    if (vol == 0 && AudioManager.isMusicEnabled()) {
+        AudioManager.setMusicEnabled(false);
+        musicToggle.setSelected(false);
+    } else if (vol > 0 && !AudioManager.isMusicEnabled()) {
+        AudioManager.setMusicEnabled(true);
+        musicToggle.setSelected(true);
+    }
+});
+
+// ===== SFX Toggle & Slider Initialization =====
+sfxToggle.setSelected(AudioManager.isSfxEnabled());
+sfxSlider.setValue(AudioManager.getSfxVolume() * 100);
+sfxProgressBar.prefWidthProperty().bind(sfxSlider.widthProperty());
+sfxProgressBar.setProgress(AudioManager.getSfxVolume());
+
+sfxSlider.disableProperty().bind(sfxToggle.selectedProperty().not());
+
+sfxToggle.selectedProperty().addListener((obs, oldVal, isOn) -> {
+    AudioManager.setSfxEnabled(isOn);
+    if (isOn && sfxSlider.getValue() == 0) {
+        sfxSlider.setValue(50);
+    } else if (!isOn) {
+        sfxSlider.setValue(0);
+    }
+});
+
+sfxSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+    double vol = newVal.doubleValue() / 100.0;
+    AudioManager.setSfxVolume(vol);
+
+    if (sfxProgressBar != null) {
+        sfxProgressBar.setProgress(vol);
+    }
+
+    // Synchronize toggle with slider
+    if (vol == 0 && AudioManager.isSfxEnabled()) {
+        AudioManager.setSfxEnabled(false);
+        sfxToggle.setSelected(false);
+    } else if (vol > 0 && !AudioManager.isSfxEnabled()) {
+        AudioManager.setSfxEnabled(true);
+        sfxToggle.setSelected(true);
+    }
+});
+
+        // ===== Language Listener =====
         languageCombo.setOnAction(e -> {
             int selectedIndex = languageCombo.getSelectionModel().getSelectedIndex();
+            Languages currentLang = LocalizationManager.getCurrentLocale().getLanguage().equals("ar") ? Languages.ARABIC : Languages.ENGLISH;
 
-            if (selectedIndex == 0) {
-                // English
+            if (selectedIndex == 0 && currentLang != Languages.ENGLISH) {
                 LocalizationManager.changeLocale(Languages.ENGLISH);
-            } else if (selectedIndex == 1) {
-                // Arabic
+                updateTexts();
+            } else if (selectedIndex == 1 && currentLang != Languages.ARABIC) {
                 LocalizationManager.changeLocale(Languages.ARABIC);
+                updateTexts();
             }
-
-            updateTexts();
         });
 
-        // ===== Theme =====
+        languageCombo.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+
+                    if (isSelected()) {
+                        setStyle("-fx-background-color: #00FFFF; -fx-text-fill: black; -fx-font-weight: bold;");
+                    } else {
+                        setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-font-weight;");
+                    }
+                }
+            }
+        });
+
+        languageCombo.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item);
+                    setStyle("-fx-text-fill: #00FFFF; -fx-font-weight: bold;");
+                }
+            }
+        });
+
+        // ===== Theme toggle group =====
         ToggleGroup themeGroup = new ToggleGroup();
         blueTheme.setToggleGroup(themeGroup);
         pinkTheme.setToggleGroup(themeGroup);
         greenTheme.setToggleGroup(themeGroup);
 
-        
+        // ===== Set selected based on current theme =====
         Theme current = ThemeManager.getTheme();
         if (current == Theme.NEON_BLUE) {
             blueTheme.setSelected(true);
@@ -123,7 +189,7 @@ public class SettingsScreenController implements Initializable {
             greenTheme.setSelected(true);
         }
 
-        
+        // ===== Listener to change Theme =====
         themeGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             if (newToggle == blueTheme) {
                 ThemeManager.setTheme(Theme.NEON_BLUE);
@@ -134,6 +200,7 @@ public class SettingsScreenController implements Initializable {
             }
         });
 
+        // ===== Disable sliders when unchecked =====
         musicSlider.disableProperty().bind(musicToggle.selectedProperty().not());
         sfxSlider.disableProperty().bind(sfxToggle.selectedProperty().not());
 
@@ -143,6 +210,7 @@ public class SettingsScreenController implements Initializable {
             NavigationManager.pop();
         });
 
+        // ===== Initialize texts =====
         try {
             updateTexts();
         } catch (Exception e) {
@@ -150,6 +218,7 @@ public class SettingsScreenController implements Initializable {
         }
 
     }
+    // ===== Helper Methods =====
 
     private String safeGet(ResourceBundle bundle, String key, String fallback) {
         try {
@@ -206,6 +275,7 @@ public class SettingsScreenController implements Initializable {
     }
 
     private void updateLanguageComboSelection(String langCode, ResourceBundle bundle) {
+
         languageCombo.getItems().clear();
 
         languageCombo.getItems().addAll(
@@ -213,7 +283,7 @@ public class SettingsScreenController implements Initializable {
                 safeGet(bundle, "language.arabic", "Arabic")
         );
 
-        if ("ar".equals(LocalizationManager.getCurrentLocale().getLanguage())) {
+        if ("ar".equals(langCode)) {
             languageCombo.getSelectionModel().select(1); // Arabic
         } else {
             languageCombo.getSelectionModel().select(0); // English

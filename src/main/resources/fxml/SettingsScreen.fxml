@@ -53,6 +53,7 @@
                         <CheckBox fx:id="musicToggle" selected="true"/>
                     </HBox>
                     <Slider fx:id="musicSlider" value="70"/>
+                    <ProgressBar fx:id="musicProgressBar" prefWidth="200" progress="0.7" />
                 </VBox>
 
                 <!-- Sound Effects -->
@@ -62,6 +63,7 @@
                         <CheckBox fx:id="sfxToggle" selected="true"/>
                     </HBox>
                     <Slider fx:id="sfxSlider" value="60"/>
+                    <ProgressBar fx:id="sfxProgressBar" prefWidth="200" progress="0.6" />
                 </VBox>
             </VBox>
 

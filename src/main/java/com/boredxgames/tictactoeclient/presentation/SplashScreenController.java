@@ -20,16 +20,16 @@ public class SplashScreenController {
 
     @FXML
     private ProgressBar progressBar;
-    
+
     @FXML
-    private Label titleLabel; 
+    private Label titleLabel;
     @FXML
-    private Label subtitleLabel; 
+    private Label subtitleLabel;
 
     @FXML
     public void initialize() {
-        
-        updateTexts(); 
+
+        updateTexts();
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(50), e -> {
                     double progress = progressBar.getProgress();
@@ -48,16 +48,22 @@ public class SplashScreenController {
 
         timeline.play();
     }
-    
-    
-     
+
+    private String safeGet(ResourceBundle bundle, String key, String fallback) {
+        try {
+            return bundle.getString(key);
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
+
     private void updateTexts() {
-        ResourceBundle bundle = LocalizationManager.getLocalizationBundle(); 
+        ResourceBundle bundle = LocalizationManager.getLocalizationBundle();
         if (titleLabel != null) {
-            titleLabel.setText(bundle.getString("app.title"));
+            titleLabel.setText(safeGet(bundle, "app.title", "Tic-Tac-Toe"));
         }
         if (subtitleLabel != null) {
-            subtitleLabel.setText(bundle.getString("app.edition"));
+            subtitleLabel.setText(safeGet(bundle, "app.edition", "v2.0.4"));
         }
     }
 }
