@@ -4,15 +4,20 @@
  */
 package com.boredxgames.tictactoeclient.domain.network;
 
+import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
+import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
+import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import com.boredxgames.tictactoeclient.domain.model.AuthResponseEntity;
 import com.boredxgames.tictactoeclient.domain.services.communication.Message;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
+import com.boredxgames.tictactoeclient.presentation.AuthenticationController;
 import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import javafx.application.Platform;
 
 /**
  *
@@ -26,6 +31,7 @@ public class ServerConnectionManager {
     private Thread th;
     private Gson gson = new Gson();
     private AuthResponseEntity player ;
+    private volatile boolean isIntentionalDisconnect = false;
 
     public void setPlayer(AuthResponseEntity player) {
         this.player = player;
@@ -45,6 +51,7 @@ public class ServerConnectionManager {
     }
 
     public void connect(String host, int port  ) throws IOException {
+        isIntentionalDisconnect = false;
        InetAddress ip = InetAddress.getByName("localhost");
             socket = new Socket(ip, port);
             dis = new DataInputStream(socket.getInputStream());
@@ -66,11 +73,30 @@ public class ServerConnectionManager {
                 MessageRouter router = MessageRouter.getInstance();
                 router.navigateMessage(response);
             } catch (IOException ex) {
+                if (isIntentionalDisconnect) {
+                    System.out.println("Disconnected intentionally.");
+                    break; 
+                }
+                
                 close();
+                
+                Platform.runLater(() -> {
+                    AuthenticationController.showUserAlert("Connection to server lost.");
+                    NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
+                });
+                break;
             }
 
         }
 
+    }
+    public void disconnect() {
+        try {
+            isIntentionalDisconnect = true;
+            close(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized void sendMessage(Message msg) {
@@ -84,6 +110,9 @@ public class ServerConnectionManager {
     }
 
     }
+    public AuthResponseEntity getPlayer() {
+    return player;
+}
 
     public void close() {
         try {
