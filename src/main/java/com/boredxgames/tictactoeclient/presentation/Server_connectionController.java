@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -19,7 +17,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 public class Server_connectionController implements Initializable {
 
@@ -34,28 +31,19 @@ public class Server_connectionController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ipComboBox.getItems().addAll("localhost");
-
-       BackgroundAnimation.startBackgroundAnimation(backgroundPane, 1920, 1080);
-        BackgroundAnimation.animateCardEntry(contentContainer);
-
-        animateCardEntry();
+       BackgroundAnimation.animateCardEntry(contentContainer);
+     Platform.runLater(() -> {
+            BackgroundAnimation.startWarpAnimation(
+                backgroundPane, 
+                backgroundPane.getWidth(), 
+                backgroundPane.getHeight()
+            );
+            
+        });
+    
     }
 
-    private void animateCardEntry() {
-        contentContainer.setOpacity(0);
-        contentContainer.setTranslateY(500);
 
-        TranslateTransition tt = new TranslateTransition(Duration.millis(1500), contentContainer);
-        tt.setToY(0);
-        
-        FadeTransition ft = new FadeTransition(Duration.millis(1000), contentContainer);
-        ft.setToValue(1);
-
-        ParallelTransition pt = new ParallelTransition(tt, ft);
-        pt.play();
-    }
-
-   
 @FXML
 private void connect() {
     String ip = ipComboBox.getEditor().getText();

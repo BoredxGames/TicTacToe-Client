@@ -3,6 +3,7 @@ package com.boredxgames.tictactoeclient.presentation;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
+import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import com.boredxgames.tictactoeclient.domain.services.authentication.AuthenticationService;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,85 +13,82 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.SVGPath;
 
 public class AuthenticationController implements Initializable {
 
-  
-    @FXML private ToggleGroup accessTabs;
-    @FXML private ToggleButton loginBtn;
-    @FXML private ToggleButton registerBtn;
+    @FXML
+    private ToggleGroup accessTabs;
+    @FXML
+    private ToggleButton loginBtn;
+    @FXML
+    private ToggleButton registerBtn;
+    @FXML
+    private Label serverStatus;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
 
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private TextField passwordTextField; 
-    @FXML private SVGPath eyeIcon; 
-    @FXML private Button submitButton;
+    private Button submitButton;
 
-  
-    @FXML private Pane backgroundPane;
-    @FXML private VBox contentContainer; 
-
-   
-
-    private boolean isPasswordVisible = false;
+    @FXML
+    private Pane backgroundPane;
+    @FXML
+    private VBox contentContainer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
-        accessTabs.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == loginBtn) switchToLoginMode();
-            else switchToRegisterMode();
-        });
-        
-        if (loginBtn.isSelected()) switchToLoginMode(); 
-        else switchToRegisterMode();
 
-       
-        setupPasswordSync(passwordField, passwordTextField);
-        
-      
-        Platform.runLater(() -> {
-            double w = backgroundPane.getWidth() > 0 ? backgroundPane.getWidth() : 1000;
-            double h = backgroundPane.getHeight() > 0 ? backgroundPane.getHeight() : 750;
-            BackgroundAnimation.startBackgroundAnimation(backgroundPane, w, h);
-            BackgroundAnimation.animateCardEntry(contentContainer);
+        accessTabs.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == loginBtn) {
+                switchToLoginMode();
+            } else {
+                switchToRegisterMode();
+            }
         });
+
+        if (loginBtn.isSelected()) {
+            switchToLoginMode();
+        } else {
+            switchToRegisterMode();
+        }
+
+        BackgroundAnimation.animateCardEntry(contentContainer);
+        backgroundPane.setMouseTransparent(true);
+
+        Platform.runLater(() -> {
+            BackgroundAnimation.startWarpAnimation(
+                    backgroundPane,
+                    backgroundPane.getWidth(),
+                    backgroundPane.getHeight()
+            );
+        });
+
     }
 
     private void switchToLoginMode() {
-        submitButton.setText("Login ➔");
+        submitButton.setText("Login");
     }
 
     private void switchToRegisterMode() {
-        submitButton.setText("Enter Arena ➔");
-    }
-
-    private void setupPasswordSync(PasswordField pf, TextField tf) {
-        if(pf == null || tf == null) return;
-        pf.textProperty().addListener((obs, o, n) -> tf.setText(n));
-        tf.textProperty().addListener((obs, o, n) -> pf.setText(n));
+        usernameField.clear();
+        passwordField.clear();
+        submitButton.setText("Join-us");
     }
 
     @FXML
-    private void togglePasswordVisibility() {
-        isPasswordVisible = !isPasswordVisible;
-        
-        if (isPasswordVisible) {
-            passwordTextField.setVisible(true); passwordTextField.setManaged(true);
-            passwordField.setVisible(false); passwordField.setManaged(false);
-        } else {
-            passwordField.setVisible(true); passwordField.setManaged(true);
-            passwordTextField.setVisible(false); passwordTextField.setManaged(false);
-        }
-    }
-
-   @FXML
     private void onSubmit() {
+        if (!ServerConnectionManager.getInstance().isConnected()) {
+            showUserAlert("Server is out of service");
+            serverStatus.setText("Server Status: Offline");
+
+        }
         String username = usernameField.getText().trim();
-        String password = passwordField.getText(); 
+        String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
+            showUserAlert("Validation Error: Please fill all fields");
             System.out.println("Validation Error: Please fill all fields");
             return;
         }
@@ -108,10 +106,11 @@ public class AuthenticationController implements Initializable {
 
     @FXML
     private void onBackClicked() {
-        System.out.println("Back clicked - Returning to Server Connection");
+
         NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
     }
-   public static void showUserAlert(String message) {
+
+    public static void showUserAlert(String message) {
         Platform.runLater(() -> {
             try {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -124,12 +123,17 @@ public class AuthenticationController implements Initializable {
                         .findFirst()
                         .ifPresent(window -> alert.initOwner(window));
 
-                alert.showAndWait();
+                alert.showAndWait().ifPresent(type -> {
+                    if (message == "Server is out of srevice"
+                            || message == "Internal Server Error") {
+                        NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
+                    }
+                });
+
             } catch (Exception e) {
-                e.printStackTrace(); 
+                e.printStackTrace();
             }
         });
     }
-    
-    
+
 }

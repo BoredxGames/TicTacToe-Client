@@ -7,14 +7,9 @@
     -fx-font-family: 'Segoe UI', sans-serif;
 }
 
-.background-particle {
-    -fx-font-family: 'Arial';
-    -fx-font-weight: bold;
-    -fx-opacity: 0.3;
-    -fx-effect: dropshadow(gaussian, #463eef, 15, 0.5, 0, 0); 
-}
 
-/* Card */
+
+
 .login-card {
     -fx-background-color: #1a1a24;
     -fx-background-radius: 12px;
@@ -22,10 +17,10 @@
     -fx-border-color: #292839;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 30, 0, 0, 10);
 }
-.card-title { -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; }
+.card-title { -fx-text-fill: white; -fx-font-size: 44px; -fx-font-weight: bold; }
 .card-subtitle { -fx-text-fill: #94a3b8; -fx-font-size: 13px; }
 
-/* Toggle */
+
 .toggle-container {
     -fx-background-color: #111022;
     -fx-background-radius: 8px;
@@ -45,9 +40,8 @@
     -fx-effect: dropshadow(gaussian, rgba(70, 62, 239, 0.4), 10, 0, 0, 0);
 }
 
-/* Inputs */
+
 .field-label { -fx-text-fill: #e2e8f0; -fx-font-size: 13px; -fx-font-weight: bold; }
-.forgot-link { -fx-text-fill: #463eef; -fx-font-size: 12px; -fx-cursor: hand; }
 .input-container {
     -fx-background-color: #292839;
     -fx-background-radius: 8px;
@@ -72,15 +66,13 @@
 .text-input-transparent:focused { -fx-background-color: transparent; }
 
 .input-icon { -fx-fill: #94a3b8; -fx-scale-x: 0.8; -fx-scale-y: 0.8; }
-.eye-icon { -fx-fill: #94a3b8; -fx-cursor: hand; -fx-scale-x: 0.9; -fx-scale-y: 0.9; }
-.eye-icon:hover { -fx-fill: white; }
 
-/* Validation */
+
 .validation-text { -fx-text-fill: #64748b; -fx-font-size: 11px; }
 .validation-icon-default { -fx-fill: #64748b; }
 .validation-icon-success { -fx-fill: #22c55e; }
 
-/* Button */
+
 .primary-button {
     -fx-background-color: #463eef;
     -fx-text-fill: white;
@@ -107,7 +99,7 @@
 }
 
 .icon-button SVGPath {
-    -fx-fill: #8a8a9a; /* Default grey */
+    -fx-fill: #ffffff; 
     -fx-transition: -fx-fill 0.3s;
 }
 
@@ -116,9 +108,17 @@
 }
 
 .icon-button:hover SVGPath {
-    -fx-fill: #ffffff; /* White on hover */
+    -fx-fill: #ffffff;
 }
 
-.icon-button:pressed SVGPath {
-    -fx-fill: #463eef; /* Brand color on click */
+.back-link { 
+    -fx-text-fill: #8a8a9a; 
+    -fx-font-size: 14px; 
+    -fx-cursor: hand; 
+    -fx-padding: 0 0 10 0; 
+}
+
+.back-link:hover { 
+    -fx-text-fill: #4f5ef7; 
+    -fx-underline: true; 
 }

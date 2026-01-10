@@ -1,14 +1,11 @@
 
 .root-pane {
-    -fx-background-color: #0a0a14;
-    
-    
+    -fx-background-color: #111022;
     -fx-background-image: 
-        repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(79, 94, 247, 0.08) 50px),
-        repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(79, 94, 247, 0.08) 50px),
-        radial-gradient(center 50% 50%, radius 80%, transparent 0%, rgba(10, 10, 20, 0.8) 100%);
-        
-    -fx-font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(70, 62, 239, 0.05) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(70, 62, 239, 0.05) 40px),
+        radial-gradient(center 50% 50%, radius 60%, transparent 0%, rgba(17, 16, 34, 0.8) 100%);
+    -fx-font-family: 'Segoe UI', sans-serif;
 }
 
 
@@ -47,7 +44,6 @@
     -fx-background-color: #1e1e2e;
     -fx-background-radius: 16px;
     -fx-border-radius: 16px;
-    /* Subtle highlight border on top */
     -fx-border-color: rgba(255,255,255,0.05);
     -fx-border-width: 1px;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 50, 0, 0, 15);
