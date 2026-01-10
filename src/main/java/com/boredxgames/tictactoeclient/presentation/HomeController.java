@@ -9,7 +9,7 @@ import com.boredxgames.tictactoeclient.domain.model.GameRequestInfo;
 import com.boredxgames.tictactoeclient.domain.model.GameResponseInfo;
 import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
-import com.boredxgames.tictactoeclient.domain.services.game.GameService;
+import com.boredxgames.tictactoeclient.domain.services.GameService;
 
 import java.net.URL;
 import java.util.ResourceBundle;

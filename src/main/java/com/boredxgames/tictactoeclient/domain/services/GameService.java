@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.boredxgames.tictactoeclient.domain.services.game;
+package com.boredxgames.tictactoeclient.domain.services;
 
 /**
  *
@@ -22,7 +22,7 @@ public class GameService {
 
     private static GameService instance;
     private final ServerConnectionManager connection;
-        private boolean isWaitingForResponse = false;
+    private boolean isWaitingForResponse = false;
 
     private GameService() {
         this.connection = ServerConnectionManager.getInstance();

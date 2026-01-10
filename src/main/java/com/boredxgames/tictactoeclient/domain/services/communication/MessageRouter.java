@@ -19,6 +19,8 @@ import com.boredxgames.tictactoeclient.domain.model.GameStartInfo;
 import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import static com.boredxgames.tictactoeclient.domain.services.communication.Action.LOGIN_SUCCESS;
 import static com.boredxgames.tictactoeclient.domain.services.communication.Action.USERNAME_NOT_FOUND;
+
+import com.boredxgames.tictactoeclient.domain.services.game.OnlineGameManager;
 import com.boredxgames.tictactoeclient.presentation.AuthenticationController;
 import com.boredxgames.tictactoeclient.presentation.HomeController;
 import com.google.gson.Gson;
@@ -46,9 +48,8 @@ public class MessageRouter {
         MessageType messageType = message.getHeader().getMsgType();
 
         assert messageType != null;
-        Message responseMessage;
         switch (messageType) {
-            case REQUEST -> responseMessage = handleRequest(message);
+            case REQUEST -> handleRequest(message);
             case RESPONSE -> handleResponse(message);
             case EVENT -> handleEvent(message);
             case ERROR -> handleError(message);
@@ -64,9 +65,12 @@ public class MessageRouter {
 
         assert action != null;
         return switch (action) {
+//            case SEND_GAME_UPDATE ->
+//            {
+//            }
             
 
-            default: {
+            default -> {
                 System.out.println("Unknown Action: " + action);
                 yield new Message();
             }
