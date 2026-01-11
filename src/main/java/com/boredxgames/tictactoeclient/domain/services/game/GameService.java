@@ -22,7 +22,7 @@ public class GameService {
 
     private static GameService instance;
     private final ServerConnectionManager connection;
-        private boolean isWaitingForResponse = false;
+    private boolean isWaitingForResponse = false;
 
     private GameService() {
         this.connection = ServerConnectionManager.getInstance();
@@ -77,6 +77,10 @@ public class GameService {
         );
 
         Message msg = Message.createMessage(MessageType.RESPONSE, Action.GAME_RESPONSE, responseInfo);
+        connection.sendMessage(msg);
+    }
+ public void requestLeaderboard() {
+        Message msg = Message.createMessage(MessageType.REQUEST, Action.GET_LEADERBOARD, "");
         connection.sendMessage(msg);
     }
 }

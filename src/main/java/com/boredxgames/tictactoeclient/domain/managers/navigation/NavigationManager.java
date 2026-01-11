@@ -22,7 +22,7 @@ public class NavigationManager {
 
         current = new ScreenNavigationEntry(Screens.PRIMARY, null, null);
 
-        scene = new Scene(initRoot(current.screen().getName()), 1600, 900);
+        scene = new Scene(initRoot(current.screen().getName()), 1200, 800);
         return scene;
     }
 
