@@ -1,4 +1,4 @@
-package com.boredxgames.tictactoeclient.domain.entity;
+package com.boredxgames.tictactoeclient.domain.model;
 
 public enum GameMode {
     OFFLINE_PVP,

@@ -1,6 +1,6 @@
 package com.boredxgames.tictactoeclient.presentation;
 
-import com.boredxgames.tictactoeclient.domain.entity.GameMode;
+import com.boredxgames.tictactoeclient.domain.model.GameMode;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
