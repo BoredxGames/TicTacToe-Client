@@ -21,7 +21,6 @@
             <Insets left="40.0" right="40.0" />
         </padding>
         <children>
-            <SVGPath content="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="#4f5ef7" scaleX="0.8" scaleY="0.8" />
             <Label styleClass="logo-text" text="Tic-Tac-Toe Online" />
             <Region HBox.hgrow="ALWAYS" />
         </children>
@@ -55,7 +54,6 @@
                                     
                                     <HBox alignment="CENTER_LEFT" styleClass="input-field-container">
                                         <children>
-                                            <SVGPath content="M15.354 2.646a.5.5 0 0 1 0 .708c-4.686 4.687-12.284 4.687-16.97 0a.5.5 0 1 1 .708-.708c4.294 4.294 11.266 4.294 15.56 0a.5.5 0 0 1 .708 0z" styleClass="input-icon" />
                                             <ComboBox fx:id="ipComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Select or type IP..." styleClass="combo-box-transparent" HBox.hgrow="ALWAYS" />
                                         </children>
                                     </HBox>
@@ -72,8 +70,10 @@
                             </HBox>
                         </children>
                     </VBox>
+            <Label style="-fx-font-size: 12px;" text="Tic Tac Toe© BoredXGames 2026" textFill="#8a8a9a" />
                 </children>
             </VBox>
+
         </children>
     </StackPane>
 </AnchorPane>
