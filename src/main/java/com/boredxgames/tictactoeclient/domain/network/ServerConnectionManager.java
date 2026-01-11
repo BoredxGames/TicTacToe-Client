@@ -16,6 +16,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import javafx.application.Platform;
 
 /**
  *
@@ -48,7 +49,7 @@ public class ServerConnectionManager {
     }
 
     public void connect(String host, int port) throws IOException {
-        InetAddress ip = InetAddress.getByName("localhost");
+        InetAddress ip = InetAddress.getByName(host);
         socket = new Socket(ip, port);
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
@@ -67,9 +68,11 @@ public class ServerConnectionManager {
                 MessageRouter router = MessageRouter.getInstance();
                 router.navigateMessage(response);
             } catch (IOException ex) {
+                 close();
                 
-                NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE);
-                close();
+                Platform.runLater(() -> {
+                NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
+    });
             }
 
         }
