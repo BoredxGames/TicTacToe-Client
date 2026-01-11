@@ -19,55 +19,62 @@ public class NavigationManager {
     private static final Stack<ScreenNavigationEntry> screenStack = new Stack<>();
 
     public static Scene init() throws IOException {
-
-        current = new ScreenNavigationEntry(Screens.PRIMARY, null, null);
+        current = new ScreenNavigationEntry(Screens.GAME, null, null);
 
         scene = new Scene(initRoot(current.screen().getName()), 1600, 900);
         return scene;
     }
 
     public static void navigate(Screens screen, NavigationAction action) {
+        navigate(screen, action, null);
+    }
+
+    public static void navigate(Screens screen, NavigationAction action, Object parameter) {
         switch (action) {
-            case PUSH -> push(screen);
-            case REPLACE -> replace(screen);
-            case REPLACE_ALL -> replaceAll(screen);
+            case PUSH -> push(screen, parameter);
+            case REPLACE -> replace(screen, parameter);
+            case REPLACE_ALL -> replaceAll(screen, parameter);
         }
 
-        System.out.println("Navigated To --" + screen.getName() + " Screen-- Using: " + action);
+        System.out.println("Navigated To --" + screen.getName() + " Screen-- Using: " + action + " With Param: " + parameter);
     }
 
     public static void pop() {
         if (screenStack.isEmpty()) return;
 
         current = screenStack.pop();
-        loadScreen(current);
+        loadScreen(current, null);
     }
 
-    private static void push(Screens screen) {
+    private static void push(Screens screen, Object parameter) {
         screenStack.push(saveState(current));
 
         current = new ScreenNavigationEntry(screen, null, null);
-        loadScreen(current);
+        loadScreen(current, parameter);
     }
 
-    private static void replace(Screens screen) {
+    private static void replace(Screens screen, Object parameter) {
         current = new ScreenNavigationEntry(screen, null, null);
-        loadScreen(current);
+        loadScreen(current, parameter);
     }
 
-    private static void replaceAll(Screens screen) {
+    private static void replaceAll(Screens screen, Object parameter) {
         screenStack.clear();
 
         current = new ScreenNavigationEntry(screen, null, null);
-        loadScreen(current);
+        loadScreen(current, parameter);
     }
 
-    private static void loadScreen(ScreenNavigationEntry entry) {
+    private static void loadScreen(ScreenNavigationEntry entry, Object parameter) {
         try {
             FXMLLoader loader = getLoader(entry.screen().getName());
 
             Parent root = loader.load();
             Object controller = loader.getController();
+
+            if (parameter != null && controller instanceof NavigationParameterAware parameterAware) {
+                parameterAware.setNavigationParameter(parameter);
+            }
 
             if (controller instanceof StatefulController sc && entry.state() != null) {
                 sc.restoreState(entry.state());
@@ -79,6 +86,7 @@ public class NavigationManager {
 
         } catch (IOException e) {
             System.out.println("Failed to load screen entry: " + entry + " <-------> Exception: " + e);
+            e.printStackTrace();
         }
     }
 
