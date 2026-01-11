@@ -21,7 +21,9 @@
             <HBox alignment="CENTER_LEFT" spacing="16">
                 <Button fx:id="backButton" styleClass="icon-button">
                     <graphic>
-                        <Text styleClass="material-icon" text="arrow_back"/>
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <Image url="@../assets/icons/arrow.png"/>
+                        </ImageView>
                     </graphic>
                 </Button>
                 <Label styleClass="header-title" text="Tic-Tac-Toe"/>
@@ -136,7 +138,7 @@
             <!-- game over modal -->
             <StackPane fx:id="modalOverlay" styleClass="modal-overlay" visible="false">
                 <VBox alignment="TOP_CENTER" maxWidth="400" styleClass="modal-content">
-                    <!-- Decorative Header -->
+
                     <StackPane maxWidth="Infinity" prefHeight="128" styleClass="modal-header">
                         <VBox alignment="CENTER">
                             <StackPane styleClass="trophy-container">
@@ -145,7 +147,6 @@
                         </VBox>
                     </StackPane>
 
-                    <!-- Modal Body -->
                     <VBox alignment="TOP_CENTER" spacing="32">
                         <padding>
                             <Insets bottom="32" left="32" right="32" top="16"/>
@@ -185,9 +186,9 @@
     <bottom>
         <VBox alignment="CENTER" styleClass="footer">
             <padding>
-                <Insets bottom="24" top="24"/>
+                <Insets bottom="48" top="24"/>
             </padding>
-            <Label style="-fx-font-size: 12px;" text="Tic Tac Toe© BoredXGames 2026" textFill="#8a8a9a" />
+            <Label style="-fx-font-size: 12px;" text="Tic Tac Toe© BoredXGames 2026" textFill="#8a8a9a"/>
         </VBox>
     </bottom>
 </BorderPane>
