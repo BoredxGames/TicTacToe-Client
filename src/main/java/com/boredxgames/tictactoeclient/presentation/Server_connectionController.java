@@ -103,6 +103,7 @@ public class Server_connectionController implements Initializable {
         if (connectionThread != null && connectionThread.isAlive()) {
             connectionThread.interrupt();
         }
+        ServerConnectionManager.getInstance().disconnect();
         NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE);
     }
 }
