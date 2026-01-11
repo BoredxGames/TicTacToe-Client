@@ -15,7 +15,7 @@
     <top>
         <HBox alignment="CENTER_LEFT" styleClass="header">
             <padding>
-                <Insets bottom="16" left="24" right="24" top="16"/>
+                <Insets bottom="16" left="48" right="24" top="16"/>
             </padding>
 
             <HBox alignment="CENTER_LEFT" spacing="16">
@@ -32,6 +32,9 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <HBox alignment="CENTER_RIGHT" spacing="12">
+                <padding>
+                    <Insets bottom="16" left="24" right="24" top="16"/>
+                </padding>
                 <HBox fx:id="difficultyBadge" alignment="CENTER" managed="false" spacing="8"
                       styleClass="difficulty-badge" visible="false">
                     <padding>
