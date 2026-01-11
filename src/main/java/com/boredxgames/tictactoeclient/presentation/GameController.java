@@ -22,8 +22,6 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -57,12 +55,6 @@ public class GameController implements Initializable {
     private Label opponentScoreLabel;
     @FXML
     private Label opponentTypeLabel;
-    @FXML
-    private Text opponentIcon;
-    @FXML
-    private HBox turnMessage;
-    @FXML
-    private Label turnLabel;
 
     @FXML
     private Button cell00, cell01, cell02;
@@ -133,7 +125,6 @@ public class GameController implements Initializable {
             case ONLINE_PVP:
                 opponentNameLabel.setText("Opponent (O)");
                 opponentTypeLabel.setText("ONLINE PLAYER");
-                opponentIcon.setText("public");
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
                 changeDifficultyButton.setVisible(false);
@@ -148,7 +139,7 @@ public class GameController implements Initializable {
                 final int r = row;
                 final int c = col;
 
-                cells[row][col].setOnAction(event -> handleCellClick(r, c));
+                cells[row][col].setOnAction(e -> handleCellClick(r, c));
             }
         }
     }
@@ -157,7 +148,7 @@ public class GameController implements Initializable {
         playAgainButton.setOnAction(e -> resetGame());
 
         mainMenuButton.setOnAction(e -> {
-            NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE_ALL);
+            NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE_ALL); // TODO: change to mode selection screen
         });
 
         backButton.setOnAction(e -> {
