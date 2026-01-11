@@ -7,11 +7,10 @@ import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import com.boredxgames.tictactoeclient.domain.utils.Config;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -19,68 +18,91 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 
 public class Server_connectionController implements Initializable {
 
     @FXML private ComboBox<String> ipComboBox;
     @FXML private Button connectButton;
     @FXML private Label statusLabel;
-    @FXML private Pane backgroundPane; 
-    @FXML private VBox contentContainer; 
+    @FXML private Pane backgroundPane;
+    @FXML private VBox contentContainer;
 
-    private final Random random = new Random();
+    private Thread connectionThread;
+    public static String pendingErrorMessage = null;
+    
+    private final Map<String, String> serverPresets = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ipComboBox.getItems().addAll("localhost");
-
-       BackgroundAnimation.startBackgroundAnimation(backgroundPane, 1920, 1080);
-        BackgroundAnimation.animateCardEntry(contentContainer);
-
-        animateCardEntry();
-    }
-
-    private void animateCardEntry() {
-        contentContainer.setOpacity(0);
-        contentContainer.setTranslateY(500);
-
-        TranslateTransition tt = new TranslateTransition(Duration.millis(1500), contentContainer);
-        tt.setToY(0);
         
-        FadeTransition ft = new FadeTransition(Duration.millis(1000), contentContainer);
-        ft.setToValue(1);
+        
+         
+        Platform.runLater(() -> { 
+            BackgroundAnimation.animateCardEntry(contentContainer);
+            BackgroundAnimation.startWarpAnimation(
+                backgroundPane,
+                backgroundPane.getWidth(),
+                backgroundPane.getHeight()
+            );
+        });
+        
+        serverPresets.put("Local Server", "127.0.0.1");
+        serverPresets.put("Network Server", "192.168.1.3");
 
-        ParallelTransition pt = new ParallelTransition(tt, ft);
-        pt.play();
+        ipComboBox.getItems().addAll(serverPresets.keySet());
+        ipComboBox.getSelectionModel().select("Local Server");
+        ipComboBox.setEditable(true);
+
+        if (pendingErrorMessage != null) {
+            statusLabel.setText("Status: " + pendingErrorMessage);
+            statusLabel.setStyle("-fx-text-fill: #ff5555;");
+            pendingErrorMessage = null;
+        }
+
+       
     }
 
-   
-@FXML
-private void connect() {
-    String ip = ipComboBox.getEditor().getText();
+    @FXML
+    private void connect() {
+        String input = ipComboBox.getValue();
+        if (input == null || input.trim().isEmpty()) return;
 
-        try {
-            statusLabel.setText("Status: Connecting to " + ip + "...");
-            ServerConnectionManager.getInstance().connect(Config.SERVER_IP, Config.SERVER_PORT);
-            NavigationManager.navigate(Screens.AUTHENTICATION, NavigationAction.REPLACE);
+        String ip = serverPresets.getOrDefault(input, input);
+        
+        statusLabel.setText("Status: Connecting to " + ip + "...");
+        statusLabel.setStyle("-fx-text-fill: white;");
+        connectButton.setDisable(true);
 
-            statusLabel.setText("Status: Connected to " + ip + "!");
-            
-            if (!ipComboBox.getItems().contains(ip)) {
-                ipComboBox.getItems().add(ip);
+        connectionThread = new Thread(() -> {
+            try {
+                ServerConnectionManager.getInstance().connect(ip, Config.SERVER_PORT);
+
+                Platform.runLater(() -> {
+                    statusLabel.setText("Status: Connected to " + ip + "!");
+                    
+                    if (!ipComboBox.getItems().contains(input)) {
+                         ipComboBox.getItems().add(input);
+                    }
+                    
+                    NavigationManager.navigate(Screens.AUTHENTICATION, NavigationAction.REPLACE);
+                });
+            } catch (IOException ex) {
+                Platform.runLater(() -> {
+                    statusLabel.setText("Status: Connection failed: " + ex.getMessage());
+                    connectButton.setDisable(false);
+                });
             }
-        } catch (IOException ex) {
-            statusLabel.setText("Status: Connection failed: " + ex.getMessage());
-        
-    } 
-}
+        });
 
-    
+        connectionThread.setDaemon(true);
+        connectionThread.start();
+    }
+
     @FXML
     private void onBackClicked() {
-        System.out.println("Back clicked");
+        if (connectionThread != null && connectionThread.isAlive()) {
+            connectionThread.interrupt();
+        }
         NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE);
-
     }
 }

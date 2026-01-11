@@ -30,8 +30,10 @@ public class ServerConnectionManager {
     private DataOutputStream dos;
     private Thread th;
     private Gson gson = new Gson();
+
     private AuthResponseEntity player ;
     private volatile boolean isIntentionalDisconnect = false;
+
 
     public void setPlayer(AuthResponseEntity player) {
         this.player = player;
@@ -60,6 +62,7 @@ public class ServerConnectionManager {
             th.start();
 
       
+
     }
 
     private void readMessages() {
@@ -68,8 +71,7 @@ public class ServerConnectionManager {
             try {
                 String response = dis.readUTF();
                 System.out.println(response);
-               
-                
+
                 MessageRouter router = MessageRouter.getInstance();
                 router.navigateMessage(response);
             } catch (IOException ex) {
@@ -85,6 +87,7 @@ public class ServerConnectionManager {
                     NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
                 });
                 break;
+
             }
 
         }
@@ -101,13 +104,13 @@ public class ServerConnectionManager {
 
     public synchronized void sendMessage(Message msg) {
         try {
-        String jsonMessage = gson.toJson(msg);
-      
-        dos.writeUTF(jsonMessage);
-        dos.flush();
-    } catch (IOException ex) {
-        ex.printStackTrace();
-    }
+            String jsonMessage = gson.toJson(msg);
+
+            dos.writeUTF(jsonMessage);
+            dos.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
     }
     public AuthResponseEntity getPlayer() {
@@ -129,5 +132,10 @@ public class ServerConnectionManager {
             System.getLogger(ServerConnectionManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
 
+    }
+
+
+    public boolean isConnected() {
+        return !socket.isClosed();
     }
 }

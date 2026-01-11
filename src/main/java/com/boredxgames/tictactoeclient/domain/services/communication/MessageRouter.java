@@ -17,8 +17,12 @@ import com.boredxgames.tictactoeclient.domain.model.GameRequestInfo;
 import com.boredxgames.tictactoeclient.domain.model.GameResponseInfo;
 import com.boredxgames.tictactoeclient.domain.model.GameStartInfo;
 import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
+import static com.boredxgames.tictactoeclient.domain.services.communication.Action.INTERNAL_SERVER_ERROR;
+import static com.boredxgames.tictactoeclient.domain.services.communication.Action.INVALID_CREDENTIAL;
 import static com.boredxgames.tictactoeclient.domain.services.communication.Action.LOGIN_SUCCESS;
+import static com.boredxgames.tictactoeclient.domain.services.communication.Action.REGISTERATION_SUCCESS;
 import static com.boredxgames.tictactoeclient.domain.services.communication.Action.USERNAME_NOT_FOUND;
+import static com.boredxgames.tictactoeclient.domain.services.communication.Action.USER_IS_ONLINE;
 import com.boredxgames.tictactoeclient.presentation.AuthenticationController;
 import com.boredxgames.tictactoeclient.presentation.HomeController;
 import com.google.gson.Gson;
@@ -88,6 +92,12 @@ public class MessageRouter {
                 NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE);
 
             }
+            case REGISTERATION_SUCCESS->{
+                System.out.println("Registration success");
+                AuthResponseEntity responseData = gson.fromJson(msg.getData(),AuthResponseEntity.class);
+               AuthenticationController.showUserAlert("Registration success");
+                        
+            }
             case USERNAME_NOT_FOUND->{
                 System.out.println("Username not found");
                 AuthenticationController.showUserAlert("Username not found");
@@ -148,6 +158,7 @@ public class MessageRouter {
     }
     
     private void handleError(Message msg) {
+        System.out.println("my time has come");
         Action action = msg.getHeader().getAction();
            System.out.println(action);
        
@@ -158,9 +169,11 @@ public class MessageRouter {
                 AuthenticationController.showUserAlert("Username not found");
                         
             }
+            
             case INTERNAL_SERVER_ERROR->{
               String errorMessage = "Server error. Please try again.";
                  System.out.println("Internal Server Error");
+
                 AuthenticationController.showUserAlert("Internal Server Error");
                 if (homeController != null) {
                     Platform.runLater(() -> homeController.showErrorAlert(errorMessage));
@@ -204,12 +217,26 @@ public class MessageRouter {
                     homeController.dismissIncomingRequest();
                     Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
                 }
+             case INVALID_CREDENTIAL->{
+                 System.out.println("INVALID_CREDENTIAL");
+                AuthenticationController.showUserAlert("INVALID CREDENTIAL");
+                
+            }
+            case USER_IS_ONLINE->{
+                 System.out.println("User alread logged in");
+                AuthenticationController.showUserAlert("User alread logged in");
+                
+            }
+            case USERNAME_ALREADY_EXIST->{
+                 System.out.println("USERNAME_ALREADY_EXIST");
+                AuthenticationController.showUserAlert("USERNAME ALREADY EXIST");
+                
             }
             default -> {
                 System.out.println("Unknown Action: " + action);
 
             }
-        };
+        }
     }
 
 }
