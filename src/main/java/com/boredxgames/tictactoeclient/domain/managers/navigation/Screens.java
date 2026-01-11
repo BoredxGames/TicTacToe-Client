@@ -5,8 +5,9 @@ public enum Screens {
     SECONDARY("secondary"),
     SETTINGS("settings"),
     SERVER_CONNECTION("server_connection"),
-    AUTHENTICATION("authentication");
-   
+    AUTHENTICATION("authentication"),
+    GAME("game_screen");
+
 
     private final String name;
 
