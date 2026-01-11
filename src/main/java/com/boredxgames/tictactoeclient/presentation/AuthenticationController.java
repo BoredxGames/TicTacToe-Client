@@ -31,10 +31,11 @@ public class AuthenticationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
-        BackgroundAnimation.animateCardEntry(contentContainer);
+     
         backgroundPane.setMouseTransparent(true);
 
         Platform.runLater(() -> {
+              BackgroundAnimation.animateCardEntry(contentContainer);
             BackgroundAnimation.startWarpAnimation(
                 backgroundPane,
                 backgroundPane.getWidth(),

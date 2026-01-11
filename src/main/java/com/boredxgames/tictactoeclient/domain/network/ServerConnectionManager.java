@@ -55,7 +55,7 @@ public class ServerConnectionManager {
         dos = new DataOutputStream(socket.getOutputStream());
         th = new Thread(this::readMessages);
         th.start();
-
+        
     }
 
     private void readMessages() {
@@ -71,7 +71,7 @@ public class ServerConnectionManager {
                  close();
                 
                 Platform.runLater(() -> {
-                NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
+                NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE_ALL);
     });
             }
 

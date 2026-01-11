@@ -37,14 +37,15 @@ public class Server_connectionController implements Initializable {
         
         
          
-        Platform.runLater(() -> {
+        Platform.runLater(() -> { 
+            BackgroundAnimation.animateCardEntry(contentContainer);
             BackgroundAnimation.startWarpAnimation(
                 backgroundPane,
                 backgroundPane.getWidth(),
                 backgroundPane.getHeight()
             );
         });
-        BackgroundAnimation.animateCardEntry(contentContainer);
+        
         serverPresets.put("Local Server", "127.0.0.1");
         serverPresets.put("Network Server", "192.168.1.3");
 
