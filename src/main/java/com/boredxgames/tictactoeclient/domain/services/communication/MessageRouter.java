@@ -217,6 +217,7 @@ public class MessageRouter {
                     homeController.dismissIncomingRequest();
                     Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
                 }
+            }
              case INVALID_CREDENTIAL->{
                  System.out.println("INVALID_CREDENTIAL");
                 AuthenticationController.showUserAlert("INVALID CREDENTIAL");
