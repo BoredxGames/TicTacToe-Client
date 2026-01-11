@@ -5,6 +5,12 @@ public enum Screens {
     SECONDARY("GameModeScreen"),
     SETTINGS("SettingsScreen");
 
+    PRIMARY("primary"),
+    SECONDARY("secondary"),
+    SETTINGS("settings"),
+    SERVER_CONNECTION("server_connection"),
+    AUTHENTICATION("authentication");
+   
 
     private final String name;
 

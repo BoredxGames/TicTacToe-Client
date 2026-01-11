@@ -4,12 +4,11 @@ import com.boredxgames.tictactoeclient.App;
 import com.boredxgames.tictactoeclient.domain.managers.localization.LocalizationManager;
 import com.boredxgames.tictactoeclient.domain.managers.state.StatefulController;
 import com.boredxgames.tictactoeclient.domain.managers.theme.ThemeManager;
+import java.io.IOException;
+import java.util.Stack;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
-import java.io.IOException;
-import java.util.Stack;
 
 public class NavigationManager {
 
@@ -31,6 +30,7 @@ public class NavigationManager {
         // طبق الثيم على الـ Scene الرئيسي وفعل listener لأي تغيير مستقبلي
         ThemeManager.init(scene);
 
+        scene = new Scene(initRoot(current.screen().getName()), 1600, 900);
         return scene;
     }
 
