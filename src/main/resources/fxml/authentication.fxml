@@ -46,7 +46,7 @@
                         <children>
                             
                             <VBox alignment="CENTER" spacing="5.0" style="-fx-padding: 0 0 30 0;">
-                                <Label styleClass="card-subtitle" text="Enter the arena to challenge players worldwide." />
+                                <Label styleClass="card-subtitle" text="Enter the arena to challenge players in our world." />
                             </VBox>
 
                             <HBox styleClass="toggle-container">
