@@ -7,6 +7,7 @@ import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import com.boredxgames.tictactoeclient.domain.services.authentication.AuthenticationService;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,97 +17,97 @@ import javafx.scene.layout.VBox;
 
 public class AuthenticationController implements Initializable {
 
-    @FXML
-    private ToggleGroup accessTabs;
-    @FXML
-    private ToggleButton loginBtn;
-    @FXML
-    private ToggleButton registerBtn;
-    @FXML
-    private Label serverStatus;
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
+    @FXML private ToggleButton loginBtn;
+    @FXML private ToggleButton registerBtn;
+    @FXML private Label serverStatus;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private Button submitButton;
+    @FXML private Pane backgroundPane;
+    @FXML private VBox contentContainer;
 
-    private Button submitButton;
-
-    @FXML
-    private Pane backgroundPane;
-    @FXML
-    private VBox contentContainer;
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{3,15}$");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        accessTabs.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == loginBtn) {
-                switchToLoginMode();
-            } else {
-                switchToRegisterMode();
-            }
-        });
-
-        if (loginBtn.isSelected()) {
-            switchToLoginMode();
-        } else {
-            switchToRegisterMode();
-        }
-
+        
         BackgroundAnimation.animateCardEntry(contentContainer);
         backgroundPane.setMouseTransparent(true);
 
         Platform.runLater(() -> {
             BackgroundAnimation.startWarpAnimation(
-                    backgroundPane,
-                    backgroundPane.getWidth(),
-                    backgroundPane.getHeight()
+                backgroundPane,
+                backgroundPane.getWidth(),
+                backgroundPane.getHeight()
             );
         });
-
     }
 
-    private void switchToLoginMode() {
+    
+    @FXML
+private void onLoginSelected() {
+    usernameField.clear();
+        passwordField.clear();
         submitButton.setText("Login");
-    }
+}
 
-    private void switchToRegisterMode() {
-        usernameField.clear();
+@FXML
+private void onRegisterSelected() {
+   usernameField.clear();
         passwordField.clear();
         submitButton.setText("Join-us");
-    }
+}
+    
+   
 
     @FXML
     private void onSubmit() {
         if (!ServerConnectionManager.getInstance().isConnected()) {
             showUserAlert("Server is out of service");
             serverStatus.setText("Server Status: Offline");
-
+            return;
         }
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showUserAlert("Validation Error: Please fill all fields");
-            System.out.println("Validation Error: Please fill all fields");
+        String username = usernameField.getText() == null ? "" : usernameField.getText().trim();
+        String password = passwordField.getText() == null ? "" : passwordField.getText();
+
+        String validationError = validateInput(username, password);
+        if (validationError != null) {
+            showUserAlert(validationError);
             return;
         }
 
         AuthenticationService authService = AuthenticationService.getInstance();
 
         if (loginBtn.isSelected()) {
-            System.out.println("Submitting Login for: " + username);
             authService.requestLogin(username, password);
         } else {
-            System.out.println("Submitting Registration for: " + username);
             authService.requestRegister(username, password);
         }
     }
 
+    private String validateInput(String username, String password) {
+        if (username.isEmpty()) {
+            return "Username is required.";
+        }
+        
+        if (!USERNAME_PATTERN.matcher(username).matches()) {
+            return "Username must be 3-15 characters and contain only letters, numbers, or underscores.";
+        }
+
+        if (password.isEmpty()) {
+            return "Password is required.";
+        }
+
+        if (password.length() < 6) {
+            return "Password must be at least 6 characters long.";
+        }
+
+        return null;
+    }
+
     @FXML
     private void onBackClicked() {
-
         NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
     }
 
@@ -124,8 +125,7 @@ public class AuthenticationController implements Initializable {
                         .ifPresent(window -> alert.initOwner(window));
 
                 alert.showAndWait().ifPresent(type -> {
-                    if (message == "Server is out of srevice"
-                            || message == "Internal Server Error") {
+                    if ("Server is out of service".equals(message) || "Internal Server Error".equals(message)) {
                         NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
                     }
                 });
@@ -135,5 +135,4 @@ public class AuthenticationController implements Initializable {
             }
         });
     }
-
 }
