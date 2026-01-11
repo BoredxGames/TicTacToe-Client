@@ -70,8 +70,10 @@
                             </HBox>
                         </children>
                     </VBox>
+            <Label style="-fx-font-size: 12px;" text="Tic Tac Toe© BoredXGames 2026" textFill="#8a8a9a" />
                 </children>
             </VBox>
+
         </children>
     </StackPane>
 </AnchorPane>

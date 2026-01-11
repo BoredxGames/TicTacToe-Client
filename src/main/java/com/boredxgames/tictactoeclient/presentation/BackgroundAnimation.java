@@ -30,9 +30,9 @@ public class BackgroundAnimation {
         fade.setToValue(1);
 
         ScaleTransition scale = new ScaleTransition(Duration.millis(1000), view);
-        scale.setToX(1.2);
-        scale.setToY(1.2);
-        scale.setInterpolator(Interpolator.EASE_IN);
+        scale.setToX(1.0);
+        scale.setToY(1.0);
+        scale.setInterpolator(Interpolator.EASE_OUT);
 
         ParallelTransition entrance = new ParallelTransition(fade, scale);
         entrance.play();
