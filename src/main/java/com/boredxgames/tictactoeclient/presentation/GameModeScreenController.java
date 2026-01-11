@@ -7,10 +7,10 @@ import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 
 public class GameModeScreenController {
 
@@ -58,7 +58,7 @@ public class GameModeScreenController {
 
         onlineCard.setOnMouseClicked(e -> {
             System.out.println("Online Mode Selected");
-            //NavigationManager.navigate(Screens.ONLINE, NavigationAction.PUSH);
+            NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE_ALL);
         });
 
     }
