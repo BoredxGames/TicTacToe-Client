@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane id="rootPane" prefHeight="800.0" prefWidth="1200.0" styleClass="root-pane"
-            xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@../css/features/game_screen.css" xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/17.0.12"
             fx:controller="com.boredxgames.tictactoeclient.presentation.GameController">
 
@@ -181,6 +181,7 @@
         </StackPane>
     </center>
 
+    <!-- footer -->
     <bottom>
         <VBox alignment="CENTER" styleClass="footer">
             <padding>
