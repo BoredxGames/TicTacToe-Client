@@ -1,90 +1,119 @@
 package com.boredxgames.tictactoeclient.presentation;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-
-/**
- *
- * @author Hazem
- */
-
-
 import java.util.Random;
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Glow;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-
-public abstract class BackgroundAnimation{
+public class BackgroundAnimation {
 
     private static final Random random = new Random();
+    private static final int STAR_COUNT = 50;
+    private static final double MAX_SCALE = 6;
+    private static final double MIN_SCALE = 0.1;
+    private static final double GLOW_LEVEL = 0.5;
 
-    /**
-     * Animates a container sliding up from the bottom and fading in.
-     * @param node The container (e.g., VBox) to animate.
-     */
-    public static void animateCardEntry(Node node) {
-        node.setOpacity(0);
-        node.setTranslateY(500);
+    public static void animateCardEntry(Node view) {
+        view.setOpacity(0);
+        view.setScaleX(0.5);
+        view.setScaleY(0.5);
 
-        TranslateTransition tt = new TranslateTransition(Duration.millis(1500), node);
-        tt.setToY(0);
+        FadeTransition fade = new FadeTransition(Duration.millis(1000), view);
+        fade.setToValue(1);
 
-        FadeTransition ft = new FadeTransition(Duration.millis(1000), node);
-        ft.setToValue(1);
+        ScaleTransition scale = new ScaleTransition(Duration.millis(1000), view);
+        scale.setToX(1.0);
+        scale.setToY(1.0);
+        scale.setInterpolator(Interpolator.EASE_OUT);
 
-        ParallelTransition pt = new ParallelTransition(tt, ft);
-        pt.play();
+        ParallelTransition entrance = new ParallelTransition(fade, scale);
+        entrance.play();
     }
 
-    
-    public static void startBackgroundAnimation(Pane backgroundPane, double screenWidth, double screenHeight) {
-        int particleCount = 50;
+    public static void startWarpAnimation(Pane container, double width, double height) {
+        container.getChildren().clear();
 
-        for (int i = 0; i < particleCount; i++) {
-            Label particle = new Label(random.nextBoolean() ? "X" : "O");
-            particle.getStyleClass().add("background-particle");
+        double centerX = width / 2;
+        double centerY = height / 2;
 
-            double size = 15 + random.nextInt(50);
-            particle.setStyle("-fx-font-size: " + size + "px; -fx-text-fill: rgba(79, 94, 247, " + (0.05 + random.nextDouble() * 0.2) + ");");
+        for (int i = 0; i < STAR_COUNT; i++) {
+            Label star = createNeonStar();
 
-            particle.setTranslateX(random.nextInt((int) screenWidth));
-            particle.setTranslateY(random.nextInt((int) screenHeight));
+            star.setTranslateX(centerX);
+            star.setTranslateY(centerY);
 
-            backgroundPane.getChildren().add(particle);
-            animateParticle(particle, screenWidth, screenHeight);
+            container.getChildren().add(star);
+
+            Duration initialDelay = Duration.millis(random.nextInt(2000));
+            launchStar(star, centerX, centerY, width, height, initialDelay);
         }
     }
 
-    private static void animateParticle(Label particle, double width, double height) {
-        TranslateTransition move = new TranslateTransition(Duration.seconds(15 + random.nextInt(15)), particle);
-        double endX = particle.getTranslateX() + (random.nextInt(200) - 100); // Drift sideways
-        double endY = -100; 
+    private static Label createNeonStar() {
+        boolean isX = random.nextBoolean();
+        String symbol = isX ? "X" : "O";
+        Label star = new Label(symbol);
 
-        move.setToX(endX);
-        move.setToY(endY);
-        move.setCycleCount(1);
+        String neonColor = isX ? "#ff00ff" : "#00ffff";
 
-        RotateTransition rotate = new RotateTransition(Duration.seconds(5 + random.nextInt(10)), particle);
-        rotate.setByAngle(360);
-        rotate.setCycleCount(RotateTransition.INDEFINITE);
+        star.setStyle(
+                "-fx-font-weight: bold;"
+                + "-fx-text-fill: " + neonColor + ";"
+                + "-fx-font-size: 18px;"
+        );
 
-        move.setOnFinished(e -> {
-           
-            particle.setTranslateY(height + random.nextInt(100));
-            particle.setTranslateX(random.nextInt((int) width));
-            animateParticle(particle, width, height);
-        });
+        star.setMouseTransparent(true);
+        star.setEffect(new Glow(GLOW_LEVEL));
 
-        move.play();
-        rotate.play();
+        return star;
+    }
+
+    private static void launchStar(Node star, double startX, double startY, double boundsW, double boundsH, Duration delay) {
+        star.setTranslateX(startX);
+        star.setTranslateY(startY);
+        star.setScaleX(MIN_SCALE);
+        star.setScaleY(MIN_SCALE);
+        star.setOpacity(0);
+
+        double angle = random.nextDouble() * 360;
+        double distance = Math.max(boundsW, boundsH);
+
+        double targetX = startX + Math.cos(Math.toRadians(angle)) * distance;
+        double targetY = startY + Math.sin(Math.toRadians(angle)) * distance;
+
+        double speed = random.nextDouble(10) + 0.5;
+
+        TranslateTransition move = new TranslateTransition(Duration.seconds(speed), star);
+        move.setFromX(startX);
+        move.setFromY(startY);
+        move.setToX(targetX);
+        move.setToY(targetY);
+        move.setInterpolator(Interpolator.EASE_IN);
+
+        ScaleTransition grow = new ScaleTransition(Duration.seconds(speed), star);
+        grow.setToX(MAX_SCALE);
+        grow.setToY(MAX_SCALE);
+        grow.setInterpolator(Interpolator.EASE_IN);
+
+        RotateTransition spin = new RotateTransition(Duration.seconds(speed), star);
+        spin.setByAngle(random.nextBoolean() ? 360 : -360);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(speed * 0.2), star);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+
+        ParallelTransition flight = new ParallelTransition(move, grow, spin, fadeIn);
+        flight.setDelay(delay);
+
+        flight.setOnFinished(event -> launchStar(star, startX, startY, boundsW, boundsH, Duration.ZERO));
+        flight.play();
     }
 }

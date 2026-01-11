@@ -30,7 +30,7 @@ public class ServerConnectionManager {
     private DataOutputStream dos;
     private Thread th;
     private Gson gson = new Gson();
-    private AuthResponseEntity player ;
+    private AuthResponseEntity player;
     private volatile boolean isIntentionalDisconnect = false;
 
     public void setPlayer(AuthResponseEntity player) {
@@ -52,14 +52,13 @@ public class ServerConnectionManager {
 
     public void connect(String host, int port  ) throws IOException {
         isIntentionalDisconnect = false;
-       InetAddress ip = InetAddress.getByName("localhost");
-            socket = new Socket(ip, port);
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
-            th = new Thread(this::readMessages);     
-            th.start();
+       InetAddress ip = InetAddress.getByName(host);
+        socket = new Socket(ip, port);
+        dis = new DataInputStream(socket.getInputStream());
+        dos = new DataOutputStream(socket.getOutputStream());
+        th = new Thread(this::readMessages);
+        th.start();
 
-      
     }
 
     private void readMessages() {
@@ -68,21 +67,20 @@ public class ServerConnectionManager {
             try {
                 String response = dis.readUTF();
                 System.out.println(response);
-               
-                
+
                 MessageRouter router = MessageRouter.getInstance();
                 router.navigateMessage(response);
             } catch (IOException ex) {
                 if (isIntentionalDisconnect) {
                     System.out.println("Disconnected intentionally.");
-                    break; 
+                    break;
                 }
-                
+
                 close();
-                
+
                 Platform.runLater(() -> {
                     AuthenticationController.showUserAlert("Connection to server lost.");
-                    NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
+                    NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE_ALL);
                 });
                 break;
             }
@@ -93,7 +91,7 @@ public class ServerConnectionManager {
     public void disconnect() {
         try {
             isIntentionalDisconnect = true;
-            close(); 
+            close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,13 +99,13 @@ public class ServerConnectionManager {
 
     public synchronized void sendMessage(Message msg) {
         try {
-        String jsonMessage = gson.toJson(msg);
-      
-        dos.writeUTF(jsonMessage);
-        dos.flush();
-    } catch (IOException ex) {
-        ex.printStackTrace();
-    }
+            String jsonMessage = gson.toJson(msg);
+
+            dos.writeUTF(jsonMessage);
+            dos.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
     }
     public AuthResponseEntity getPlayer() {
@@ -129,5 +127,9 @@ public class ServerConnectionManager {
             System.getLogger(ServerConnectionManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
 
+    }
+
+    public boolean isConnected() {
+        return !socket.isClosed();
     }
 }
