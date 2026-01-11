@@ -30,7 +30,6 @@ public class NavigationManager {
         // طبق الثيم على الـ Scene الرئيسي وفعل listener لأي تغيير مستقبلي
         ThemeManager.init(scene);
 
-        scene = new Scene(initRoot(current.screen().getName()), 1600, 900);
         return scene;
     }
 

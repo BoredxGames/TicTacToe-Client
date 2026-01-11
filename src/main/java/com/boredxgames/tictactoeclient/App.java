@@ -20,10 +20,10 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
 
-        // شغل الموسيقى تلقائياً
+      
         AudioManager.playDefaultMusic();
 
-        // فعل الكليك على أي مكان
+        
         AudioManager.attachGlobalClickSoundToScene(scene);
     }
 

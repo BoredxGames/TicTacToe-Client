@@ -4,12 +4,12 @@ module com.boredxgames.tictactoeclient {
     requires javafx.media;
     requires java.base;
     requires java.prefs;
-
+requires org.json;
+    requires com.google.gson;
+    
     
     opens com.boredxgames.tictactoeclient.domain.managers.audio to javafx.fxml;
-    requires org.json;
-    requires com.google.gson;
-    requires java.base;
+    
     opens com.boredxgames.tictactoeclient to javafx.fxml;
     opens com.boredxgames.tictactoeclient.domain.services.communication to com.google.gson;
     opens com.boredxgames.tictactoeclient.domain.model to com.google.gson;
