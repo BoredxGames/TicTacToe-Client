@@ -18,9 +18,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -72,6 +74,8 @@ public class GameController implements Initializable {
     private Label modalTitle;
     @FXML
     private Label modalMessage;
+    @FXML
+    private MediaView victoryVideo;
     @FXML
     private Button playAgainButton;
     @FXML
@@ -287,6 +291,7 @@ public class GameController implements Initializable {
         if (state == GameState.X_WINS) {
             playerScore++;
             playerScoreLabel.setText(String.valueOf(playerScore));
+            playVictoryVideo();
         } else if (state == GameState.O_WINS) {
             opponentScore++;
             opponentScoreLabel.setText(String.valueOf(opponentScore));
@@ -323,6 +328,28 @@ public class GameController implements Initializable {
         }
 
         modalOverlay.setVisible(true);
+    }
+
+    private void playVictoryVideo() {
+        try {
+            String videoPath = Objects.requireNonNull(
+                    getClass().getResource("/assets/videos/you_win.mp4")
+            ).toExternalForm();
+
+            Media media = new Media(videoPath);
+            MediaPlayer player = new MediaPlayer(media);
+            victoryVideo.setMediaPlayer(player);
+
+            victoryVideo.setVisible(true);
+            player.setAutoPlay(true);
+
+            player.setOnEndOfMedia(() -> {
+                victoryVideo.setVisible(false);
+            });
+
+        } catch (Exception e) {
+            System.out.println("Error getting the video: " + e);
+        }
     }
 
     public void resetGame() {

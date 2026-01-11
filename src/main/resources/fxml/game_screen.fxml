@@ -5,6 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.media.MediaView?>
 
 <BorderPane id="rootPane" prefHeight="800.0" prefWidth="1200.0" styleClass="root-pane"
             stylesheets="@../css/features/game_screen.css" xmlns:fx="http://javafx.com/fxml/1"
@@ -145,6 +146,9 @@
                     <StackPane maxWidth="Infinity" prefHeight="128" styleClass="modal-header">
                         <VBox alignment="CENTER">
                             <StackPane styleClass="trophy-container">
+                                <MediaView fx:id="victoryVideo"
+                                           fitWidth="600"
+                                           visible="false"/>
                                 <Text fx:id="modalIcon" styleClass="material-icon, trophy-icon" text="emoji_events"/>
                             </StackPane>
                         </VBox>
