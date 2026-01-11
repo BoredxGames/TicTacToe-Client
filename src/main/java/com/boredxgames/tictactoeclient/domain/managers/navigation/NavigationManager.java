@@ -3,12 +3,11 @@ package com.boredxgames.tictactoeclient.domain.managers.navigation;
 import com.boredxgames.tictactoeclient.App;
 import com.boredxgames.tictactoeclient.domain.managers.localization.LocalizationManager;
 import com.boredxgames.tictactoeclient.domain.managers.state.StatefulController;
+import java.io.IOException;
+import java.util.Stack;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
-import java.io.IOException;
-import java.util.Stack;
 
 public class NavigationManager {
 
@@ -23,7 +22,7 @@ public class NavigationManager {
 
         current = new ScreenNavigationEntry(Screens.PRIMARY, null, null);
 
-        scene = new Scene(initRoot(current.screen().getName()), 640, 480);
+        scene = new Scene(initRoot(current.screen().getName()), 1600, 900);
         return scene;
     }
 
