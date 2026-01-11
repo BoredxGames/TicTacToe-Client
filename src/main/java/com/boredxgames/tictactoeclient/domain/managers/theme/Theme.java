@@ -4,9 +4,9 @@ import com.boredxgames.tictactoeclient.App;
 
 public enum Theme {
 
-    PURPLE("/css/themes/purple.css"),
-    GREEN("/css/themes/green.css"),
-    RED("/css/themes/red.css");
+    NEON_BLUE("/css/themes/neon_blue.css"),
+    CYBER_PINK("/css/themes/cyber_pink.css"),
+    TOXIC_GREEN("/css/themes/toxic_green.css");
 
     private final String cssPath;
 
