@@ -14,6 +14,7 @@ import com.boredxgames.tictactoeclient.domain.services.game.GameService;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -99,7 +100,7 @@ public class HomeController implements Initializable {
             ButtonType declineBtn = new ButtonType("Decline");
             alert.getButtonTypes().setAll(acceptBtn, declineBtn);
             
-            this.currentIncomingRequestAlert = alert; // Store reference
+            this.currentIncomingRequestAlert = alert; 
 
             alert.showAndWait().ifPresent(type -> {
                 this.currentIncomingRequestAlert = null;
@@ -121,7 +122,7 @@ public class HomeController implements Initializable {
     }
 
     public void showErrorAlert(String message) {
-        GameService.getInstance().setWaiting(false); // Always unblock waiting state on error
+        GameService.getInstance().setWaiting(false); 
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -129,7 +130,6 @@ public class HomeController implements Initializable {
             alert.setContentText(message);
             alert.showAndWait();
             
-            // Refresh list to ensure UI is consistent
             GameService.getInstance().requestAvailablePlayers();
         });
     }
@@ -146,4 +146,9 @@ public class HomeController implements Initializable {
         leaderboardViewController.updateLeaderboard(info);
     }
 }
+    @FXML
+    private void openSettings(ActionEvent event) {
+        System.out.println("Settings Button Clicked");
+        NavigationManager.navigate(Screens.SETTINGS, NavigationAction.PUSH);
+    }
 }

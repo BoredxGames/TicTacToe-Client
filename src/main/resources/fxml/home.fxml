@@ -33,7 +33,7 @@
                     
                     <Circle radius="18" styleClass="avatar-profile" />
                     
-                    <Button styleClass="icon-btn" text="⚙" />
+                    <Button onAction="#openSettings" styleClass="icon-btn" text="⚙" />
                     <Button onAction="#onSignOut" styleClass="signout-btn" text="Sign Out" />
                 </HBox>
             </HBox>
