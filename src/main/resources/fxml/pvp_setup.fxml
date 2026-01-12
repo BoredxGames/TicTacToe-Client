@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane stylesheets="@../css/features/pvp_setup.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+
+    <AnchorPane styleClass="root">
+        <Region styleClass="background-blur" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
+        
+        <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="20.0" styleClass="top-bar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets left="30.0" right="30.0" />
+            </padding>
+            <children>
+                <Label styleClass="logo-text" text="Tic-Tac-Toe" />
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox alignment="CENTER" spacing="30.0" styleClass="nav-links">
+                    <Label text="Home" />
+                    <Label text="Leaderboard" />
+                    <Label text="Settings" />
+                    <Label text="Records" />
+                </HBox>
+                </children>
+        </HBox>
+
+        <VBox alignment="CENTER" fillWidth="false" spacing="24.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="80.0">
+            
+            <VBox alignment="CENTER" maxWidth="520.0" prefWidth="520.0" spacing="8.0">
+                <HBox alignment="CENTER" spacing="15.0">
+                    <SVGPath content="M10.576 2.837v26.271zM2.839 21.36h26.264zM21.184 2.837v26.271zM2.839 10.752h26.149zM14.158 14.158l3.632 3.632zM14.205 17.742l3.537-3.537zM24.645 3.418l3.632 3.632zM24.692 7.002l3.537-3.537zM3.55 24.895l3.632 3.632zM3.598 28.48l3.537-3.537zM10.31 2.837h0.522v26.271h-0.522v-26.271zM20.959 2.837h0.47v26.272h-0.47v-26.272zM2.839 21.011h26.264v0.348h-26.264v-0.348zM2.839 10.578h26.264v0.348h-26.264v-0.348zM28.384 6.889l-0.257 0.259-3.591-3.571 0.257-0.259 3.591 3.571zM24.785 7.141l-0.256-0.26 3.608-3.555 0.256 0.26-3.608 3.555zM17.892 17.59l-0.257 0.259-3.591-3.572 0.257-0.259 3.591 3.572zM14.292 17.843l-0.256-0.26 3.608-3.555 0.256 0.26-3.608 3.555zM7.291 28.366l-0.257 0.259-3.591-3.572 0.257-0.259 3.591 3.572zM3.69 28.619l-0.256-0.26 3.608-3.555 0.256 0.26-3.608 3.555zM15.974 2.837c-1.396 0-2.527 1.073-2.527 2.397s1.131 2.397 2.527 2.397 2.527-1.073 2.527-2.397-1.131-2.397-2.527-2.397zM15.974 7.267c-1.184 0-2.144-0.91-2.144-2.034s0.96-2.034 2.144-2.034 2.144 0.91 2.144 2.034-0.96 2.034-2.144 2.034zM5.366 2.837c-1.396 0-2.527 1.073-2.527 2.397s1.131 2.397 2.527 2.397 2.527-1.073 2.527-2.397-1.131-2.397-2.527-2.397zM5.366 7.267c-1.184 0-2.144-0.91-2.144-2.034s0.96-2.034 2.144-2.034 2.144 0.91 2.144 2.034-0.96 2.034-2.144 2.034zM26.461 13.538c-1.396 0-2.527 1.073-2.527 2.397s1.131 2.397 2.527 2.397c1.396 0 2.527-1.073 2.527-2.397s-1.131-2.397-2.527-2.397zM26.461 17.969c-1.184 0-2.144-0.91-2.144-2.034s0.96-2.034 2.144-2.034c1.184 0 2.144 0.91 2.144 2.034s-0.96 2.034-2.144 2.034zM15.922 24.314c-1.396 0-2.527 1.073-2.527 2.397s1.131 2.397 2.527 2.397 2.527-1.073 2.527-2.397-1.131-2.397-2.527-2.397zM15.922 28.745c-1.184 0-2.144-0.91-2.144-2.034s0.96-2.034 2.144-2.034 2.144 0.91 2.144 2.034-0.96 2.034-2.144 2.034z" scaleX="2" scaleY="2" styleClass="icon-primary">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin></SVGPath>
+                    <Label styleClass="title-text" text=" Offline PVP" />
+                </HBox>
+                <Label alignment="CENTER" contentDisplay="CENTER" styleClass="subtitle-text" text="Configure players for a local match." />
+            </VBox>
+
+            <VBox prefWidth="520.0" spacing="32.0" styleClass="setup-card">
+                
+                <VBox spacing="24.0">
+                    <VBox spacing="8.0">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label styleClass="section-label" text="Player 1 Name" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label styleClass="badge-x" text="PLAY AS X" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" styleClass="input-container">
+                            <HBox styleClass="input-icon-box">
+                                <SVGPath content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" styleClass="icon-gray" />
+                            </HBox>
+                            <TextField fx:id="player1Field" promptText="Enter name..." text="Hazem" HBox.hgrow="ALWAYS" />
+                        </HBox>
+                    </VBox>
+
+                    <StackPane>
+                        <Region styleClass="separator-line" />
+                        <Label styleClass="separator-text" text="VS" />
+                    </StackPane>
+
+                    <VBox spacing="8.0">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label styleClass="section-label" text="Player 2 Name" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label styleClass="badge-o" text="PLAY AS O" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" styleClass="input-container">
+                            <HBox styleClass="input-icon-box">
+                                <SVGPath content="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" styleClass="icon-gray" />
+                            </HBox>
+                            <TextField fx:id="player2Field" promptText="Enter name..." HBox.hgrow="ALWAYS" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <VBox spacing="12.0">
+                    <Label styleClass="section-label" text="Who goes first?" />
+                    <HBox styleClass="toggle-container">
+                        <fx:define>
+                            <ToggleGroup fx:id="starterGroup" />
+                        </fx:define>
+                        <ToggleButton maxWidth="Infinity" selected="true" styleClass="toggle-button" text="Player 1 (X)" HBox.hgrow="ALWAYS">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="starterGroup" />
+                     </toggleGroup></ToggleButton>
+                        <ToggleButton maxWidth="Infinity" styleClass="toggle-button" text="Player 2 (O)" toggleGroup="$starterGroup" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="12.0">
+                    <Button fx:id="startGameBtn" maxWidth="Infinity" styleClass="primary-button" text="Start Game">
+                        <graphic>
+                            <SVGPath content="M8 5v14l11-7z" style="-fx-translate-x: -4;" styleClass="icon-white" />
+                        </graphic>
+                    </Button>
+                    <Button fx:id="backBtn" maxWidth="Infinity" styleClass="secondary-button" text="Back to Menu">
+                        <graphic>
+                            <SVGPath content="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" style="-fx-translate-x: -4;" styleClass="icon-gray" />
+                        </graphic>                    
+                    </Button>
+                </VBox>
+
+            </VBox>
+        </VBox>
+    </AnchorPane>
+</StackPane>

@@ -7,10 +7,10 @@ import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 
 public class GameModeScreenController {
 
@@ -53,7 +53,7 @@ public class GameModeScreenController {
         // عند الضغط على الكارد الخاص بالـ Offline
         offlineCard.setOnMouseClicked(e -> {
             System.out.println("Offline Mode Selected");
-            // NavigationManager.navigate(Screens.OFFLINE, NavigationAction.PUSH);
+             NavigationManager.navigate(Screens.PVP_SETUP, NavigationAction.REPLACE);
         });
 
         onlineCard.setOnMouseClicked(e -> {

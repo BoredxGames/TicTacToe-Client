@@ -7,8 +7,8 @@ public enum Screens {
 
 
     SERVER_CONNECTION("server_connection"),
-    AUTHENTICATION("authentication");
-   
+    AUTHENTICATION("authentication"),
+    PVP_SETUP("pvp_setup");
 
     private final String name;
 
