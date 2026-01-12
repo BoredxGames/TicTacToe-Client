@@ -30,37 +30,49 @@ public class LeaderboardController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
     }
     
-    public void updateLeaderboard(AvailablePlayersInfo info) {
+   public void updateLeaderboard(AvailablePlayersInfo info) {
         Platform.runLater(() -> {
             leaderboardContainer.getChildren().clear();
-            
+
             Vector<PlayerEntity> allPlayers = new Vector<>();
             if (info.getOnlinePlayers() != null) allPlayers.addAll(info.getOnlinePlayers());
             if (info.getInGamePlayers() != null) allPlayers.addAll(info.getInGamePlayers());
             if (info.getPendingPlayers() != null) allPlayers.addAll(info.getPendingPlayers());
-            
+
             allPlayers.sort((p1, p2) -> Integer.compare(p2.getScore(), p1.getScore()));
 
             AuthResponseEntity me = ServerConnectionManager.getInstance().getPlayer();
             boolean foundMe = false;
 
-            int rank = 1;
-            for (PlayerEntity p : allPlayers) {
-                if (me != null && p.getId().equals(me.getId())) {
-                    foundMe = true;
-                    if (myRankBar != null) updateMyFooter(rank, p);
-                }
+            if (me != null && myRankBar != null) {
+                PlayerEntity myPlayerState = allPlayers.stream()
+                        .filter(p -> p.getId().equals(me.getId()))
+                        .findFirst()
+                        .orElse(null);
 
-                leaderboardContainer.getChildren().add(createRow(p, rank));
-                rank++;
+                if (myPlayerState != null) {
+                    foundMe = true;
+                    if (myPlayerState.getScore() == 0) {
+                        updateMyFooter("NA", myPlayerState);
+                    } else {
+                        int myRank = allPlayers.indexOf(myPlayerState) + 1;
+                        updateMyFooter(String.valueOf(myRank), myPlayerState);
+                    }
+                }
+                myRankBar.setVisible(foundMe);
             }
-            
-            if (myRankBar != null) myRankBar.setVisible(foundMe);
+            int count = 0;
+            for (PlayerEntity p : allPlayers) {
+                if (count >= 5 || p.getScore() <= 0) break; 
+
+                leaderboardContainer.getChildren().add(createRow(p, count + 1));
+                count++;
+            }
         });
     }
 
-    private void updateMyFooter(int rank, PlayerEntity p) {
-        if (myRankLabel != null) myRankLabel.setText(String.valueOf(rank));
+    private void updateMyFooter(String rankText, PlayerEntity p) {
+        if (myRankLabel != null) myRankLabel.setText(rankText);
         if (myNameLabel != null) myNameLabel.setText(p.getUsername());
         if (myScoreLabel != null) myScoreLabel.setText(String.valueOf(p.getScore()));
     }
