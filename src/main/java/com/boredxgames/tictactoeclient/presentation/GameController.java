@@ -7,8 +7,8 @@ import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationMana
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
 import com.boredxgames.tictactoeclient.domain.model.Move;
-import com.boredxgames.tictactoeclient.domain.services.GameBoard;
-import com.boredxgames.tictactoeclient.domain.services.GameBoard.GameState;
+import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
+import com.boredxgames.tictactoeclient.domain.model.GameState;
 import com.boredxgames.tictactoeclient.domain.services.game.GameService;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;

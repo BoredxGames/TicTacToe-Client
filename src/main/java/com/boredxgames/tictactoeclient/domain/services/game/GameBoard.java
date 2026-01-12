@@ -1,4 +1,6 @@
-package com.boredxgames.tictactoeclient.domain.services;
+package com.boredxgames.tictactoeclient.domain.services.game;
+
+import com.boredxgames.tictactoeclient.domain.model.GameState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +20,6 @@ public class GameBoard {
     private char currentPlayer;
     private GameState gameState;
     private int movesCount;
-    
-    public enum GameState {
-        IN_PROGRESS,
-        X_WINS,
-        O_WINS,
-        DRAW
-    }
      
     public GameBoard() {
         this(PLAYER_X);
