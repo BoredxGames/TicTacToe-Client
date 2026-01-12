@@ -5,7 +5,6 @@ public enum Screens {
     SECONDARY("GameModeScreen"),
     SETTINGS("SettingsScreen"),
     GAME_MODE("GameModeScreen"),
-
     SERVER_CONNECTION("server_connection"),
     AUTHENTICATION("authentication"),
     GAME("game_screen");
