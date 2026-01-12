@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane styleClass="anchor-pane" stylesheets="@../css/features/splashscreen.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.boredxgames.tictactoeclient.presentation.SplashScreenController">
+
+
+    <Label styleClass="floating-char" text="X" StackPane.alignment="TOP_LEFT" />
+    <Label styleClass="floating-char" text="O" StackPane.alignment="TOP_RIGHT" />
+    <Label styleClass="floating-char" text="X" StackPane.alignment="BOTTOM_RIGHT" />
+    <Label styleClass="floating-char" text="O" StackPane.alignment="BOTTOM_LEFT" />
+
+
+    <VBox alignment="CENTER" maxWidth="600" spacing="12" styleClass="content-box">
+
+                    <ImageView fx:id="gameIcon" fitHeight="66.0" fitWidth="85.0" preserveRatio="true">
+         <image>
+            <Image url="@../assets/icons/Tic_Tac_Toe.png" />
+         </image>
+      </ImageView>
+
+        <Label fx:id="titleLabel" styleClass="title-label" text="TIC TAC TOE" />
+
+        <Label fx:id="subtitleLabel" styleClass="subtitle-label" text="NEON EDITION" />
+
+        <ProgressBar fx:id="progressBar" maxWidth="600" prefWidth="0.6" progress="0.0" styleClass="progress-bar" />
+
+    </VBox>
+
+</StackPane>

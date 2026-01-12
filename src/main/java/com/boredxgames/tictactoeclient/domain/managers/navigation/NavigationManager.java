@@ -3,6 +3,7 @@ package com.boredxgames.tictactoeclient.domain.managers.navigation;
 import com.boredxgames.tictactoeclient.App;
 import com.boredxgames.tictactoeclient.domain.managers.localization.LocalizationManager;
 import com.boredxgames.tictactoeclient.domain.managers.state.StatefulController;
+import com.boredxgames.tictactoeclient.domain.managers.theme.ThemeManager;
 import java.io.IOException;
 import java.util.Stack;
 import javafx.fxml.FXMLLoader;
@@ -19,9 +20,15 @@ public class NavigationManager {
     private static final Stack<ScreenNavigationEntry> screenStack = new Stack<>();
 
     public static Scene init() throws IOException {
+// شاشة البداية
         current = new ScreenNavigationEntry(Screens.GAME, null, null);
 
-        scene = new Scene(initRoot(current.screen().getName()), 1600, 900);
+        Parent root = initRoot(current.screen().getName());
+        scene = new Scene(root, 640, 480);
+
+        // طبق الثيم على الـ Scene الرئيسي وفعل listener لأي تغيير مستقبلي
+        ThemeManager.init(scene);
+
         return scene;
     }
 
@@ -81,6 +88,8 @@ public class NavigationManager {
             }
 
             scene.setRoot(root);
+
+            ThemeManager.applyThemeTo(scene);
 
             current = new ScreenNavigationEntry(entry.screen(), entry.state(), controller);
 
