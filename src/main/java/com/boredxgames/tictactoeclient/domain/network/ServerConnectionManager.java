@@ -98,6 +98,7 @@ public class ServerConnectionManager {
     public synchronized void sendMessage(Message msg) {
         try {
             String jsonMessage = gson.toJson(msg);
+            System.out.println(jsonMessage + "SENTTTTT");
 
             dos.writeUTF(jsonMessage);
             dos.flush();

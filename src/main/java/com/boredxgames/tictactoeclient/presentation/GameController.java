@@ -1,15 +1,19 @@
 package com.boredxgames.tictactoeclient.presentation;
 
-import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationParameterAware;
-import com.boredxgames.tictactoeclient.domain.model.GameMode;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
+import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationParameterAware;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
+import com.boredxgames.tictactoeclient.domain.model.GameMode;
 import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
-import com.boredxgames.tictactoeclient.domain.model.Move;
-import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
 import com.boredxgames.tictactoeclient.domain.model.GameState;
-import com.boredxgames.tictactoeclient.domain.services.game.GameService;
+import com.boredxgames.tictactoeclient.domain.model.Move;
+import com.boredxgames.tictactoeclient.domain.services.GameService;
+import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
+import com.boredxgames.tictactoeclient.domain.services.game.OnlinePVPService;
+import java.net.URL;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -27,9 +31,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import java.net.URL;
-import java.util.Objects;
-import java.util.ResourceBundle;
 
 /**
  * @author Tasneem
@@ -99,10 +100,11 @@ public class GameController implements Initializable, NavigationParameterAware {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         cells = new Button[][]{
-                {cell00, cell01, cell02},
-                {cell10, cell11, cell12},
-                {cell20, cell21, cell22}
+            {cell00, cell01, cell02},
+            {cell10, cell11, cell12},
+            {cell20, cell21, cell22}
         };
         gameBoard = new GameBoard();
         setupCellHandlers();
@@ -148,14 +150,28 @@ public class GameController implements Initializable, NavigationParameterAware {
                 changeDifficultyButton.setManaged(true);
                 // gameService = new OfflinePVEAIService(); // TODO: implement offline pve ai service
             }
-            case ONLINE_PVP -> {
-                opponentTypeLabel.setText("ONLINE PLAYER");
-                difficultyBadge.setVisible(false);
-                difficultyBadge.setManaged(false);
-                changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);
-
+         case ONLINE_PVP -> {
+    opponentTypeLabel.setText("ONLINE PLAYER");
+    difficultyBadge.setVisible(false);
+    difficultyBadge.setManaged(false);
+    changeDifficultyButton.setVisible(false);
+    changeDifficultyButton.setManaged(false);
+    gameService = OnlinePVPService.getInstance().setMoveListener((move) -> {
+        Platform.runLater(() -> {
+            if (gameBoard.makeMove(move.getRow(), move.getCol(), gameBoard.getCurrentPlayer())) {
+                updateCell(move.getRow(), move.getCol(), gameBoard.getCurrentPlayer());
+                
+                if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
+                    handleGameEnd();
+                } else {
+                    gameBoard.switchPlayer();
+                    updateTurnIndicator();
+                    enableBoard();
+                }
             }
+        });
+    });
+}
         }
     }
 
@@ -191,18 +207,46 @@ public class GameController implements Initializable, NavigationParameterAware {
         });
     }
 
-    private void handleCellClick(int row, int col) {
-        if (!gameBoard.isValidMove(row, col)) return;
+  private void handleCellClick(int row, int col) {
+    if (!gameBoard.isValidMove(row, col)) return;
 
-        if (gameMode == GameMode.ONLINE_PVP && !isPlayerTurn) return;
-
-        char currentPlayer = gameBoard.getCurrentPlayer();
-
-        Move move = new Move(row, col);
+    char currentPlayer = gameBoard.getCurrentPlayer();
+    
+    if (!gameBoard.makeMove(row, col, currentPlayer)) {
+        return;
+    }
+    
+    Move move = new Move(row, col);
+    
+    if (gameMode == GameMode.ONLINE_PVP) {
         gameService.makeMove(move, currentPlayer);
-
-        Move nextMove = gameService.getNextMove(gameBoard, currentPlayer);
-        if(nextMove != null) {
+        updateCell(row, col, currentPlayer);
+        disableBoard();
+        
+        if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
+            handleGameEnd();
+        } else {
+            gameBoard.switchPlayer();
+            updateTurnIndicator();
+        }
+        return;
+    }
+    
+    gameService.makeMove(move, currentPlayer);
+    updateCell(row, col, currentPlayer);
+    gameBoard.switchPlayer();
+    
+    if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
+        handleGameEnd();
+        return;
+    }
+    
+    updateTurnIndicator();
+    
+    if (gameMode == GameMode.OFFLINE_PVE) {
+        disableBoard();
+        Move nextMove = gameService.getNextMove(gameBoard, gameBoard.getCurrentPlayer());
+        if (nextMove != null) {
             Platform.runLater(() -> {
                 if (gameBoard.makeMove(nextMove.getRow(), nextMove.getCol(), gameBoard.getCurrentPlayer())) {
                     updateCell(nextMove.getRow(), nextMove.getCol(), gameBoard.getCurrentPlayer());
@@ -211,16 +255,13 @@ public class GameController implements Initializable, NavigationParameterAware {
                     } else {
                         gameBoard.switchPlayer();
                         updateTurnIndicator();
+                        enableBoard();
                     }
                 }
             });
         }
-
-        GameState state = gameService.getOutcome(gameBoard);
-        if (state != GameState.IN_PROGRESS) {
-            handleGameEnd();
-        }
     }
+}
 
     private void updateCell(int row, int col, char player) {
         Button cell = cells[row][col];
@@ -331,17 +372,17 @@ public class GameController implements Initializable, NavigationParameterAware {
             case X_WINS:
                 modalIcon.setText("emoji_events");
                 modalTitle.setText("Victory!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE ?
-                        "The CPU didn't stand a chance against your moves." :
-                        "Player 1 wins the game!");
+                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
+                        ? "The CPU didn't stand a chance against your moves."
+                        : "Player 1 wins the game!");
                 break;
 
             case O_WINS:
                 modalIcon.setText("sentiment_dissatisfied");
                 modalTitle.setText("Defeat!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE ?
-                        "The CPU outsmarted you this time." :
-                        "Player 2 wins the game!");
+                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
+                        ? "The CPU outsmarted you this time."
+                        : "Player 2 wins the game!");
                 break;
 
             case DRAW:

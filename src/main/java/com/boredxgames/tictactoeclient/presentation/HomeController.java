@@ -3,10 +3,7 @@ package com.boredxgames.tictactoeclient.presentation;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
-import com.boredxgames.tictactoeclient.domain.model.AuthResponseEntity;
-import com.boredxgames.tictactoeclient.domain.model.AvailablePlayersInfo;
-import com.boredxgames.tictactoeclient.domain.model.GameRequestInfo;
-import com.boredxgames.tictactoeclient.domain.model.GameResponseInfo;
+import com.boredxgames.tictactoeclient.domain.model.*;
 import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
 import com.boredxgames.tictactoeclient.domain.services.game.OnlinGameSession;
@@ -46,15 +43,7 @@ public class HomeController implements Initializable {
             if(scoreLabel != null) scoreLabel.setText("Score: " + currentUser.getScore());
         }
 
-        Platform.runLater(() -> {
-            if (backgroundPane != null) {
-                double w = rootStack.getWidth() > 0 ? rootStack.getWidth() : 1280;
-                double h = rootStack.getHeight() > 0 ? rootStack.getHeight() : 800;
-                BackgroundHomeAnimation.startBackgroundAnimation(backgroundPane, w, h);
-            }
-            javafx.scene.Node viewport = rootStack.lookup(".viewport");
-            if (viewport != null) viewport.setStyle("-fx-background-color: rgba(0,0,0,0);");
-        });
+      
          OnlinGameSession.getInstance().requestLeaderboard();
                 OnlinGameSession.getInstance().requestAvailablePlayers();
 
