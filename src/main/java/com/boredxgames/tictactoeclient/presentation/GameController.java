@@ -12,6 +12,7 @@ import com.boredxgames.tictactoeclient.domain.model.GameState;
 import com.boredxgames.tictactoeclient.domain.services.AIService;
 import com.boredxgames.tictactoeclient.domain.services.game.GameService;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVEAIService;
+import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVPService;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -143,7 +144,7 @@ public class GameController implements Initializable, NavigationParameterAware {
                 difficultyBadge.setManaged(false);
                 changeDifficultyButton.setVisible(false);
                 changeDifficultyButton.setManaged(false);
-                // gameService = new OfflinePVPService(); // TODO: implement offline pvp service
+                gameService = new OfflinePVPService();
             }
             case OFFLINE_PVE -> {
                 opponentTypeLabel.setText("CPU (O)");
@@ -197,53 +198,59 @@ public class GameController implements Initializable, NavigationParameterAware {
     }
 
     private void handleCellClick(int row, int col) {
- if (!gameBoard.isValidMove(row, col)) return;
-
-    char currentPlayer = gameBoard.getCurrentPlayer();
-
-    switch (gameMode) {
-        case OFFLINE_PVP -> {
-            // Player vs Player
-            gameBoard.makeMove(row, col, currentPlayer);
-            updateCell(row, col, currentPlayer);
-            checkGameEnd();
-            gameBoard.switchPlayer();
-            updateTurnIndicator();
+        if (!gameBoard.isValidMove(row, col)) {
+            return;
         }
 
-        case OFFLINE_PVE -> {
-            // Player X moves
-            gameBoard.makeMove(row, col, GameBoard.PLAYER_X);
-            updateCell(row, col, GameBoard.PLAYER_X);
+        char currentPlayer = gameBoard.getCurrentPlayer();
 
-            if (checkGameEnd()) return;
+        switch (gameMode) {
+            case OFFLINE_PVP -> {
+                // Player vs Player
 
-            // AI O moves
-            disableBoard();
-            PauseTransition pause = new PauseTransition(Duration.millis(500)); // AI "thinking"
-            pause.setOnFinished(e -> {
-                Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
-                gameService.makeMove(aiMove, GameBoard.PLAYER_O, gameBoard);
-
-                if (aiMove != null) {
-                    updateCell(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
-                }
+                gameBoard.makeMove(row, col, currentPlayer);
+                updateCell(row, col, currentPlayer);
 
                 if (!checkGameEnd()) {
-                    enableBoard();
-                    gameBoard.switchPlayer();
+
                     updateTurnIndicator();
                 }
-            });
-            pause.play();
-        }
+            }
 
-        case ONLINE_PVP -> {
-            // Player sends move to server instead of executing locally
-     
-         //   sendMoveToServer(row, col);
+            case OFFLINE_PVE -> {
+                // Player X moves
+                gameBoard.makeMove(row, col, GameBoard.PLAYER_X);
+                updateCell(row, col, GameBoard.PLAYER_X);
+                if (checkGameEnd()) {
+                    return;
+                }
+
+                // AI O moves
+                disableBoard();
+                PauseTransition pause = new PauseTransition(Duration.millis(500)); // AI "thinking"
+                pause.setOnFinished(e -> {
+                    Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
+                    gameService.makeMove(aiMove, GameBoard.PLAYER_O, gameBoard);
+
+                    if (aiMove != null) {
+                        updateCell(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
+                    }
+
+                    if (!checkGameEnd()) {
+                        enableBoard();
+                        gameBoard.switchPlayer();
+                        updateTurnIndicator();
+                    }
+                });
+                pause.play();
+            }
+
+            case ONLINE_PVP -> {
+                // Player sends move to server instead of executing locally
+
+                //   sendMoveToServer(row, col);
+            }
         }
-    }
     }
 
     private boolean checkGameEnd() {
