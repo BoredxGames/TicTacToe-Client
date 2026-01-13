@@ -24,6 +24,7 @@ import javafx.animation.KeyFrame;
 
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -324,13 +325,6 @@ public class GameController implements Initializable, NavigationParameterAware {
             enableBoard();
             gameBoard.switchPlayer();
             updateTurnIndicator();
-            case OFFLINE_PVP -> {
-                gameBoard.makeMove(row, col, currentPlayer);
-                updateCell(row, col, currentPlayer);
-                if (!checkGameEnd()) {
-                    updateTurnIndicator();
-                }
-            }
         }
     }
 
@@ -371,7 +365,7 @@ public class GameController implements Initializable, NavigationParameterAware {
             setActiveCard(opponentCard, playerCard);
       }
         if (gameMode == GameMode.OFFLINE_PVP || gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.REPLAY) {
-            if (isPlayerX) {
+            if (localPlayerId == GameBoard.PLAYER_X) {
                 setActiveCard(playerCard, opponentCard);
             } else {
                 setActiveCard(opponentCard, playerCard);
@@ -509,5 +503,25 @@ public class GameController implements Initializable, NavigationParameterAware {
                 if (gameBoard.getCellValue(row, col) == GameBoard.EMPTY) cells[row][col].setDisable(false);
             }
         }
+    }
+
+    private void startReplay() {
+        disableBoard();
+        Timeline timeline = new Timeline();
+        int delay = 0;
+
+        for (var move : replayData.moves()) {
+            delay += 1000;
+            KeyFrame frame = new KeyFrame(Duration.millis(delay), e -> {
+                gameBoard.forceMove(move.row(), move.col(), move.player());
+                updateCell(move.row(), move.col(), move.player());
+
+                gameBoard.switchPlayer();
+                updateTurnIndicator();
+                checkGameEnd();
+            });
+            timeline.getKeyFrames().add(frame);
+        }
+        timeline.play();
     }
 }

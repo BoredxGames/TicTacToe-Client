@@ -11,7 +11,6 @@ public enum Screens {
     GAME("game_screen"),
     Home("home"),
     PVP_SETUP("pvp_setup"),
-    GAME("game_screen"),
     DifficultySelection("difficulty_selection"),
     RECORDINGS("RecordingsListScreen");
 

@@ -121,10 +121,39 @@ private void onRegisterSelected() {
                 alert.setHeaderText(null);
                 alert.setContentText(message);
 
+                DialogPane dialogPane = alert.getDialogPane();
+
+                // 1. Style the main pane
+                dialogPane.setStyle(
+                        "-fx-background-color: #1e1e1e; " +
+                                "-fx-border-color: #333333; " +
+                                "-fx-border-width: 2px;"
+                );
+
+                // 2. Style all labels (Content text)
+                dialogPane.lookupAll(".label").forEach(node ->
+                        node.setStyle("-fx-text-fill: #e0e0e0; -fx-font-family: 'Segoe UI';")
+                );
+
+                // 3. Style the buttons
+                dialogPane.lookupAll(".button").forEach(node -> {
+                    node.setStyle(
+                            "-fx-background-color: #3c3f41; " +
+                                    "-fx-text-fill: white; " +
+                                    "-fx-background-radius: 4; " +
+                                    "-fx-cursor: hand;"
+                    );
+
+                    // Add simple hover effect via code
+                    node.setOnMouseEntered(e -> node.setStyle("-fx-background-color: #4b4d4d; -fx-text-fill: white; -fx-background-radius: 4;"));
+                    node.setOnMouseExited(e -> node.setStyle("-fx-background-color: #3c3f41; -fx-text-fill: white; -fx-background-radius: 4;"));
+                });
+
+                // Set the owner window
                 javafx.stage.Window.getWindows().stream()
                         .filter(javafx.stage.Window::isShowing)
                         .findFirst()
-                        .ifPresent(window -> alert.initOwner(window));
+                        .ifPresent(alert::initOwner);
 
                 alert.showAndWait().ifPresent(type -> {
                     if ("Server is out of service".equals(message) || "Internal Server Error".equals(message)) {
