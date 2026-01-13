@@ -29,14 +29,12 @@ public class OfflineModeSelectionController implements Initializable {
 
     @FXML
     private void handlePlayerVsPlayer(MouseEvent event) {
-        // TODO: Navigate to PvP game screen
-        System.out.println("Player vs Player mode selected");
+        NavigationManager.navigate(Screens.PVP_SETUP, NavigationAction.PUSH);
     }
 
     @FXML
     private void handlePlayerVsCPU(MouseEvent event) {
-        // TODO: Navigate to PvE game screen
-        System.out.println("Player vs CPU mode selected");
+        NavigationManager.navigate(Screens.DifficultySelection, NavigationAction.PUSH);
     }
 
 }

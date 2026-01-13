@@ -143,7 +143,11 @@ public class MessageRouter {
             }
             case GAME_START -> {
                 OnlineGameState.info = gson.fromJson(msg.getData(), GameStartInfo.class);
-                NavigationManager.navigate(Screens.GAME, NavigationAction.REPLACE, GameMode.ONLINE_PVP);
+                String player1Name = "You";
+                String player2Name = "Opponent";
+                NavigationManager.navigate(Screens.GAME, NavigationAction.REPLACE, new GameNavigationParams(
+                        player1Name,player2Name, GameMode.ONLINE_PVP
+                ));
 
             }
 

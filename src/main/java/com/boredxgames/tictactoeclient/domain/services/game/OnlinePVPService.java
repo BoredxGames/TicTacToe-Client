@@ -12,28 +12,16 @@ import java.util.function.Consumer;
 public class OnlinePVPService implements GameService {
 
     private static OnlinePVPService instance;
-    private boolean isMyTurn = false;
 
-    public void setupOnlineGame() {
+    public boolean shouldPlayFirst() {
 
         System.out.println(" Check equality"+OnlineGameState.info.getPlayer1().equalsIgnoreCase(ServerConnectionManager.getInstance().getPlayer().getId()));
 
         
         if (OnlineGameState.info.getPlayer1().equalsIgnoreCase(ServerConnectionManager.getInstance().getPlayer().getId())) {
-            isMyTurn = true;
+            return true;
         }
-    }
-
-    public void setIsMyTurn(boolean isMyTurn) {
-        this.isMyTurn = isMyTurn;
-    }
-
-    public boolean isIsMyTurn() {
-        return isMyTurn;
-    }
-
-    public boolean checkTurn() {
-        return isMyTurn;
+        return false;
     }
 
     public static OnlinePVPService getInstance() {
@@ -78,6 +66,11 @@ public class OnlinePVPService implements GameService {
                 info
         );
         connectionManager.sendMessage(msg);
+    }
+
+    @Override
+    public void makeMove(Move move, char currentPlayer, GameBoard board) {
+
     }
 
     @Override

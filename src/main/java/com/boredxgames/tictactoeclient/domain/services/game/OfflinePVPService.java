@@ -6,12 +6,13 @@ package com.boredxgames.tictactoeclient.domain.services.game;
 
 import com.boredxgames.tictactoeclient.domain.model.GameState;
 import com.boredxgames.tictactoeclient.domain.model.Move;
+import com.boredxgames.tictactoeclient.domain.services.GameService;
 
 /**
  *
  * @author sheri
  */
-public class OfflinePVPService implements GameService{
+public class OfflinePVPService implements GameService {
 
     @Override
     public void makeMove(Move move, char currentPlayer) {
