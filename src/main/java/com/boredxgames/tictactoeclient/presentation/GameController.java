@@ -9,12 +9,10 @@ import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
 import com.boredxgames.tictactoeclient.domain.model.Move;
 import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
 import com.boredxgames.tictactoeclient.domain.model.GameState;
-import com.boredxgames.tictactoeclient.domain.services.AIService;
 import com.boredxgames.tictactoeclient.domain.services.game.GameService;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVEAIService;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVPService;
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -35,9 +33,6 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-/**
- * @author Tasneem
- */
 public class GameController implements Initializable, NavigationParameterAware {
 
     public GridPane gameGrid;
@@ -99,6 +94,8 @@ public class GameController implements Initializable, NavigationParameterAware {
 
     private GameService gameService;
 
+    private MediaPlayer currentMediaPlayer;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cells = new Button[][]{
@@ -118,15 +115,11 @@ public class GameController implements Initializable, NavigationParameterAware {
             this.player2Name = params.player2();
             this.gameMode = params.mode();
         } else {
-            // Default 
             this.gameMode = GameMode.OFFLINE_PVP;
-            this.player1Name = "Player 1";
-            this.player2Name = "Player 2";
         }
 
         applyPlayerInfo();
         applyGameModeSettings();
-
         resetGame();
     }
 
@@ -153,7 +146,6 @@ public class GameController implements Initializable, NavigationParameterAware {
                 opponentTypeLabel.setText(player2Name);
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
-                // gameService = new OnlinePVPService(); // TODO: implement online pvp service
             }
         }
     }
@@ -305,32 +297,6 @@ public class GameController implements Initializable, NavigationParameterAware {
         inactiveCard.getStyleClass().remove("active-card");
     }
 
-    private void makeCPUMove() {
-        if (gameMode != GameMode.OFFLINE_PVE) {
-            return;
-        }
-
-        int[] aiMove = AIService.nextMove(gameBoard, AIService.getDiffiulty());
-        if (aiMove == null) {
-            return;
-        }
-
-        Platform.runLater(() -> {
-            if (gameBoard.makeMove(aiMove[0], aiMove[1], GameBoard.PLAYER_O)) {
-                updateCell(aiMove[0], aiMove[1], GameBoard.PLAYER_O);
-
-                GameState state = gameBoard.getGameState();
-                if (state != GameState.IN_PROGRESS) {
-                    handleGameEnd();
-                } else {
-                    gameBoard.switchPlayer();
-                    updateTurnIndicator();
-                    enableBoard();
-                }
-            }
-        });
-    }
-
     private void handleGameEnd() {
         GameState state = gameBoard.getGameState();
 
@@ -343,16 +309,18 @@ public class GameController implements Initializable, NavigationParameterAware {
             }
         }
 
-        if (state == GameState.X_WINS) {
-            playerScore++;
-            playerScoreLabel.setText(String.valueOf(playerScore));
-            playVictoryVideo("you_win");
-        } else if (state == GameState.O_WINS) {
-            opponentScore++;
-            opponentScoreLabel.setText(String.valueOf(opponentScore));
-            playVictoryVideo("loser");
-        } else if (state == GameState.DRAW) {
-            playVictoryVideo("handshake");
+        switch (state) {
+            case X_WINS -> {
+                playerScore++;
+                playerScoreLabel.setText(String.valueOf(playerScore));
+                playVictoryVideo("you_win");
+            }
+            case O_WINS -> {
+                opponentScore++;
+                opponentScoreLabel.setText(String.valueOf(opponentScore));
+                playVictoryVideo("loser");
+            }
+            case DRAW -> playVictoryVideo("handshake");
         }
 
         PauseTransition pause = new PauseTransition(Duration.millis(800));
@@ -362,26 +330,19 @@ public class GameController implements Initializable, NavigationParameterAware {
 
     private void showGameOverModal(GameState state) {
         switch (state) {
-            case X_WINS:
+            case X_WINS -> {
                 modalTitle.setText("Victory!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
-                        ? "The CPU didn't stand a chance against your moves."
-                        : player1Name + " wins the game!");
-                break;
-
-            case O_WINS:
+                modalMessage.setText(player1Name + " wins!");
+            }
+            case O_WINS -> {
                 modalTitle.setText("Defeat!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
-                        ? "The CPU outsmarted you this time."
-                        : player2Name + " wins the game!");
-                break;
-
-            case DRAW:
+                modalMessage.setText(player2Name + " wins!");
+            }
+            case DRAW -> {
                 modalTitle.setText("Draw!");
-                modalMessage.setText("It's a tie! Both players played well.");
-                break;
+                modalMessage.setText("Both players played well.");
+            }
         }
-
         modalOverlay.setVisible(true);
     }
 
@@ -391,40 +352,46 @@ public class GameController implements Initializable, NavigationParameterAware {
                     getClass().getResource("/assets/videos/" + videoName + ".mp4")
             ).toExternalForm();
 
-            Media media = new Media(videoPath);
-            MediaPlayer player = new MediaPlayer(media);
-            victoryVideo.setMediaPlayer(player);
+            if (currentMediaPlayer != null) {
+                currentMediaPlayer.stop();
+                currentMediaPlayer.dispose();
+            }
 
-            player.setCycleCount(MediaPlayer.INDEFINITE); // loop forever
-            player.play();
-            player.setAutoPlay(true);
-            victoryVideo.setPreserveRatio(true);
+            Media media = new Media(videoPath);
+            currentMediaPlayer = new MediaPlayer(media);
+
+            victoryVideo.setMediaPlayer(currentMediaPlayer);
+            currentMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            currentMediaPlayer.setAutoPlay(true);
             victoryVideo.setVisible(true);
 
-            /*victoryVideo.setVisible(true);
-            player.setAutoPlay(true);
-
-            player.setOnEndOfMedia(() -> {
-                victoryVideo.setVisible(false);
-            });*/
-
         } catch (Exception e) {
-            System.out.println("Error getting the video: " + e);
+            System.out.println("Video error: " + e.getMessage());
         }
     }
 
     public void resetGame() {
         gameBoard.resetGame();
 
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                cells[row][col].setGraphic(null);
-                cells[row][col].setDisable(false);
-                cells[row][col].getStyleClass().remove("cell-winning");
+        for (Button[] row : cells) {
+            for (Button cell : row) {
+                cell.setGraphic(null);
+                cell.setDisable(false);
+                cell.getStyleClass().remove("cell-winning");
             }
         }
 
         modalOverlay.setVisible(false);
+
+        if (currentMediaPlayer != null) {
+            currentMediaPlayer.stop();
+            currentMediaPlayer.dispose();
+            currentMediaPlayer = null;
+        }
+
+        victoryVideo.setVisible(false);
+        victoryVideo.setMediaPlayer(null);
+
         updateTurnIndicator();
         enableBoard();
     }
