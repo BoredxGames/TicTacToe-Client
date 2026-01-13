@@ -150,21 +150,28 @@ public class GameController implements Initializable, NavigationParameterAware {
                 changeDifficultyButton.setManaged(true);
                 // gameService = new OfflinePVEAIService(); // TODO: implement offline pve ai service
             }
-            case ONLINE_PVP -> {
-                opponentTypeLabel.setText("ONLINE PLAYER");
-                difficultyBadge.setVisible(false);
-                difficultyBadge.setManaged(false);
-                changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);
-                gameService = OnlinePVPService.getInstance().setMoveListener((move) ->
-                {
-                    Platform.runLater(() -> {
-                        updateCell(move.getCol(), move.getRow(), gameBoard.getCurrentPlayer());
-                        gameBoard.switchPlayer();
-                        enableBoard();
-                    });
-                });
+         case ONLINE_PVP -> {
+    opponentTypeLabel.setText("ONLINE PLAYER");
+    difficultyBadge.setVisible(false);
+    difficultyBadge.setManaged(false);
+    changeDifficultyButton.setVisible(false);
+    changeDifficultyButton.setManaged(false);
+    gameService = OnlinePVPService.getInstance().setMoveListener((move) -> {
+        Platform.runLater(() -> {
+            if (gameBoard.makeMove(move.getRow(), move.getCol(), gameBoard.getCurrentPlayer())) {
+                updateCell(move.getRow(), move.getCol(), gameBoard.getCurrentPlayer());
+                
+                if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
+                    handleGameEnd();
+                } else {
+                    gameBoard.switchPlayer();
+                    updateTurnIndicator();
+                    enableBoard();
+                }
             }
+        });
+    });
+}
         }
     }
 
@@ -200,18 +207,51 @@ public class GameController implements Initializable, NavigationParameterAware {
         });
     }
 
-    private void handleCellClick(int row, int col) {
-        if (!gameBoard.isValidMove(row, col)) return;
+  private void handleCellClick(int row, int col) {
+    if (!gameBoard.isValidMove(row, col)) return;
 
-        char currentPlayer = gameBoard.getCurrentPlayer();
-
-        Move move = new Move(row, col);
+    char currentPlayer = gameBoard.getCurrentPlayer();
+    
+    // Make the move on the local board first
+    if (!gameBoard.makeMove(row, col, currentPlayer)) {
+        return;
+    }
+    
+    Move move = new Move(row, col);
+    
+    // For online mode, send the move to server
+    if (gameMode == GameMode.ONLINE_PVP) {
         gameService.makeMove(move, currentPlayer);
-        updateCell(move.getCol(), move.getRow(), currentPlayer);
+        updateCell(row, col, currentPlayer);
         disableBoard();
-        gameBoard.switchPlayer();
-
-        Move nextMove = gameService.getNextMove(gameBoard, currentPlayer);
+        
+        // Check for game end after our move
+        if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
+            handleGameEnd();
+        } else {
+            gameBoard.switchPlayer();
+            updateTurnIndicator();
+        }
+        return;
+    }
+    
+    // For offline modes (PVP/PVE)
+    gameService.makeMove(move, currentPlayer);
+    updateCell(row, col, currentPlayer);
+    gameBoard.switchPlayer();
+    
+    // Check game state after player move
+    if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
+        handleGameEnd();
+        return;
+    }
+    
+    updateTurnIndicator();
+    
+    // Handle CPU move for PVE
+    if (gameMode == GameMode.OFFLINE_PVE) {
+        disableBoard();
+        Move nextMove = gameService.getNextMove(gameBoard, gameBoard.getCurrentPlayer());
         if (nextMove != null) {
             Platform.runLater(() -> {
                 if (gameBoard.makeMove(nextMove.getRow(), nextMove.getCol(), gameBoard.getCurrentPlayer())) {
@@ -221,16 +261,13 @@ public class GameController implements Initializable, NavigationParameterAware {
                     } else {
                         gameBoard.switchPlayer();
                         updateTurnIndicator();
+                        enableBoard();
                     }
                 }
             });
         }
-
-        GameState state = gameService.getOutcome(gameBoard);
-        if (state != GameState.IN_PROGRESS) {
-            handleGameEnd();
-        }
     }
+}
 
     private void updateCell(int row, int col, char player) {
         Button cell = cells[row][col];
