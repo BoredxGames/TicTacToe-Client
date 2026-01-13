@@ -5,10 +5,13 @@ public enum Screens {
     SECONDARY("GameModeScreen"),
     SETTINGS("SettingsScreen"),
     GAME_MODE("GameModeScreen"),
-
     SERVER_CONNECTION("server_connection"),
-    AUTHENTICATION("authentication");
-   
+    AUTHENTICATION("authentication"),
+    Home("home"),
+    PVP_SETUP("pvp_setup"),
+    GAME("game_screen"),
+    DifficultySelection("difficulty_selection");
+
 
     private final String name;
 

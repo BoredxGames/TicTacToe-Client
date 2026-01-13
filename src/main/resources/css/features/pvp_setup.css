@@ -1,0 +1,188 @@
+.root {
+    -fx-background-color: #121121;
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+.background-blur {
+    -fx-background-color: radial-gradient(center 20% 20%, radius 30%, rgba(80, 72, 229, 0.05), transparent),
+                          radial-gradient(center 80% 80%, radius 30%, rgba(88, 28, 135, 0.1), transparent);
+}
+
+.top-bar {
+    -fx-background-color: rgba(18, 17, 33, 0.8);
+    -fx-border-color: transparent transparent #2a2938 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.logo-text {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.nav-links > .label {
+    -fx-text-fill: #9f9eb7;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.nav-links > .label:hover {
+    -fx-text-fill: white;
+}
+
+.setup-card {
+    -fx-background-color: #1c1b29;
+    -fx-background-radius: 16;
+    -fx-border-color: #2a2938;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 20, 0, 0, 4);
+    -fx-padding: 32;
+    -fx-max-width: 520;
+}
+
+.title-text {
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+.subtitle-text {
+    -fx-text-fill: #9f9eb7;
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+}
+
+.section-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.badge-x {
+    -fx-background-color: rgba(80, 72, 229, 0.15);
+    -fx-text-fill: #5048e5;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 4;
+    -fx-effect: dropshadow(gaussian, rgba(80, 72, 229, 0.8), 15, 0.3, 0, 0);
+}
+
+.badge-o {
+    -fx-background-color: rgba(45, 212, 191, 0.15);
+    -fx-text-fill: #2dd4bf;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 4;
+    -fx-effect: dropshadow(gaussian, rgba(45, 212, 191, 0.8), 15, 0.3, 0, 0);
+}
+
+.input-container {
+    -fx-background-color: #15141b;
+    -fx-background-radius: 12;
+    -fx-border-color: #2a2938;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 0;
+}
+
+.input-container:focused-within {
+    -fx-border-color: #5048e5;
+    -fx-border-width: 1;
+}
+
+.input-icon-box {
+    -fx-padding: 0 15 0 15;
+    -fx-alignment: center;
+    -fx-border-color: transparent #2a2938 transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #4e4e5a;
+    -fx-font-size: 16px;
+    -fx-padding: 15;
+}
+
+.separator-line {
+    -fx-background-color: #2a2938;
+    -fx-max-height: 1;
+}
+
+.separator-text {
+    -fx-background-color: #1c1b29;
+    -fx-text-fill: #9f9eb7;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 8 0 8;
+}
+
+.toggle-container {
+    -fx-background-color: #15141b;
+    -fx-background-radius: 12;
+    -fx-border-color: #2a2938;
+    -fx-border-radius: 12;
+    -fx-padding: 4;
+    -fx-spacing: 4;
+}
+
+.toggle-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9f9eb7;
+    -fx-background-radius: 8;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-pref-height: 40;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #1c1b29;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-border-color: #2a2938;
+    -fx-border-radius: 8;
+}
+
+.primary-button {
+    -fx-background-color: #5048e5;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-pref-height: 56;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(80, 72, 229, 0.4), 15, -5, 0, 0);
+}
+
+.primary-button:hover {
+    -fx-background-color: #4338ca;
+}
+
+.secondary-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9f9eb7;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-pref-height: 48;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+}
+
+.icon-primary { 
+    -fx-fill: #5048e5; 
+    -fx-stroke: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(80, 72, 229, 0.4), 10, 0, 0, 0);
+}
+.icon-white { -fx-fill: white; }
+.icon-gray { -fx-fill: #9f9eb7; }
