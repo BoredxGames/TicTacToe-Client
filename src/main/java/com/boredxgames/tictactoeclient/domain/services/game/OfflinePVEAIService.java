@@ -15,19 +15,19 @@ import com.boredxgames.tictactoeclient.domain.services.AIService;
 public class OfflinePVEAIService implements GameService {
 
     @Override
-    public void makeMove(Move move, char currentPlayer) {
-        if (move != null) {
-            GameBoard board = move.getBoard();
+    public void makeMove(Move move, char currentPlayer, GameBoard board) {
+                if (move != null) {
             board.makeMove(move.getRow(), move.getCol(), currentPlayer);
         }
+
     }
 
     @Override
     public Move getNextMove(GameBoard board, char currentPlayer) {
-        if (currentPlayer == GameBoard.PLAYER_O) {
+       if (currentPlayer == GameBoard.PLAYER_O) {
             int[] aiMove = AIService.nextMove(board, AIService.getDiffiulty());
             if (aiMove != null) {
-                return new Move(aiMove[0], aiMove[1], board);
+                return new Move(aiMove[0], aiMove[1]);
             }
         }
         return null;

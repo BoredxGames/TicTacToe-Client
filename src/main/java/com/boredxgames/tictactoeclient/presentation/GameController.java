@@ -197,32 +197,53 @@ public class GameController implements Initializable, NavigationParameterAware {
     }
 
     private void handleCellClick(int row, int col) {
-        if (!gameBoard.isValidMove(row, col)) {
-            return;
+ if (!gameBoard.isValidMove(row, col)) return;
+
+    char currentPlayer = gameBoard.getCurrentPlayer();
+
+    switch (gameMode) {
+        case OFFLINE_PVP -> {
+            // Player vs Player
+            gameBoard.makeMove(row, col, currentPlayer);
+            updateCell(row, col, currentPlayer);
+            checkGameEnd();
+            gameBoard.switchPlayer();
+            updateTurnIndicator();
         }
 
-    
-        gameBoard.makeMove(row, col, GameBoard.PLAYER_X);
-        updateCell(row, col, GameBoard.PLAYER_X);
+        case OFFLINE_PVE -> {
+            // Player X moves
+            gameBoard.makeMove(row, col, GameBoard.PLAYER_X);
+            updateCell(row, col, GameBoard.PLAYER_X);
 
-        if (checkGameEnd()) {
-            return;
-        }
+            if (checkGameEnd()) return;
 
-   
-        if (gameMode == GameMode.OFFLINE_PVE) {
+            // AI O moves
             disableBoard();
-            Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
-            gameService.makeMove(aiMove, GameBoard.PLAYER_O);
+            PauseTransition pause = new PauseTransition(Duration.millis(500)); // AI "thinking"
+            pause.setOnFinished(e -> {
+                Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
+                gameService.makeMove(aiMove, GameBoard.PLAYER_O, gameBoard);
 
-            if (aiMove != null) {
-                updateCell(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
-            }
+                if (aiMove != null) {
+                    updateCell(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
+                }
 
-            if (!checkGameEnd()) {
-                enableBoard();
-            }
+                if (!checkGameEnd()) {
+                    enableBoard();
+                    gameBoard.switchPlayer();
+                    updateTurnIndicator();
+                }
+            });
+            pause.play();
         }
+
+        case ONLINE_PVP -> {
+            // Player sends move to server instead of executing locally
+     
+         //   sendMoveToServer(row, col);
+        }
+    }
     }
 
     private boolean checkGameEnd() {
