@@ -43,15 +43,7 @@ public class HomeController implements Initializable {
             if(scoreLabel != null) scoreLabel.setText("Score: " + currentUser.getScore());
         }
 
-        Platform.runLater(() -> {
-            if (backgroundPane != null) {
-                double w = rootStack.getWidth() > 0 ? rootStack.getWidth() : 1280;
-                double h = rootStack.getHeight() > 0 ? rootStack.getHeight() : 800;
-                BackgroundHomeAnimation.startBackgroundAnimation(backgroundPane, w, h);
-            }
-            javafx.scene.Node viewport = rootStack.lookup(".viewport");
-            if (viewport != null) viewport.setStyle("-fx-background-color: rgba(0,0,0,0);");
-        });
+      
          OnlinGameSession.getInstance().requestLeaderboard();
                 OnlinGameSession.getInstance().requestAvailablePlayers();
 
