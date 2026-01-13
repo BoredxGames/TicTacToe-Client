@@ -9,7 +9,7 @@ import com.boredxgames.tictactoeclient.domain.model.GameRequestInfo;
 import com.boredxgames.tictactoeclient.domain.model.GameResponseInfo;
 import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
-import com.boredxgames.tictactoeclient.domain.services.GameService;
+import com.boredxgames.tictactoeclient.domain.services.game.OnlinGameSession;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -55,8 +55,8 @@ public class HomeController implements Initializable {
             javafx.scene.Node viewport = rootStack.lookup(".viewport");
             if (viewport != null) viewport.setStyle("-fx-background-color: rgba(0,0,0,0);");
         });
-         GameService.getInstance().requestLeaderboard();
-                GameService.getInstance().requestAvailablePlayers();
+         OnlinGameSession.getInstance().requestLeaderboard();
+                OnlinGameSession.getInstance().requestAvailablePlayers();
 
 
     }
@@ -68,7 +68,7 @@ public class HomeController implements Initializable {
     }
 
     public void handleServerGameResponse(GameResponseInfo info) {
-        GameService.getInstance().setWaiting(false);
+        OnlinGameSession.getInstance().setWaiting(false);
 
         if (info.isAccepted()) {
             System.out.println("Opponent Accepted. Waiting for GAME_START event...");
@@ -80,7 +80,7 @@ public class HomeController implements Initializable {
                 alert.setContentText("Player " + info.getResponderUserName()+ " declined your challenge.");
                 alert.showAndWait();
                 
-                GameService.getInstance().requestAvailablePlayers();
+                OnlinGameSession.getInstance().requestAvailablePlayers();
             });
         }
     }
@@ -105,7 +105,7 @@ public class HomeController implements Initializable {
             alert.showAndWait().ifPresent(type -> {
                 this.currentIncomingRequestAlert = null;
                 boolean accepted = (type == acceptBtn);
-                GameService.getInstance().sendGameResponse(info, accepted);
+                OnlinGameSession.getInstance().sendGameResponse(info, accepted);
             });
         });
     }
@@ -122,7 +122,7 @@ public class HomeController implements Initializable {
     }
 
     public void showErrorAlert(String message) {
-        GameService.getInstance().setWaiting(false); 
+        OnlinGameSession.getInstance().setWaiting(false);
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -130,7 +130,7 @@ public class HomeController implements Initializable {
             alert.setContentText(message);
             alert.showAndWait();
             
-            GameService.getInstance().requestAvailablePlayers();
+            OnlinGameSession.getInstance().requestAvailablePlayers();
         });
     }
     

@@ -2,7 +2,8 @@ package com.boredxgames.tictactoeclient.presentation;
 
 import com.boredxgames.tictactoeclient.domain.model.AvailablePlayersInfo;
 import com.boredxgames.tictactoeclient.domain.model.PlayerEntity;
-import com.boredxgames.tictactoeclient.domain.services.GameService;
+import com.boredxgames.tictactoeclient.domain.services.game.OnlinGameSession;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -91,8 +92,8 @@ public class PlayersController {
             actionBtn.getStyleClass().add("btn-challenge");
             
             actionBtn.setOnAction(e -> {
-                System.out.println("response tyepeeeeeeeeeeeeeeeeeee : "+GameService.getInstance().isWaiting());
-                if (GameService.getInstance().isWaiting()) {
+                System.out.println("response tyepeeeeeeeeeeeeeeeeeee : "+OnlinGameSession.getInstance().isWaiting());
+                if (OnlinGameSession.getInstance().isWaiting()) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Please Wait");
                     alert.setHeaderText(null);
@@ -103,7 +104,7 @@ public class PlayersController {
                 
                 actionBtn.setDisable(true);
                 actionBtn.setText("Sent...");
-                GameService.getInstance().sendGameRequest(p.getId());
+                OnlinGameSession.getInstance().sendGameRequest(p.getId());
             });
             
         } else {
