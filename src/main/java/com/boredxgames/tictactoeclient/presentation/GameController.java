@@ -11,6 +11,9 @@ import com.boredxgames.tictactoeclient.domain.model.Move;
 import com.boredxgames.tictactoeclient.domain.services.GameService;
 import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
 import com.boredxgames.tictactoeclient.domain.services.game.OnlinePVPService;
+import java.net.URL;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -28,10 +31,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
-import java.net.URL;
-import java.util.Objects;
-import java.util.ResourceBundle;
 
 /**
  * @author Tasneem
@@ -101,10 +100,11 @@ public class GameController implements Initializable, NavigationParameterAware {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         cells = new Button[][]{
-                {cell00, cell01, cell02},
-                {cell10, cell11, cell12},
-                {cell20, cell21, cell22}
+            {cell00, cell01, cell02},
+            {cell10, cell11, cell12},
+            {cell20, cell21, cell22}
         };
         gameBoard = new GameBoard();
         setupCellHandlers();
@@ -151,19 +151,31 @@ public class GameController implements Initializable, NavigationParameterAware {
                 // gameService = new OfflinePVEAIService(); // TODO: implement offline pve ai service
             }
             case ONLINE_PVP -> {
+
                 opponentTypeLabel.setText("ONLINE PLAYER");
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
                 changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);
-                gameService = OnlinePVPService.getInstance().setMoveListener((move) ->
-                {
+                changeDifficultyButton.setManaged(false);          
+                System.out.println("before run later in switch");
+
+                gameService = OnlinePVPService.getInstance().setMoveListener((move)
+                        -> {
+
                     Platform.runLater(() -> {
                         updateCell(move.getCol(), move.getRow(), gameBoard.getCurrentPlayer());
                         gameBoard.switchPlayer();
                         enableBoard();
+
+                        if (gameService instanceof OnlinePVPService) {
+
+                            ((OnlinePVPService) gameService).setIsMyTurn(true);
+                        }
                     });
                 });
+                System.out.println("before check turn in switch");
+                OnlinePVPService.getInstance().setupOnlineGame();
+
             }
         }
     }
@@ -201,14 +213,32 @@ public class GameController implements Initializable, NavigationParameterAware {
     }
 
     private void handleCellClick(int row, int col) {
-        if (!gameBoard.isValidMove(row, col)) return;
+        if (!gameBoard.isValidMove(row, col)) {
+            return;
+        }
+
+        if (gameService instanceof OnlinePVPService) {
+            boolean isMyTurn;
+            isMyTurn = ((OnlinePVPService) gameService).checkTurn();
+            if (!isMyTurn) {
+                return;
+            }
+        }
+
+        //TODO switch col and row 
+        Move move = new Move(col, row);
 
         char currentPlayer = gameBoard.getCurrentPlayer();
-
-        Move move = new Move(row, col);
         gameService.makeMove(move, currentPlayer);
         updateCell(move.getCol(), move.getRow(), currentPlayer);
+
         disableBoard();
+
+        if (gameService instanceof OnlinePVPService) {
+
+            ((OnlinePVPService) gameService).setIsMyTurn(false);
+        }
+
         gameBoard.switchPlayer();
 
         Move nextMove = gameService.getNextMove(gameBoard, currentPlayer);
@@ -341,17 +371,17 @@ public class GameController implements Initializable, NavigationParameterAware {
             case X_WINS:
                 modalIcon.setText("emoji_events");
                 modalTitle.setText("Victory!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE ?
-                        "The CPU didn't stand a chance against your moves." :
-                        "Player 1 wins the game!");
+                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
+                        ? "The CPU didn't stand a chance against your moves."
+                        : "Player 1 wins the game!");
                 break;
 
             case O_WINS:
                 modalIcon.setText("sentiment_dissatisfied");
                 modalTitle.setText("Defeat!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE ?
-                        "The CPU outsmarted you this time." :
-                        "Player 2 wins the game!");
+                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
+                        ? "The CPU outsmarted you this time."
+                        : "Player 2 wins the game!");
                 break;
 
             case DRAW:

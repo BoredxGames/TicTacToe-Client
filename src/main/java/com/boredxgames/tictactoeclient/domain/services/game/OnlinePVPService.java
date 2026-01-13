@@ -7,18 +7,44 @@ import com.boredxgames.tictactoeclient.domain.services.communication.Action;
 import com.boredxgames.tictactoeclient.domain.services.communication.Message;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageType;
 import com.google.gson.Gson;
-
 import java.util.function.Consumer;
 
 public class OnlinePVPService implements GameService {
+
     private static OnlinePVPService instance;
+    private boolean isMyTurn = false;
+
+    public void setupOnlineGame() {
+
+        System.out.println(" Check equality"+OnlineGameState.info.getPlayer1().equalsIgnoreCase(ServerConnectionManager.getInstance().getPlayer().getId()));
+
+        
+        if (OnlineGameState.info.getPlayer1().equalsIgnoreCase(ServerConnectionManager.getInstance().getPlayer().getId())) {
+            isMyTurn = true;
+        }
+    }
+
+    public void setIsMyTurn(boolean isMyTurn) {
+        this.isMyTurn = isMyTurn;
+    }
+
+    public boolean isIsMyTurn() {
+        return isMyTurn;
+    }
+
+    public boolean checkTurn() {
+        return isMyTurn;
+    }
+
     public static OnlinePVPService getInstance() {
         if (instance == null) {
             instance = new OnlinePVPService();
         }
         return instance;
     }
-    private OnlinePVPService(){}
+
+    private OnlinePVPService() {
+    }
 
     // specific listener to bridge Network -> UI
     private static Consumer<Move> moveListener;
@@ -43,7 +69,7 @@ public class OnlinePVPService implements GameService {
         AuthResponseEntity player = connectionManager.getPlayer();
         GameStartInfo sessionInfo = OnlineGameState.info;
         // Prepare the data
-        MoveInfo info = MoveInfo.createMoveInfo(sessionInfo.getRoomId() , player.getId(), move);
+        MoveInfo info = MoveInfo.createMoveInfo(sessionInfo.getRoomId(), player.getId(), move);
 
         // Send SEND_GAME_UPDATE action to server
         Message msg = Message.createMessage(
