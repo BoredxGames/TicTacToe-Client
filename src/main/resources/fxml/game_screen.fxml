@@ -149,7 +149,7 @@
                                 <MediaView fx:id="victoryVideo"
                                            fitWidth="600"
                                            visible="false"/>
-                                <Text fx:id="modalIcon" styleClass="material-icon, trophy-icon" text="emoji_events"/>
+                                <!--<Text fx:id="modalIcon" styleClass="material-icon, trophy-icon" text="emoji_events"/>-->
                             </StackPane>
                         </VBox>
                     </StackPane>

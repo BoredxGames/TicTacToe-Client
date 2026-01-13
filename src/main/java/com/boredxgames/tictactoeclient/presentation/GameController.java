@@ -85,8 +85,8 @@ public class GameController implements Initializable, NavigationParameterAware {
     private MediaView victoryVideo;
     @FXML
     private Button playAgainButton;
-    @FXML
-    private Button changeDifficultyButton;
+   /* @FXML
+    private Button changeDifficultyButton;*/
     @FXML
     private Button mainMenuButton;
 
@@ -139,27 +139,27 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void applyGameModeSettings() {
         switch (gameMode) {
             case OFFLINE_PVP -> {
-                opponentTypeLabel.setText("PLAYER 2");
+                opponentTypeLabel.setText(player2Name);
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
-                changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);
+                /*changeDifficultyButton.setVisible(false);
+                changeDifficultyButton.setManaged(false);*/
                 gameService = new OfflinePVPService();
             }
             case OFFLINE_PVE -> {
                 opponentTypeLabel.setText("CPU (O)");
                 difficultyBadge.setVisible(true);
                 difficultyBadge.setManaged(true);
-                changeDifficultyButton.setVisible(true);
-                changeDifficultyButton.setManaged(true);
+                /*changeDifficultyButton.setVisible(true);
+                changeDifficultyButton.setManaged(true);*/
                 gameService = new OfflinePVEAIService();
             }
             case ONLINE_PVP -> {
-                opponentTypeLabel.setText("ONLINE PLAYER");
+                opponentTypeLabel.setText(player2Name);
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
-                changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);
+                /*changeDifficultyButton.setVisible(false);
+                changeDifficultyButton.setManaged(false);*/
                 // gameService = new OnlinePVPService(); // TODO: implement online pvp service
             }
         }
@@ -180,7 +180,7 @@ public class GameController implements Initializable, NavigationParameterAware {
         playAgainButton.setOnAction(e -> resetGame());
 
         mainMenuButton.setOnAction(e -> {
-            NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE_ALL); // TODO: change to mode selection screen
+            NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL); // TODO: change to mode selection screen
         });
 
         backButton.setOnAction(e -> {
@@ -192,9 +192,9 @@ public class GameController implements Initializable, NavigationParameterAware {
             NavigationManager.navigate(Screens.SETTINGS, NavigationAction.REPLACE_ALL);
         });
 
-        changeDifficultyButton.setOnAction(e -> {
+        /*changeDifficultyButton.setOnAction(e -> {
             // TODO change difficulty
-        });
+        });*/
     }
 
     private void handleCellClick(int row, int col) {
@@ -371,23 +371,20 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void showGameOverModal(GameState state) {
         switch (state) {
             case X_WINS:
-                modalIcon.setText("emoji_events");
                 modalTitle.setText("Victory!");
                 modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
                         ? "The CPU didn't stand a chance against your moves."
-                        : "Player 1 wins the game!");
+                        : player1Name + " wins the game!");
                 break;
 
             case O_WINS:
-                modalIcon.setText("sentiment_dissatisfied");
                 modalTitle.setText("Defeat!");
                 modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
                         ? "The CPU outsmarted you this time."
-                        : "Player 2 wins the game!");
+                        : player2Name + " wins the game!");
                 break;
 
             case DRAW:
-                modalIcon.setText("handshake");
                 modalTitle.setText("Draw!");
                 modalMessage.setText("It's a tie! Both players played well.");
                 break;
@@ -406,12 +403,18 @@ public class GameController implements Initializable, NavigationParameterAware {
             MediaPlayer player = new MediaPlayer(media);
             victoryVideo.setMediaPlayer(player);
 
+            player.setCycleCount(MediaPlayer.INDEFINITE); // loop forever
+            player.play();
+            player.setAutoPlay(true);
+            victoryVideo.setPreserveRatio(true);
             victoryVideo.setVisible(true);
+
+            /*victoryVideo.setVisible(true);
             player.setAutoPlay(true);
 
             player.setOnEndOfMedia(() -> {
                 victoryVideo.setVisible(false);
-            });
+            });*/
 
         } catch (Exception e) {
             System.out.println("Error getting the video: " + e);
