@@ -58,7 +58,7 @@ public class GameModeScreenController {
 
         onlineCard.setOnMouseClicked(e -> {
             System.out.println("Online Mode Selected");
-            //NavigationManager.navigate(Screens.ONLINE, NavigationAction.PUSH);
+            NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE_ALL);
         });
 
     }

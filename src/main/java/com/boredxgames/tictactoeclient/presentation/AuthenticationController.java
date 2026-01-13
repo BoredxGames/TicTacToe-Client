@@ -31,8 +31,8 @@ public class AuthenticationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
-     
-        backgroundPane.setMouseTransparent(true);
+        backgroundPane.getChildren().clear();
+
 
         Platform.runLater(() -> {
               BackgroundAnimation.animateCardEntry(contentContainer);
