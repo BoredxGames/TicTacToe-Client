@@ -18,19 +18,19 @@ import com.boredxgames.tictactoeclient.domain.services.communication.Action;
 import com.boredxgames.tictactoeclient.domain.services.communication.Message;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageType;
 
-public class GameService {
+public class OnlinGameSession {
 
-    private static GameService instance;
+    private static OnlinGameSession instance;
     private final ServerConnectionManager connection;
     private boolean isWaitingForResponse = false;
 
-    private GameService() {
+    private OnlinGameSession() {
         this.connection = ServerConnectionManager.getInstance();
     }
 
-    public static synchronized GameService getInstance() {
+    public static synchronized OnlinGameSession getInstance() {
         if (instance == null) {
-            instance = new GameService();
+            instance = new OnlinGameSession();
         }
         return instance;
     }
