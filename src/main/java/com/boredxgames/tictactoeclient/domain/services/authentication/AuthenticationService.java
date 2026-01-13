@@ -14,10 +14,11 @@ import com.boredxgames.tictactoeclient.domain.services.communication.MessageType
  *
  * @author Hazem
  */
+
 public class AuthenticationService {
 
     private static AuthenticationService instance;
-    private ServerConnectionManager connection;
+    private final ServerConnectionManager connection;
 
     private AuthenticationService() {
        
@@ -25,12 +26,14 @@ public class AuthenticationService {
     }
 
     public static AuthenticationService getInstance() {
-         if(instance==null)
-            instance = new AuthenticationService();
+         if(instance==null) {
+             instance = new AuthenticationService();
+         }
         return instance;
     }
 
     public void requestLogin(String username, String password) {
+        
         System.out.println("here");
          AuthRequestEntity responseData = AuthRequestEntity.createAuthEntity(username, password);
         Message loginRequest = Message.createMessage(MessageType.REQUEST, Action.LOGIN, responseData);
@@ -47,16 +50,7 @@ public class AuthenticationService {
         connection.sendMessage(registerRequest);
     }
 
-    public void handleAuthenticationResponse(Message message) {
-        if (message.getData() != null) {
-          
-            
-            //TODO navigate to online mode screen
-            System.out.println("");
-            
-        } else {
-            System.out.println("Authentication faild, no response data");
-        }
-    }
+  
+    
 
 }
