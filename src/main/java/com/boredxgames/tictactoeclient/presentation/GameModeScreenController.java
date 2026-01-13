@@ -50,7 +50,7 @@ public class GameModeScreenController {
 
     private void setupActions() {
 
-        // عند الضغط على الكارد الخاص بالـ Offline
+        
         offlineCard.setOnMouseClicked(e -> {
             System.out.println("Offline Mode Selected");
              NavigationManager.navigate(Screens.PVP_SETUP, NavigationAction.REPLACE);

@@ -54,7 +54,7 @@
                      <Label styleClass="difficulty-badge, badge-easy" text="EASY" />
                   </HBox>
                   <Label styleClass="card-desc" text="Just getting started? The Rookie makes random mistakes and is perfect for a quick warm-up game." wrapText="true" VBox.vgrow="ALWAYS" />
-                  <Button maxWidth="1.7976931348623157E308" styleClass="select-btn, btn-easy" text="Select Rookie →" />
+                  <Button fx:id= "easyBtn" maxWidth="1.7976931348623157E308" styleClass="select-btn, btn-easy" text="Select Rookie →" />
                </VBox>
             </VBox>
 
@@ -77,7 +77,7 @@
                         <Label styleClass="difficulty-badge, badge-medium" text="MEDIUM" />
                      </HBox>
                      <Label styleClass="card-desc" text="A balanced challenge. The Strategist knows the basics and will punish obvious blunders." wrapText="true" VBox.vgrow="ALWAYS" />
-                     <Button maxWidth="1.7976931348623157E308" styleClass="select-btn, btn-medium" text="Select Strategist →" />
+                     <Button fx:id= "mediumBtn" maxWidth="1.7976931348623157E308" styleClass="select-btn, btn-medium" text="Select Strategist →" />
                   </VBox>
                </VBox>
                <Label styleClass="rec-badge" text="RECOMMENDED" StackPane.alignment="TOP_CENTER">
@@ -103,12 +103,12 @@
                      <Label styleClass="difficulty-badge, badge-hard" text="HARD" />
                   </HBox>
                   <Label styleClass="card-desc" text="Expect no mercy. This AI calculates every possibility and plays a perfect game." wrapText="true" VBox.vgrow="ALWAYS" />
-                  <Button maxWidth="1.7976931348623157E308" styleClass="select-btn, btn-hard" text="Select Grandmaster →" />
+                  <Button fx:id= "hardBtn" maxWidth="1.7976931348623157E308" styleClass="select-btn, btn-hard" text="Select Grandmaster →" />
                </VBox>
             </VBox>
          </FlowPane>
 
-         <Label styleClass="back-link" text="← Back to Main Menu" />
+         <Label fx:id="backLabel" styleClass="back-link" text="← Back to Main Menu" />
       </VBox>
    </StackPane>
 </ScrollPane>
