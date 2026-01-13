@@ -1,0 +1,166 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jan 13, 2026, 12:06:30 AM
+    Author     : mahmoud
+*/
+
+.root-scroll {
+    -fx-background-color: #121117; 
+    -fx-background: #121117;
+}
+
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb {
+    -fx-background-color: #2a2938;
+    -fx-background-radius: 5em;
+}
+
+.main-background {
+    -fx-background-color: #121117;
+}
+.card {
+    -fx-background-color: #1d1c26;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-border-color: #2a2938;
+    
+    -fx-min-width: 300px;
+    -fx-pref-width: 320px;
+    -fx-max-width: 350px;
+    
+    -fx-min-height: 420px;
+    
+    -fx-cursor: hand;
+    -fx-transition: -fx-translate-y 0.3s;
+}
+
+.card:hover {
+    -fx-translate-y: -5;
+}
+
+.main-title {
+    -fx-text-fill: white;
+    -fx-font-family: 'Segoe UI Black', 'Arial Black', sans-serif;
+    -fx-font-size: 40px; 
+    -fx-font-weight: 900;
+}
+
+.subtitle {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 16px;
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+.pve-badge {
+    -fx-background-color: rgba(42, 41, 56, 0.5);
+    -fx-border-color: #2a2938;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5 12 5 12;
+}
+
+.pve-text {
+    -fx-text-fill: #d1d5db;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.icon-area {
+    -fx-background-color: linear-gradient(to bottom right, #1d1c26, #2a2938);
+    -fx-background-radius: 16 16 0 0;
+    -fx-alignment: center;
+    -fx-pref-height: 160;
+}
+
+.icon-circle {
+    -fx-background-color: #121117;
+    -fx-background-radius: 50%; 
+    -fx-border-radius: 50%; 
+    -fx-border-width: 1;
+}
+
+.card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.card-desc {
+    -fx-text-fill: #9ca3af;
+    -fx-font-size: 14px;
+    -fx-line-spacing: 3;
+}
+
+.difficulty-badge {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 8 3 8;
+    -fx-background-radius: 5;
+}
+
+.select-btn {
+    -fx-background-color: #2a2938;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 12 15 12 15;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.rec-badge {
+    -fx-background-color: #5048e5;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 10 4 10;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 4);
+}
+
+.back-link {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.back-link:hover {
+    -fx-text-fill: white;
+}
+
+.icon-circle-easy { -fx-border-color: rgba(0, 240, 255, 0.3); }
+.icon-svg-easy    { -fx-fill: #00f0ff; }
+.badge-easy       { -fx-text-fill: #00f0ff; -fx-background-color: rgba(0, 240, 255, 0.1); }
+.easy-card:hover {
+    -fx-border-color: #00f0ff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 240, 255, 0.4), 20, 0, 0, 0);
+}
+.easy-card:hover .card-title { -fx-text-fill: #00f0ff; }
+.easy-card:hover .btn-easy   { -fx-background-color: #00f0ff; -fx-text-fill: #121117; }
+
+.medium-card { -fx-border-color: #5048e5; -fx-border-width: 2; }
+.icon-circle-medium { -fx-border-color: rgba(188, 19, 254, 0.3); }
+.icon-svg-medium    { -fx-fill: #bc13fe; }
+.badge-medium       { -fx-text-fill: #bc13fe; -fx-background-color: rgba(188, 19, 254, 0.1); }
+.btn-medium { -fx-background-color: #5048e5; -fx-text-fill: white; }
+.medium-card:hover {
+    -fx-border-color: #bc13fe;
+    -fx-effect: dropshadow(three-pass-box, rgba(188, 19, 254, 0.4), 20, 0, 0, 0);
+}
+.medium-card:hover .title-medium { -fx-text-fill: #bc13fe; }
+.medium-card:hover .btn-medium   { -fx-background-color: #bc13fe; }
+
+.icon-circle-hard { -fx-border-color: rgba(255, 0, 60, 0.3); }
+.icon-svg-hard    { -fx-fill: #ff003c; }
+.badge-hard       { -fx-text-fill: #ff003c; -fx-background-color: rgba(255, 0, 60, 0.1); }
+.hard-card:hover {
+    -fx-border-color: #ff003c;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 0, 60, 0.4), 20, 0, 0, 0);
+}
+.hard-card:hover .card-title { -fx-text-fill: #ff003c; }
+.hard-card:hover .btn-hard   { -fx-background-color: #ff003c; -fx-text-fill: #121117; }
