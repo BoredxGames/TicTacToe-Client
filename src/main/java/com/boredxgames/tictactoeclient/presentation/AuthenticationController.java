@@ -109,6 +109,7 @@ private void onRegisterSelected() {
 
     @FXML
     private void onBackClicked() {
+        ServerConnectionManager.getInstance().disconnect();
         NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
     }
 

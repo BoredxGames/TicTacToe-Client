@@ -1,0 +1,216 @@
+/* css/features/offline_mode_selection.css */
+
+.root {
+    /* Variables inherited from global theme */
+    /* -bg-main, -bg-card, -primary, -primary-soft, -text-main */
+
+    /* UPDATED: Unified radius variable used for cropping */
+    -offline-card-radius: 24;
+    -icon-size: 48;
+
+    -text-badge: derive(-text-main, -50%);
+
+    -fx-background-color: -bg-main;
+    -fx-font-family: 'System';
+}
+
+/* Background Effects */
+.background-effects {
+    -fx-opacity: 0.15;
+}
+
+.blur-circle-top, .blur-circle-bottom {
+    -fx-background-color: -primary;
+    -fx-background-radius: 1000;
+    -fx-effect: dropshadow(gaussian, -primary, 120, 0.6, 0, 0);
+}
+
+/* ================== HEADER ================== */
+.header {
+    -fx-border-color: derive(-bg-card, 20%);
+    -fx-border-width: 0 0 1 0;
+}
+
+.logo-section {
+    -fx-cursor: hand;
+    -fx-opacity: 1.0;
+}
+.logo-section:hover { -fx-opacity: 0.8; }
+
+.logo-icon-wrapper {
+    -fx-background-color: -primary-soft;
+    -fx-background-radius: 12;
+    -fx-alignment: center;
+}
+
+.logo-icon-wrapper SVGPath {
+    -fx-fill: -primary;
+}
+
+.logo-text {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-main;
+}
+
+/* Settings Button */
+.icon-button {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-padding: 0;
+}
+.icon-button:hover {
+    -fx-border-color: -primary;
+    -fx-border-width: 1;
+}
+.icon-button SVGPath {
+    -fx-fill: -text-main;
+}
+
+/* Typography */
+.title {
+    -fx-font-size: 42px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -text-main;
+    -fx-alignment: center;
+}
+.subtitle {
+    -fx-font-size: 15px;
+    -fx-text-fill: -text-muted;
+    -fx-font-weight: 500;
+}
+
+/* ================== CARDS ================== */
+
+.game-card {
+    /* 1. Use the unified variable so container matches content */
+    -fx-background-radius: -offline-card-radius;
+    -fx-border-radius: -offline-card-radius;
+    -fx-background-color: -bg-card;
+
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 20, 0, 0, 10);
+
+    -fx-border-color: transparent;
+    -fx-border-width: 2;
+}
+
+.game-card:hover {
+    -fx-border-color: -primary;
+    /* Maintain the same radius on hover to prevent shape shifting */
+    -fx-background-radius: -offline-card-radius;
+    -fx-border-radius: -offline-card-radius;
+    -fx-effect: dropshadow(three-pass-box, -primary-soft, 40, 0.2, 0, 0);
+}
+
+/* BACKGROUND IMAGES (Cropped via radius) */
+.card-bg-image-pvp {
+    -fx-background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuw3YJ7m8TLhz3GNAjD8Scf5cQLafn2bp8Qn2o_Ll0YnRvc5Ab_GqZNGey-746vql56GF4b6Sb0UKlABmsHyFQGa2mOfoV1nhTqEWHwqIn3ZPTFy1766m5UtDZBWmPT7H5a4_W3sL8oBT6ZJ74opM1_UsXjR4LR-Hs8VSTtUWD1axZbvQOF6UgXhNW53aKKwV-BU0E91jRE_LkaM9uukR2NIMq35DC3CE2ggLEMvTft7WS62_B5fMAyJ1oTzUDC7Vk-CL4LrZv30EV");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    /* 2. Radius matches parent to create crop effect */
+    -fx-background-radius: -offline-card-radius;
+    /* 3. Insets 0 ensures image fills the region exactly to the edge */
+    -fx-background-insets: 0;
+}
+
+.card-bg-image-pve {
+    -fx-background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_55qHepZ8p-aFLKxAwRFDeAfTWN8qIelTmbf9QTc6mt5b7JBTox0lLVDujXJT3iQbXoW9F2NKgKgrykD-m9tahZevwoRma9_Ul3pm0Te6Suzje9RtNlAIsJw4o3tIupJ5NfLPGqoFFAs0sg7icvB2sTi4Zdu_4tZAVuCUq6fVujXB6tIYLLGAybHRwF3Y0mPCdWtNYj_TCtu_uOgXabYd_CeW7FP5Uc-ratqZX7ESNF0H6lpNtF91FYYWHaHW9YWDSgPBKw8T2C0t");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-radius: -offline-card-radius;
+    -fx-background-insets: 0;
+}
+
+/* GRADIENT OVERLAY */
+.card-gradient {
+    -fx-background-radius: -offline-card-radius;
+    -fx-background-insets: 0;
+    -fx-background-color: linear-gradient(
+            to top,
+            -bg-main 0%,
+            derive(-bg-main, 20%) 40%,
+            derive(-bg-main, 80%) 100%
+    );
+    -fx-opacity: 0.9;
+}
+
+/* ================== CARD ICONS ================== */
+
+.card-icon-bg {
+    -fx-background-color: -primary-soft;
+    -fx-background-radius: 100;
+    -fx-alignment: center;
+
+    -fx-min-width: -icon-size;
+    -fx-min-height: -icon-size;
+    -fx-max-width: -icon-size;
+    -fx-max-height: -icon-size;
+}
+
+.card-icon-bg SVGPath {
+    -fx-fill: white;
+}
+
+.game-card:hover .card-icon-bg {
+    -fx-effect: dropshadow(gaussian, -primary, 10, 0.4, 0, 0);
+}
+
+/* ================== CARD TEXT & FOOTER ================== */
+
+.card-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-main;
+}
+.game-card:hover .card-title {
+    -fx-text-fill: -primary;
+}
+
+.card-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-muted;
+    -fx-font-weight: 500;
+}
+
+.card-footer {
+    -fx-border-color: derive(-bg-card, 30%);
+    -fx-border-width: 1 0 0 0;
+}
+
+.card-badge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-badge;
+    -fx-opacity: 0.7;
+}
+
+.action-text {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -primary;
+}
+.card-action SVGPath {
+    -fx-fill: -primary;
+}
+
+/* Back Button */
+.back-button {
+    -fx-background-color: transparent;
+    -fx-padding: 10 20 10 20;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+.back-button:hover {
+    -fx-background-color: -bg-card;
+}
+.back-button .back-text, .back-button SVGPath {
+    -fx-text-fill: -text-muted;
+    -fx-fill: -text-muted;
+    -fx-font-weight: bold;
+}
+.back-button:hover .back-text { -fx-text-fill: -primary; }
+.back-button:hover SVGPath { -fx-fill: -primary; }

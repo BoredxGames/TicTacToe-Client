@@ -122,7 +122,7 @@ public class HomeController implements Initializable {
     }
 
     public void showErrorAlert(String message) {
-        OnlinGameSession.getInstance().setWaiting(false); 
+        OnlinGameSession.getInstance().setWaiting(false);
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
