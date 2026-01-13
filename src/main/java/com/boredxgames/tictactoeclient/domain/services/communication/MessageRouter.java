@@ -24,7 +24,6 @@ import static com.boredxgames.tictactoeclient.domain.services.communication.Acti
 import static com.boredxgames.tictactoeclient.domain.services.communication.Action.USERNAME_NOT_FOUND;
 import static com.boredxgames.tictactoeclient.domain.services.communication.Action.USER_IS_ONLINE;
 
-import com.boredxgames.tictactoeclient.domain.services.game.OnlineGameManager;
 import com.boredxgames.tictactoeclient.presentation.AuthenticationController;
 import com.boredxgames.tictactoeclient.presentation.HomeController;
 import com.google.gson.Gson;

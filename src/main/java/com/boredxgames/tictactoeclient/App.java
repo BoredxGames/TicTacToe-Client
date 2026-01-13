@@ -15,6 +15,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Scene scene = NavigationManager.init();
+        ThemeManager.init(scene);
         stage.setScene(scene);
         stage.show();
 

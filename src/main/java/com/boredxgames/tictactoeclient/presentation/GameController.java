@@ -154,7 +154,7 @@ public class GameController implements Initializable, NavigationParameterAware {
                 difficultyBadge.setManaged(false);
                 changeDifficultyButton.setVisible(false);
                 changeDifficultyButton.setManaged(false);
-                // gameService = new OnlinePVPService(); // TODO: implement online pvp service
+
             }
         }
     }
