@@ -173,11 +173,11 @@ public class GameController implements Initializable, NavigationParameterAware {
         playAgainButton.setOnAction(e -> resetGame());
 
         mainMenuButton.setOnAction(e -> {
-            NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL); // TODO: change to mode selection screen
+            NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
         });
 
         backButton.setOnAction(e -> {
-            NavigationManager.pop();
+            NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
         });
 
         settingsButton.setOnAction(e -> {

@@ -170,14 +170,6 @@
                                     <Text styleClass="material-icon, button-icon" text="refresh"/>
                                 </graphic>
                             </Button>
-
-                            <Button fx:id="changeDifficultyButton" managed="false" maxWidth="Infinity"
-                                    styleClass="secondary-button" text="Change Difficulty" visible="false">
-                                <graphic>
-                                    <Text styleClass="material-icon, button-icon" text="tune"/>
-                                </graphic>
-                            </Button>
-
                             <Button fx:id="mainMenuButton" maxWidth="Infinity" styleClass="text-button"
                                     text="Back to Main Menu"/>
                         </VBox>
