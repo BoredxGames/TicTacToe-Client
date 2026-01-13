@@ -7,9 +7,8 @@ public enum Screens {
     GAME_MODE("GameModeScreen"),
     SERVER_CONNECTION("server_connection"),
     AUTHENTICATION("authentication"),
-
     Home("home"),
-
+    PVP_SETUP("pvp_setup"),
     GAME("game_screen");
 
 
