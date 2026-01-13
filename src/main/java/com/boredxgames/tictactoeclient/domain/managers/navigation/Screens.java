@@ -8,8 +8,10 @@ public enum Screens {
     OFFLINE_MODE_SELECTION("offline_mode_selection"),
     SERVER_CONNECTION("server_connection"),
     AUTHENTICATION("authentication"),
+    GAME("game_screen"),
     Home("home"),
-    GAME("game_screen");
+    PVP_SETUP("pvp_setup"),
+    DifficultySelection("difficulty_selection");
 
 
     private final String name;
