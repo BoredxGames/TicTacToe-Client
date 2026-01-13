@@ -1,12 +1,16 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.boredxgames.tictactoeclient.domain.services.game;
 
 import com.boredxgames.tictactoeclient.domain.model.GameState;
-
+import com.boredxgames.tictactoeclient.domain.model.RecordedMove;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * @author Tasneem
  */
 public class GameBoard {
@@ -21,6 +25,8 @@ public class GameBoard {
     private char currentPlayer;
     private GameState gameState;
     private int movesCount;
+    
+    private final List<RecordedMove> moveHistory;
 
 
     public GameBoard() {
@@ -29,6 +35,7 @@ public class GameBoard {
 
     public GameBoard(char startingPlayer) {
         board = new char[BOARD_SIZE][BOARD_SIZE];
+        moveHistory = new ArrayList<>();
         initializeBoard();
         currentPlayer = startingPlayer;
         gameState = GameState.IN_PROGRESS;
@@ -49,6 +56,7 @@ public class GameBoard {
 
     public void resetGame(char startingPlayer) {
         initializeBoard();
+        moveHistory.clear(); 
         currentPlayer = startingPlayer;
         gameState = GameState.IN_PROGRESS;
         movesCount = 0;
@@ -69,6 +77,9 @@ public class GameBoard {
 
         board[row][col] = player;
         movesCount++;
+        
+        moveHistory.add(new RecordedMove(row, col, player));
+
         updateGameState();
 
         if (gameState == GameState.IN_PROGRESS) {
@@ -87,11 +98,9 @@ public class GameBoard {
         if (gameState != GameState.IN_PROGRESS) {
             return false;
         }
-
         if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
             return false;
         }
-
         return board[row][col] == EMPTY;
     }
 
@@ -114,88 +123,49 @@ public class GameBoard {
     }
 
     public boolean checkWin(char player) {
-        // rows
         for (int i = 0; i < BOARD_SIZE; i++) {
-            if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
-                return true;
-            }
+            if (board[i][0] == player && board[i][1] == player && board[i][2] == player) return true;
         }
-
-        // col
         for (int j = 0; j < BOARD_SIZE; j++) {
-            if (board[0][j] == player && board[1][j] == player && board[2][j] == player) {
-                return true;
-            }
+            if (board[0][j] == player && board[1][j] == player && board[2][j] == player) return true;
         }
-
-        // diagonal left -> right
-        if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
-            return true;
-        }
-
-        // diagonal right -> left
-        if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
-            return true;
-        }
+        if (board[0][0] == player && board[1][1] == player && board[2][2] == player) return true;
+        if (board[0][2] == player && board[1][1] == player && board[2][0] == player) return true;
 
         return false;
     }
-
+    
     public int[] getWinningLine() {
-        if (gameState == GameState.IN_PROGRESS || gameState == GameState.DRAW) {
-            return null;
-        }
-
+        if (gameState == GameState.IN_PROGRESS || gameState == GameState.DRAW) return null;
         char winner = (gameState == GameState.X_WINS) ? PLAYER_X : PLAYER_O;
 
-        // row
         for (int i = 0; i < BOARD_SIZE; i++) {
-            if (board[i][0] == winner && board[i][1] == winner && board[i][2] == winner) {
+            if (board[i][0] == winner && board[i][1] == winner && board[i][2] == winner) 
                 return new int[]{i, 0, i, 1, i, 2};
-            }
         }
-
-        // col
         for (int j = 0; j < BOARD_SIZE; j++) {
-            if (board[0][j] == winner && board[1][j] == winner && board[2][j] == winner) {
+            if (board[0][j] == winner && board[1][j] == winner && board[2][j] == winner) 
                 return new int[]{0, j, 1, j, 2, j};
-            }
         }
-
-        // diagonal left -> right
-        if (board[0][0] == winner && board[1][1] == winner && board[2][2] == winner) {
+        if (board[0][0] == winner && board[1][1] == winner && board[2][2] == winner) 
             return new int[]{0, 0, 1, 1, 2, 2};
-        }
-
-        // diagonal right -> left
-        if (board[0][2] == winner && board[1][1] == winner && board[2][0] == winner) {
+        if (board[0][2] == winner && board[1][1] == winner && board[2][0] == winner) 
             return new int[]{0, 2, 1, 1, 2, 0};
-        }
-
+        
         return null;
     }
 
     public char getWinner() {
-        if (gameState == GameState.X_WINS) {
-            return PLAYER_X;
-        } else if (gameState == GameState.O_WINS) {
-            return PLAYER_O;
-        }
+        if (gameState == GameState.X_WINS) return PLAYER_X;
+        if (gameState == GameState.O_WINS) return PLAYER_O;
         return EMPTY;
     }
 
-    public char getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
+    public char getCurrentPlayer() { return currentPlayer; }
+    public GameState getGameState() { return gameState; }
+    
     public char getCellValue(int row, int col) {
-        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
-            return EMPTY;
-        }
+        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return EMPTY;
         return board[row][col];
     }
 
@@ -203,11 +173,13 @@ public class GameBoard {
         List<int[]> availableMoves = new ArrayList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                if (board[i][j] == EMPTY) {
-                    availableMoves.add(new int[]{i, j});
-                }
+                if (board[i][j] == EMPTY) availableMoves.add(new int[]{i, j});
             }
         }
         return availableMoves;
+    }
+    
+    public List<RecordedMove> getMoveHistory() {
+        return Collections.unmodifiableList(moveHistory);
     }
 }
