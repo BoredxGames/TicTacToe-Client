@@ -30,6 +30,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -85,8 +86,6 @@ public class GameController implements Initializable, NavigationParameterAware {
     private MediaView victoryVideo;
     @FXML
     private Button playAgainButton;
-   /* @FXML
-    private Button changeDifficultyButton;*/
     @FXML
     private Button mainMenuButton;
 
@@ -103,9 +102,9 @@ public class GameController implements Initializable, NavigationParameterAware {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cells = new Button[][]{
-            {cell00, cell01, cell02},
-            {cell10, cell11, cell12},
-            {cell20, cell21, cell22}
+                {cell00, cell01, cell02},
+                {cell10, cell11, cell12},
+                {cell20, cell21, cell22}
         };
         gameBoard = new GameBoard();
         setupCellHandlers();
@@ -142,24 +141,18 @@ public class GameController implements Initializable, NavigationParameterAware {
                 opponentTypeLabel.setText(player2Name);
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
-                /*changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);*/
                 gameService = new OfflinePVPService();
             }
             case OFFLINE_PVE -> {
                 opponentTypeLabel.setText("CPU (O)");
                 difficultyBadge.setVisible(true);
                 difficultyBadge.setManaged(true);
-                /*changeDifficultyButton.setVisible(true);
-                changeDifficultyButton.setManaged(true);*/
                 gameService = new OfflinePVEAIService();
             }
             case ONLINE_PVP -> {
                 opponentTypeLabel.setText(player2Name);
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
-                /*changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);*/
                 // gameService = new OnlinePVPService(); // TODO: implement online pvp service
             }
         }
@@ -191,10 +184,6 @@ public class GameController implements Initializable, NavigationParameterAware {
 
             NavigationManager.navigate(Screens.SETTINGS, NavigationAction.REPLACE_ALL);
         });
-
-        /*changeDifficultyButton.setOnAction(e -> {
-            // TODO change difficulty
-        });*/
     }
 
     private void handleCellClick(int row, int col) {
@@ -357,10 +346,11 @@ public class GameController implements Initializable, NavigationParameterAware {
         if (state == GameState.X_WINS) {
             playerScore++;
             playerScoreLabel.setText(String.valueOf(playerScore));
-            playVictoryVideo();
+            playVictoryVideo("you_win");
         } else if (state == GameState.O_WINS) {
             opponentScore++;
             opponentScoreLabel.setText(String.valueOf(opponentScore));
+            playVictoryVideo("loser");
         }
 
         PauseTransition pause = new PauseTransition(Duration.millis(800));
@@ -393,10 +383,10 @@ public class GameController implements Initializable, NavigationParameterAware {
         modalOverlay.setVisible(true);
     }
 
-    private void playVictoryVideo() {
+    private void playVictoryVideo(String videoName) {
         try {
             String videoPath = Objects.requireNonNull(
-                    getClass().getResource("/assets/videos/you_win.mp4")
+                    getClass().getResource("/assets/videos/" + videoName + ".mp4")
             ).toExternalForm();
 
             Media media = new Media(videoPath);

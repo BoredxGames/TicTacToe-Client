@@ -41,8 +41,6 @@
                     <padding>
                         <Insets bottom="6" left="12" right="16" top="6"/>
                     </padding>
-                    <Text styleClass="material-icon, difficulty-icon" text="smart_toy"/>
-                    <Label fx:id="difficultyLabel" styleClass="difficulty-text" text="Hard Difficulty"/>
                 </HBox>
                 <Button fx:id="settingsButton" styleClass="icon-button">
                     <graphic>
@@ -147,9 +145,9 @@
                         <VBox alignment="CENTER">
                             <StackPane styleClass="trophy-container">
                                 <MediaView fx:id="victoryVideo"
-                                           fitWidth="600"
-                                           visible="false"/>
-                                <!--<Text fx:id="modalIcon" styleClass="material-icon, trophy-icon" text="emoji_events"/>-->
+                                           visible="false"
+                                           fitWidth="450"
+                                />
                             </StackPane>
                         </VBox>
                     </StackPane>
