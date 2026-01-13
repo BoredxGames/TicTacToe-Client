@@ -5,10 +5,10 @@ public enum Screens {
     SECONDARY("GameModeScreen"),
     SETTINGS("SettingsScreen"),
     GAME_MODE("GameModeScreen"),
-
     SERVER_CONNECTION("server_connection"),
-    AUTHENTICATION("authentication");
-   
+    AUTHENTICATION("authentication"),
+    GAME("game_screen");
+
 
     private final String name;
 

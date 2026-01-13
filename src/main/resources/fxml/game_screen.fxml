@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.media.MediaView?>
+
+<BorderPane id="rootPane" prefHeight="800.0" prefWidth="1200.0" styleClass="root-pane"
+            stylesheets="@../css/features/game_screen.css" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            fx:controller="com.boredxgames.tictactoeclient.presentation.GameController">
+
+    <!-- top bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="header">
+            <padding>
+                <Insets bottom="16" left="48" right="24" top="16"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="16">
+                <Button fx:id="backButton" styleClass="icon-button">
+                    <graphic>
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <Image url="@../assets/icons/arrow.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Label styleClass="header-title" text="Tic-Tac-Toe"/>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox alignment="CENTER_RIGHT" spacing="12">
+                <padding>
+                    <Insets bottom="16" left="24" right="24" top="16"/>
+                </padding>
+                <HBox fx:id="difficultyBadge" alignment="CENTER" managed="false" spacing="8"
+                      styleClass="difficulty-badge" visible="false">
+                    <padding>
+                        <Insets bottom="6" left="12" right="16" top="6"/>
+                    </padding>
+                    <Text styleClass="material-icon, difficulty-icon" text="smart_toy"/>
+                    <Label fx:id="difficultyLabel" styleClass="difficulty-text" text="Hard Difficulty"/>
+                </HBox>
+                <Button fx:id="settingsButton" styleClass="icon-button">
+                    <graphic>
+                        <ImageView fitHeight="24" fitWidth="24">
+                            <Image url="@../assets/icons/setting.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+            </HBox>
+        </HBox>
+    </top>
+
+    <!-- main -->
+    <center>
+        <StackPane styleClass="main-content">
+            <HBox alignment="CENTER" spacing="64">
+                <padding>
+                    <Insets bottom="32" left="32" right="32" top="32"/>
+                </padding>
+
+                <VBox alignment="CENTER" spacing="16">
+                    <!-- player card -->
+                    <VBox fx:id="playerCard" maxWidth="200" minWidth="200" spacing="8" styleClass="player-card">
+                        <padding>
+                            <Insets bottom="20" left="20" right="20" top="20"/>
+                        </padding>
+
+                        <Label styleClass="player-label" text="YOU"/>
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <ImageView fitHeight="16" fitWidth="16" styleClass="material-icon, player-icon">
+                                <Image url="@../assets/icons/user.png"/>
+                            </ImageView>
+                            <Label fx:id="playerNameLabel" styleClass="player-name" text="Player (X)"/>
+                        </HBox>
+                        <Label fx:id="playerScoreLabel" styleClass="score-label" text="0"/>
+
+                        <!-- turn indicator -->
+                        <Region prefHeight="4" styleClass="turn-indicator" VBox.vgrow="NEVER"/>
+                    </VBox>
+
+                    <!-- opponent card -->
+                    <VBox fx:id="opponentCard" maxWidth="200" minWidth="200" spacing="8" styleClass="player-card">
+                        <padding>
+                            <Insets bottom="20" left="20" right="20" top="20"/>
+                        </padding>
+
+                        <Label fx:id="opponentTypeLabel" styleClass="opponent-label" text="OPPONENT"/>
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <ImageView fitHeight="16" fitWidth="16" styleClass="material-icon, opponent-icon">
+                                <Image url="@../assets/icons/robot.png"/>
+                            </ImageView>
+                            <Label fx:id="opponentNameLabel" styleClass="opponent-name" text="CPU (O)"/>
+                        </HBox>
+                        <Label fx:id="opponentScoreLabel" styleClass="score-label" text="0"/>
+                    </VBox>
+                </VBox>
+
+                <!-- game board -->
+                <VBox alignment="CENTER" spacing="24">
+
+                    <VBox alignment="CENTER" styleClass="board-container">
+                        <padding>
+                            <Insets bottom="16" left="16" right="16" top="16"/>
+                        </padding>
+
+                        <GridPane fx:id="gameGrid" hgap="12" styleClass="game-grid" vgap="12">
+                            <!-- row 0 -->
+                            <Button fx:id="cell00" styleClass="cell" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Button fx:id="cell01" styleClass="cell" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                            <Button fx:id="cell02" styleClass="cell" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+
+                            <!-- row 1 -->
+                            <Button fx:id="cell10" styleClass="cell" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Button fx:id="cell11" styleClass="cell" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                            <Button fx:id="cell12" styleClass="cell" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+
+                            <!-- row 2 -->
+                            <Button fx:id="cell20" styleClass="cell" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Button fx:id="cell21" styleClass="cell" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            <Button fx:id="cell22" styleClass="cell" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                            <columnConstraints>
+                                <ColumnConstraints/>
+                                <ColumnConstraints/>
+                                <ColumnConstraints/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints/>
+                                <RowConstraints/>
+                                <RowConstraints/>
+                            </rowConstraints>
+                        </GridPane>
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <!-- game over modal -->
+            <StackPane fx:id="modalOverlay" styleClass="modal-overlay" visible="false">
+                <VBox alignment="TOP_CENTER" maxWidth="400" styleClass="modal-content">
+
+                    <StackPane maxWidth="Infinity" prefHeight="128" styleClass="modal-header">
+                        <VBox alignment="CENTER">
+                            <StackPane styleClass="trophy-container">
+                                <MediaView fx:id="victoryVideo"
+                                           fitWidth="600"
+                                           visible="false"/>
+                                <Text fx:id="modalIcon" styleClass="material-icon, trophy-icon" text="emoji_events"/>
+                            </StackPane>
+                        </VBox>
+                    </StackPane>
+
+                    <VBox alignment="TOP_CENTER" spacing="32">
+                        <padding>
+                            <Insets bottom="32" left="32" right="32" top="16"/>
+                        </padding>
+
+                        <VBox alignment="CENTER" spacing="8">
+                            <Label fx:id="modalTitle" styleClass="modal-title" text="Victory!"/>
+                            <Label fx:id="modalMessage" styleClass="modal-message" text="You won the game!"
+                                   textAlignment="CENTER" wrapText="true"/>
+                        </VBox>
+
+                        <VBox maxWidth="Infinity" spacing="12">
+                            <Button fx:id="playAgainButton" maxWidth="Infinity" styleClass="primary-button"
+                                    text="Play Again">
+                                <graphic>
+                                    <Text styleClass="material-icon, button-icon" text="refresh"/>
+                                </graphic>
+                            </Button>
+
+                            <Button fx:id="changeDifficultyButton" managed="false" maxWidth="Infinity"
+                                    styleClass="secondary-button" text="Change Difficulty" visible="false">
+                                <graphic>
+                                    <Text styleClass="material-icon, button-icon" text="tune"/>
+                                </graphic>
+                            </Button>
+
+                            <Button fx:id="mainMenuButton" maxWidth="Infinity" styleClass="text-button"
+                                    text="Back to Main Menu"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </StackPane>
+        </StackPane>
+    </center>
+
+    <!-- footer -->
+    <bottom>
+        <VBox alignment="CENTER" styleClass="footer">
+            <padding>
+                <Insets bottom="48" top="24"/>
+            </padding>
+            <Label style="-fx-font-size: 12px;" text="Tic Tac Toe© BoredXGames 2026" textFill="#8a8a9a"/>
+        </VBox>
+    </bottom>
+</BorderPane>
