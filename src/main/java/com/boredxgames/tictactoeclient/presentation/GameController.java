@@ -9,7 +9,9 @@ import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
 import com.boredxgames.tictactoeclient.domain.model.Move;
 import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
 import com.boredxgames.tictactoeclient.domain.model.GameState;
+import com.boredxgames.tictactoeclient.domain.services.AIService;
 import com.boredxgames.tictactoeclient.domain.services.game.GameService;
+import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVEAIService;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -100,9 +102,9 @@ public class GameController implements Initializable, NavigationParameterAware {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cells = new Button[][]{
-                {cell00, cell01, cell02},
-                {cell10, cell11, cell12},
-                {cell20, cell21, cell22}
+            {cell00, cell01, cell02},
+            {cell10, cell11, cell12},
+            {cell20, cell21, cell22}
         };
         gameBoard = new GameBoard();
         setupCellHandlers();
@@ -111,12 +113,15 @@ public class GameController implements Initializable, NavigationParameterAware {
 
     @Override
     public void setNavigationParameter(Object parameter) {
-        if (parameter instanceof GameNavigationParams(String player1, String player2, GameMode mode)) {
-            this.player1Name = player1;
-            this.player2Name = player2;
-            this.gameMode = mode;
-        } else if (parameter instanceof GameMode mode) {
-            this.gameMode = mode;
+        if (parameter instanceof GameNavigationParams params) {
+            this.player1Name = params.player1();
+            this.player2Name = params.player2();
+            this.gameMode = params.mode();
+        } else {
+            // Default 
+            this.gameMode = GameMode.OFFLINE_PVP;
+            this.player1Name = "Player 1";
+            this.player2Name = "Player 2";
         }
 
         applyPlayerInfo();
@@ -146,7 +151,7 @@ public class GameController implements Initializable, NavigationParameterAware {
                 difficultyBadge.setManaged(true);
                 changeDifficultyButton.setVisible(true);
                 changeDifficultyButton.setManaged(true);
-                // gameService = new OfflinePVEAIService(); // TODO: implement offline pve ai service
+                gameService = new OfflinePVEAIService();
             }
             case ONLINE_PVP -> {
                 opponentTypeLabel.setText("ONLINE PLAYER");
@@ -192,34 +197,41 @@ public class GameController implements Initializable, NavigationParameterAware {
     }
 
     private void handleCellClick(int row, int col) {
-        if (!gameBoard.isValidMove(row, col)) return;
-
-        if (gameMode == GameMode.ONLINE_PVP && !isPlayerTurn) return;
-
-        char currentPlayer = gameBoard.getCurrentPlayer();
-
-        Move move = new Move(row, col);
-        gameService.makeMove(move, currentPlayer);
-
-        Move nextMove = gameService.getNextMove(gameBoard, currentPlayer);
-        if(nextMove != null) {
-            Platform.runLater(() -> {
-                if (gameBoard.makeMove(nextMove.getRow(), nextMove.getCol(), gameBoard.getCurrentPlayer())) {
-                    updateCell(nextMove.getRow(), nextMove.getCol(), gameBoard.getCurrentPlayer());
-                    if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
-                        handleGameEnd();
-                    } else {
-                        gameBoard.switchPlayer();
-                        updateTurnIndicator();
-                    }
-                }
-            });
+        if (!gameBoard.isValidMove(row, col)) {
+            return;
         }
 
-        GameState state = gameService.getOutcome(gameBoard);
+    
+        gameBoard.makeMove(row, col, GameBoard.PLAYER_X);
+        updateCell(row, col, GameBoard.PLAYER_X);
+
+        if (checkGameEnd()) {
+            return;
+        }
+
+   
+        if (gameMode == GameMode.OFFLINE_PVE) {
+            disableBoard();
+            Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
+            gameService.makeMove(aiMove, GameBoard.PLAYER_O);
+
+            if (aiMove != null) {
+                updateCell(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
+            }
+
+            if (!checkGameEnd()) {
+                enableBoard();
+            }
+        }
+    }
+
+    private boolean checkGameEnd() {
+        GameState state = gameBoard.getGameState();
         if (state != GameState.IN_PROGRESS) {
             handleGameEnd();
+            return true;
         }
+        return false;
     }
 
     private void updateCell(int row, int col, char player) {
@@ -277,27 +289,29 @@ public class GameController implements Initializable, NavigationParameterAware {
     }
 
     private void makeCPUMove() {
-        var availableMoves = gameBoard.getAvailableMoves();
-
-        if (!availableMoves.isEmpty()) {
-            // TODO: change difficulty
-            int randomIndex = (int) (Math.random() * availableMoves.size());
-            int[] move = availableMoves.get(randomIndex);
-
-            Platform.runLater(() -> {
-                if (gameBoard.makeMove(move[0], move[1], GameBoard.PLAYER_O)) {
-                    updateCell(move[0], move[1], GameBoard.PLAYER_O);
-
-                    if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
-                        handleGameEnd();
-                    } else {
-                        gameBoard.switchPlayer();
-                        updateTurnIndicator();
-                        enableBoard();
-                    }
-                }
-            });
+        if (gameMode != GameMode.OFFLINE_PVE) {
+            return;
         }
+
+        int[] aiMove = AIService.nextMove(gameBoard, AIService.getDiffiulty());
+        if (aiMove == null) {
+            return;
+        }
+
+        Platform.runLater(() -> {
+            if (gameBoard.makeMove(aiMove[0], aiMove[1], GameBoard.PLAYER_O)) {
+                updateCell(aiMove[0], aiMove[1], GameBoard.PLAYER_O);
+
+                GameState state = gameBoard.getGameState();
+                if (state != GameState.IN_PROGRESS) {
+                    handleGameEnd();
+                } else {
+                    gameBoard.switchPlayer();
+                    updateTurnIndicator();
+                    enableBoard();
+                }
+            }
+        });
     }
 
     private void handleGameEnd() {
@@ -331,17 +345,17 @@ public class GameController implements Initializable, NavigationParameterAware {
             case X_WINS:
                 modalIcon.setText("emoji_events");
                 modalTitle.setText("Victory!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE ?
-                        "The CPU didn't stand a chance against your moves." :
-                        "Player 1 wins the game!");
+                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
+                        ? "The CPU didn't stand a chance against your moves."
+                        : "Player 1 wins the game!");
                 break;
 
             case O_WINS:
                 modalIcon.setText("sentiment_dissatisfied");
                 modalTitle.setText("Defeat!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE ?
-                        "The CPU outsmarted you this time." :
-                        "Player 2 wins the game!");
+                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
+                        ? "The CPU outsmarted you this time."
+                        : "Player 2 wins the game!");
                 break;
 
             case DRAW:

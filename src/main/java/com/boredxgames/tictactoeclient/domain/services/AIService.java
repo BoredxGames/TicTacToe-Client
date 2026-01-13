@@ -4,6 +4,8 @@
  */
 package com.boredxgames.tictactoeclient.domain.services;
 
+import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
+
 import java.util.List;
 import java.util.Random;
 
@@ -13,7 +15,8 @@ import java.util.Random;
  */
 public class AIService {
         private static final Random random = new Random();
-
+        private static AIDifficulty diffiulty = AIDifficulty.EASY;
+        
     public static int[] nextMove(GameBoard board, AIDifficulty difficulty) {
         if (board.getAvailableMoves().isEmpty()) return null;
 
@@ -23,6 +26,16 @@ public class AIService {
             case HARD -> hardMove(board);
         };
     }
+
+    public static AIDifficulty getDiffiulty() {
+        return diffiulty;
+    }
+
+    public static void setDiffiulty(AIDifficulty diffiulty) {
+        AIService.diffiulty = diffiulty;
+    }
+    
+    
 
     private static int[] randomMove(GameBoard board) {
         List<int[]> moves = board.getAvailableMoves();

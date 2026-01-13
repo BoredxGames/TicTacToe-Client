@@ -4,6 +4,8 @@
  */
 package com.boredxgames.tictactoeclient.domain.services;
 
+import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
+
 /**
  *
  * @author sheri

@@ -20,13 +20,13 @@ public class NavigationManager {
     private static final Stack<ScreenNavigationEntry> screenStack = new Stack<>();
 
     public static Scene init() throws IOException {
-// شاشة البداية
+
         current = new ScreenNavigationEntry(Screens.PRIMARY, null, null);
 
         Parent root = initRoot(current.screen().getName());
         scene = new Scene(root, 640, 480);
 
-        // طبق الثيم على الـ Scene الرئيسي وفعل listener لأي تغيير مستقبلي
+       
         ThemeManager.init(scene);
 
         return scene;
