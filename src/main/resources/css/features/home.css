@@ -1,0 +1,239 @@
+
+.root {
+    -fx-background-color: #111022; 
+    -fx-font-family: "Noto Sans", "Segoe UI", sans-serif;
+    -fx-text-fill: white;
+    -fx-focus-color: rgba(0,0,0,0);
+    -fx-faint-focus-color: rgba(0,0,0,0);
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+
+.scroll-pane, 
+.scroll-pane .viewport, 
+.scroll-pane .content {
+    -fx-background-color: rgba(0,0,0,0) !important;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+/* Also target your specific class just in case */
+.edge-to-edge,
+.edge-to-edge .viewport,
+.edge-to-edge .content {
+    -fx-background-color: rgba(0,0,0,0) !important;
+}
+
+.flat-tabs {
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.flat-tabs .tab-header-area {
+    -fx-background-color: rgba(0,0,0,0) !important;
+    -fx-padding: 0; 
+}
+
+.flat-tabs .tab-header-background {
+    -fx-background-color: rgba(0,0,0,0) !important;
+    -fx-background-insets: 0;
+}
+
+.flat-tabs .headers-region {
+    -fx-background-color: rgba(0,0,0,0) !important;
+}
+
+.flat-tabs .tab-content-area {
+    -fx-background-color: rgba(0,0,0,0) !important;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+/* 4. TAB BUTTONS */
+.flat-tabs .tab {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 15; 
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: rgba(0,0,0,0);
+}
+
+.flat-tabs .tab-label {
+    -fx-text-fill: #94a3b8; 
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.flat-tabs .tab:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05); 
+}
+
+.flat-tabs .tab:selected {
+    -fx-background-color: rgba(0,0,0,0) !important;
+    -fx-border-color: transparent transparent #463eef transparent;
+}
+
+.flat-tabs .tab:selected .tab-label {
+    -fx-text-fill: #463eef !important; 
+}
+
+.player-card {
+    -fx-background-color: #1c1b2e; 
+    -fx-background-radius: 16;
+    -fx-border-color: rgba(255,255,255,0.05);
+    -fx-border-width: 2px; 
+    -fx-border-radius: 16;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+    -fx-transition: -fx-background-color 0.2s, -fx-border-color 0.2s;
+}
+
+.player-card:hover {
+    -fx-background-color: #252438 !important;
+    -fx-border-color: #463eef !important;
+    -fx-border-width: 2px; /* Must match non-hover width */
+}
+
+.player-name { -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; }
+.player-subtext { -fx-text-fill: #94a3b8; -fx-font-size: 11px; }
+
+/* 6. TOP BAR */
+.top-bar {
+    -fx-background-color: rgba(28, 27, 46, 0.95);
+    -fx-padding: 20;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 0 0 1 0;
+}
+
+.app-icon { -fx-text-fill: #463eef; -fx-font-size: 24px; -fx-font-weight: bold; }
+.app-title { -fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: 700; }
+.username { -fx-text-fill: white !important; -fx-font-weight: 700; -fx-font-size: 14px; }
+.user-level { -fx-text-fill: #94a3b8; -fx-font-size: 11px; }
+.avatar-profile { -fx-stroke: #463eef; -fx-stroke-width: 2; -fx-fill: #2d2d44; }
+
+.signout-btn {
+    -fx-background-color: #1c1b2e; 
+    -fx-text-fill: #cbd5e1; 
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255,255,255,0.1);
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 10;
+}
+.signout-btn:hover { -fx-background-color: #2a2940; -fx-border-color: rgba(255,255,255,0.2); }
+
+.quick-match-btn {
+    -fx-background-color: #463eef;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 30;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(70, 62, 239, 0.6), 15, 0, 0, 4);
+    -fx-cursor: hand;
+}
+.quick-match-btn:hover { -fx-background-color: #6d66f5; }
+
+.btn-challenge { -fx-background-color: #463eef; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 8; }
+.btn-challenge:hover { -fx-background-color: #6d66f5; }
+
+.icon-btn { -fx-background-color: rgba(0,0,0,0); -fx-text-fill: #94a3b8; -fx-font-size: 16px; -fx-cursor: hand; } 
+.icon-btn:hover { -fx-text-fill: white; -fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 8; }
+
+.btn-spectate { -fx-background-color: rgba(0,0,0,0); -fx-text-fill: #cbd5e1; -fx-border-color: rgba(255,255,255,0.2); -fx-border-radius: 8; -fx-padding: 8; -fx-font-weight: bold; }
+.btn-spectate:hover { -fx-background-color: rgba(255,255,255,0.05); -fx-text-fill: white; }
+.btn-disabled { -fx-background-color: rgba(0,0,0,0); -fx-text-fill: #475569; -fx-padding: 8; -fx-border-color: rgba(255,255,255,0.05); -fx-border-radius: 8; }
+
+/* Status Indicators */
+.status-text-online { -fx-text-fill: #00ff9d; -fx-font-weight: bold; -fx-font-size: 10px; }
+.status-text-ingame { -fx-text-fill: #ff9e00; -fx-font-weight: bold; -fx-font-size: 10px; }
+.status-text-busy   { -fx-text-fill: #64748b; -fx-font-weight: bold; -fx-font-size: 10px; }
+.status-dot-online { -fx-fill: #00ff9d; }
+.status-dot-ingame { -fx-fill: #ff9e00; }
+.status-dot-busy   { -fx-fill: #64748b; }
+
+/* --- SCROLLBAR STYLING --- */
+.modern-scroll .viewport {
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+.modern-scroll .scroll-bar:vertical {
+    -fx-background-color: rgba(0,0,0,0);
+    -fx-pref-width: 12; 
+}
+
+.modern-scroll .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 10;
+}
+
+.modern-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #463eef; 
+    -fx-background-radius: 10;
+    -fx-background-insets: 2;
+}
+
+.modern-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #6d66f5;
+}
+
+.modern-scroll .scroll-bar .increment-button,
+.modern-scroll .scroll-bar .decrement-button {
+    -fx-visible: false;
+    -fx-padding: 0;
+    -fx-pref-height: 0;
+}
+
+/* --- RESPONSIVE TWEAKS --- */
+.player-card {
+    -fx-min-height: 70;
+    -fx-pref-width: 100%; 
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 4);
+}
+
+/* --- LEADERBOARD SPECIFIC STYLES --- */
+
+.leaderboard-card {
+    -fx-background-color: #0f0e1e; /* Slightly darker than root */
+    -fx-background-radius: 16;
+    -fx-border-color: rgba(255,255,255,0.05);
+    -fx-border-radius: 16;
+    -fx-padding: 0;
+}
+
+.leaderboard-header-row {
+    -fx-padding: 15 ;
+    -fx-border-color: rgba(255,255,255,0.05);
+    -fx-border-width: 0 0 1 0;
+}
+
+.column-header {
+    -fx-text-fill: #64748b; /* Muted text for headers */
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+.leaderboard-row {
+    -fx-padding: 15 ;
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: rgba(255,255,255,0.02);
+    -fx-cursor: hand;
+}
+
+.leaderboard-row:hover {
+    -fx-background-color: rgba(255,255,255,0.03);
+}
+
+/* The Blue "My Rank" Footer */
+.my-rank-footer {
+    -fx-background-color: linear-gradient(to right, #463eef, #6d66f5);
+    -fx-background-radius: 16;
+    -fx-padding: 15 ;
+    -fx-effect: dropshadow(three-pass-box, rgba(70, 62, 239, 0.4), 20, 0, 0, 8);
+}

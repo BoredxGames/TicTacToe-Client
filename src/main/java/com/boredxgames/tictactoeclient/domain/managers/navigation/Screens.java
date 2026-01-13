@@ -5,11 +5,12 @@ public enum Screens {
     SECONDARY("GameModeScreen"),
     SETTINGS("SettingsScreen"),
     GAME_MODE("GameModeScreen"),
+    OFFLINE_MODE_SELECTION("offline_mode_selection"),
     SERVER_CONNECTION("server_connection"),
     AUTHENTICATION("authentication"),
+    GAME("game_screen"),
     Home("home"),
     PVP_SETUP("pvp_setup"),
-    GAME("game_screen"),
     DifficultySelection("difficulty_selection"),
     RECORDINGS("RecordingsListScreen");
 

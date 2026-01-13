@@ -42,7 +42,7 @@ public class Server_connectionController implements Initializable {
                 backgroundPane.getWidth(),
                 backgroundPane.getHeight()
             );
-            
+
         });
         
         serverPresets.put("Local Server", "127.0.0.1");
@@ -52,10 +52,10 @@ public class Server_connectionController implements Initializable {
         ipComboBox.getSelectionModel().select("Local Server");
         ipComboBox.setEditable(true);
 
-        
+
     }
 
-   
+
     @FXML
     private void connect() {
         String input = ipComboBox.getValue();
@@ -98,7 +98,7 @@ public class Server_connectionController implements Initializable {
         stopConnectionThread();
         NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
     }
-    
+
     private void stopConnectionThread() {
         if (connectionThread != null && connectionThread.isAlive()) {
             connectionThread.interrupt();

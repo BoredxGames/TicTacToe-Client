@@ -35,12 +35,14 @@ public class GameModeScreenController {
     }
 
     private void setupActions() {
-        offlineCard.setOnMouseClicked(e -> {
-             NavigationManager.navigate(Screens.PVP_SETUP, NavigationAction.REPLACE);
-        });
 
+        offlineCard.setOnMouseClicked(e -> {
+             NavigationManager.navigate(Screens.OFFLINE_MODE_SELECTION, NavigationAction.PUSH);
+        });
+      
         onlineCard.setOnMouseClicked(e -> {
             NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE_ALL);
+
         });
     }
 

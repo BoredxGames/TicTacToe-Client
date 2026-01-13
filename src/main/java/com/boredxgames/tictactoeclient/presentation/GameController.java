@@ -6,20 +6,25 @@ import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationPara
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import com.boredxgames.tictactoeclient.domain.model.GameMode;
 import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
-import com.boredxgames.tictactoeclient.domain.model.GameRecord;
+
 import com.boredxgames.tictactoeclient.domain.model.GameState;
 import com.boredxgames.tictactoeclient.domain.model.Move;
+import com.boredxgames.tictactoeclient.domain.services.AIService;
+import com.boredxgames.tictactoeclient.domain.services.GameService;
 import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
-import com.boredxgames.tictactoeclient.domain.services.game.GameService;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVEAIService;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVPService;
+import com.boredxgames.tictactoeclient.domain.services.game.OnlinePVPService;
+import com.boredxgames.tictactoeclient.domain.model.GameRecord;
 import com.boredxgames.tictactoeclient.domain.services.storage.GameRecordingService;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
+
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -77,15 +82,17 @@ public class GameController implements Initializable, NavigationParameterAware {
     private String player2Name = "Player 2";
 
     private GameService gameService;
+    private char localPlayerId;
     private final GameRecordingService recordingService = new GameRecordingService();
     private GameRecord replayData;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         cells = new Button[][]{
-            {cell00, cell01, cell02},
-            {cell10, cell11, cell12},
-            {cell20, cell21, cell22}
+                {cell00, cell01, cell02},
+                {cell10, cell11, cell12},
+                {cell20, cell21, cell22}
         };
         gameBoard = new GameBoard();
         setupCellHandlers();
@@ -127,6 +134,7 @@ public class GameController implements Initializable, NavigationParameterAware {
                 difficultyBadge.setManaged(false);
                 changeDifficultyButton.setVisible(false);
                 changeDifficultyButton.setManaged(false);
+
                 gameService = new OfflinePVPService();
             }
             case OFFLINE_PVE -> {
@@ -135,6 +143,7 @@ public class GameController implements Initializable, NavigationParameterAware {
                 difficultyBadge.setManaged(true);
                 changeDifficultyButton.setVisible(true);
                 changeDifficultyButton.setManaged(true);
+
                 gameService = new OfflinePVEAIService();
             }
             case ONLINE_PVP -> {
@@ -143,6 +152,35 @@ public class GameController implements Initializable, NavigationParameterAware {
                 difficultyBadge.setManaged(false);
                 changeDifficultyButton.setVisible(false);
                 changeDifficultyButton.setManaged(false);
+
+                boolean amIPlayer1 = OnlinePVPService.getInstance().shouldPlayFirst();
+                localPlayerId = amIPlayer1 ? GameBoard.PLAYER_X : GameBoard.PLAYER_O;
+
+                System.out.println("I am Player: " + localPlayerId);
+
+                gameService = OnlinePVPService.getInstance().setMoveListener((move) -> {
+                    Platform.runLater(() -> {
+                        char remotePlayer = (localPlayerId == GameBoard.PLAYER_X) ? GameBoard.PLAYER_O : GameBoard.PLAYER_X;
+
+                        if (gameBoard.makeMove(move.getRow(), move.getCol(), remotePlayer)) {
+                            updateCell(move.getRow(), move.getCol(), remotePlayer);
+
+                            if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
+                                handleGameEnd();
+                            } else {
+                                updateTurnIndicator();
+                                enableBoard();
+                            }
+                        }
+                    });
+                });
+
+                if (amIPlayer1) {
+                    enableBoard();
+                } else {
+                    disableBoard();
+                }
+                updateTurnIndicator();
             }
             case REPLAY -> {
                 opponentTypeLabel.setText("REPLAY");
@@ -174,6 +212,10 @@ public class GameController implements Initializable, NavigationParameterAware {
 
         mainMenuButton.setOnAction(e -> {
             NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE_ALL);
+        });
+
+        backButton.setOnAction(e -> {
+            NavigationManager.pop();
         });
 
         backButton.setOnAction(e -> NavigationManager.pop());
@@ -211,59 +253,83 @@ public class GameController implements Initializable, NavigationParameterAware {
         if (!gameBoard.isValidMove(row, col)) return;
         if (gameMode == GameMode.REPLAY) return;
 
-        char currentPlayer = gameBoard.getCurrentPlayer();
+        if (gameMode == GameMode.ONLINE_PVP && gameBoard.getCurrentPlayer() != localPlayerId) {
+            return;
+        }
 
         switch (gameMode) {
-            case OFFLINE_PVP -> {
-                gameBoard.makeMove(row, col, currentPlayer);
-                updateCell(row, col, currentPlayer);
-                if (!checkGameEnd()) {
-                    updateTurnIndicator();
-                }
-            }
-            case OFFLINE_PVE -> {
-                gameBoard.makeMove(row, col, GameBoard.PLAYER_X);
-                updateCell(row, col, GameBoard.PLAYER_X);
-                if (checkGameEnd()) return;
-
-                disableBoard();
-                PauseTransition pause = new PauseTransition(Duration.millis(500));
-                pause.setOnFinished(e -> {
-                    Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
-                    gameService.makeMove(aiMove, GameBoard.PLAYER_O, gameBoard);
-                    if (aiMove != null) {
-                        updateCell(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
-                    }
-                    if (!checkGameEnd()) {
-                        enableBoard();
-                        gameBoard.switchPlayer();
-                        updateTurnIndicator();
-                    }
-                });
-                pause.play();
-            }
+            case OFFLINE_PVP -> handleOfflinePvp(row, col);
+            case OFFLINE_PVE -> handleOfflinePve(row, col);
+            case ONLINE_PVP -> handleOnlinePvp(row, col);
         }
     }
 
-    private void startReplay() {
+    private void handleOfflinePvp(int row, int col) {
+        char currentPlayer = gameBoard.getCurrentPlayer();
+
+        performMove(row, col, currentPlayer);
+
+        if (!checkGameEnd()) {
+            gameBoard.switchPlayer();
+            updateTurnIndicator();
+        }
+    }
+
+    private void handleOfflinePve(int row, int col) {
+        performMove(row, col, GameBoard.PLAYER_X);
+
+        if (checkGameEnd()) {
+            return;
+        }
+
+        scheduleAiTurn();
+    }
+
+    private void handleOnlinePvp(int row, int col) {
+        performMove(row, col, localPlayerId);
+
+        Move move = new Move(row, col);
+        gameService.makeMove(move, localPlayerId);
+
         disableBoard();
-        Timeline timeline = new Timeline();
-        int delay = 0;
 
-        for (var move : replayData.moves()) {
-            delay += 1000;
-            KeyFrame frame = new KeyFrame(Duration.millis(delay), e -> {
-                gameBoard.forceMove(move.row(), move.col(), move.player());
-                updateCell(move.row(), move.col(), move.player());
-                
-                gameBoard.switchPlayer();
-                updateTurnIndicator();
-                checkGameEnd(); 
-            });
-            timeline.getKeyFrames().add(frame);
+        if (gameBoard.getGameState() != GameState.IN_PROGRESS) {
+            handleGameEnd();
+        } else {
+            updateTurnIndicator();
         }
-        timeline.play();
     }
+
+    private void performMove(int row, int col, char player) {
+        gameBoard.makeMove(row, col, player);
+        updateCell(row, col, player);
+    }
+
+    private void scheduleAiTurn() {
+        disableBoard();
+
+        PauseTransition pause = new PauseTransition(Duration.millis(500));
+        pause.setOnFinished(e -> executeAiMove());
+        pause.play();
+    }
+
+    private void executeAiMove() {
+        Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
+
+        if (aiMove != null) {
+            gameService.makeMove(aiMove, GameBoard.PLAYER_O, gameBoard);
+            performMove(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
+        }
+
+        if (!checkGameEnd()) {
+            enableBoard();
+            gameBoard.switchPlayer();
+            updateTurnIndicator();
+        }
+    }
+
+
+
 
     private boolean checkGameEnd() {
         GameState state = gameBoard.getGameState();
@@ -290,11 +356,16 @@ public class GameController implements Initializable, NavigationParameterAware {
     }
 
     private void updateTurnIndicator() {
-        char current = gameBoard.getCurrentPlayer();
-        boolean isPlayerX = (current == GameBoard.PLAYER_X);
-
+        char currentPlayer = gameBoard.getCurrentPlayer();
+  
+      if (currentPlayer == GameBoard.PLAYER_X) {
+            setActiveCard(playerCard, opponentCard);
+        } 
+      else {
+            setActiveCard(opponentCard, playerCard);
+      }
         if (gameMode == GameMode.OFFLINE_PVP || gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.REPLAY) {
-            if (isPlayerX) {
+            if (localPlayerId == GameBoard.PLAYER_X) {
                 setActiveCard(playerCard, opponentCard);
             } else {
                 setActiveCard(opponentCard, playerCard);
@@ -404,8 +475,18 @@ public class GameController implements Initializable, NavigationParameterAware {
             }
         }
         modalOverlay.setVisible(false);
+
         updateTurnIndicator();
-        enableBoard();
+
+        if (gameMode == GameMode.ONLINE_PVP) {
+            if (localPlayerId == GameBoard.PLAYER_X) {
+                enableBoard();
+            } else {
+                disableBoard();
+            }
+        } else {
+            enableBoard();
+        }
     }
 
     private void disableBoard() {
@@ -422,5 +503,25 @@ public class GameController implements Initializable, NavigationParameterAware {
                 if (gameBoard.getCellValue(row, col) == GameBoard.EMPTY) cells[row][col].setDisable(false);
             }
         }
+    }
+
+    private void startReplay() {
+        disableBoard();
+        Timeline timeline = new Timeline();
+        int delay = 0;
+
+        for (var move : replayData.moves()) {
+            delay += 1000;
+            KeyFrame frame = new KeyFrame(Duration.millis(delay), e -> {
+                gameBoard.forceMove(move.row(), move.col(), move.player());
+                updateCell(move.row(), move.col(), move.player());
+
+                gameBoard.switchPlayer();
+                updateTurnIndicator();
+                checkGameEnd();
+            });
+            timeline.getKeyFrames().add(frame);
+        }
+        timeline.play();
     }
 }

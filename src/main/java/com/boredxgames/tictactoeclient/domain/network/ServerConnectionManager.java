@@ -10,6 +10,7 @@ import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import com.boredxgames.tictactoeclient.domain.model.AuthResponseEntity;
 import com.boredxgames.tictactoeclient.domain.services.communication.Message;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
+import com.boredxgames.tictactoeclient.presentation.AuthenticationController;
 import com.google.gson.Gson;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -27,9 +28,9 @@ public class ServerConnectionManager {
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
-    private Thread th;
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     private AuthResponseEntity player;
+    private volatile boolean isIntentionalDisconnect = false;
 
     public void setPlayer(AuthResponseEntity player) {
         this.player = player;
@@ -48,14 +49,14 @@ public class ServerConnectionManager {
         return instance;
     }
 
-    public void connect(String host, int port) throws IOException {
-        InetAddress ip = InetAddress.getByName(host);
+    public void connect(String host, int port  ) throws IOException {
+        isIntentionalDisconnect = false;
+       InetAddress ip = InetAddress.getByName("localhost");
         socket = new Socket(ip, port);
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
-        th = new Thread(this::readMessages);
+        Thread th = new Thread(this::readMessages);
         th.start();
-        
     }
 
     private void readMessages() {
@@ -68,20 +69,36 @@ public class ServerConnectionManager {
                 MessageRouter router = MessageRouter.getInstance();
                 router.navigateMessage(response);
             } catch (IOException ex) {
-                 close();
-                
+                if (isIntentionalDisconnect) {
+                    System.out.println("Disconnected intentionally.");
+                    break;
+                }
+
+                close();
                 Platform.runLater(() -> {
-                NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE_ALL);
-    });
+                    AuthenticationController.showUserAlert("Connection to server lost.");
+                    NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
+                });
+                break;
+
             }
 
         }
 
     }
+    public void disconnect() {
+        try {
+            isIntentionalDisconnect = true;
+            close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public synchronized void sendMessage(Message msg) {
         try {
             String jsonMessage = gson.toJson(msg);
+            System.out.println(jsonMessage + "SENTTTTT");
 
             dos.writeUTF(jsonMessage);
             dos.flush();
@@ -90,6 +107,9 @@ public class ServerConnectionManager {
         }
 
     }
+    public AuthResponseEntity getPlayer() {
+    return player;
+}
 
     public void close() {
         try {
@@ -107,6 +127,7 @@ public class ServerConnectionManager {
         }
 
     }
+
 
     public boolean isConnected() {
         return !socket.isClosed();

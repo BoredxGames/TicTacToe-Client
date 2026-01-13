@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane stylesheets="@../css/features/home.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boredxgames.tictactoeclient.presentation.LeaderboardController">
+    
+    <VBox spacing="0" style="-fx-padding: 30 50 30 50;">
+        
+        <HBox alignment="BOTTOM_LEFT" style="-fx-padding: 0 0 20 0;">
+            <VBox spacing="5">
+                <Label style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;" text="Global Rankings" />
+                <Label style="-fx-font-size: 14px; -fx-text-fill: #94a3b8;" text="See who's dominating the grid this season." />
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS" />
+            </HBox>
+
+        <VBox styleClass="leaderboard-card" VBox.vgrow="ALWAYS">
+            
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="leaderboard-header-row">
+                <Label prefWidth="60" styleClass="column-header" text="RANK" />
+                <Label maxWidth="Infinity" styleClass="column-header" text="PLAYER" HBox.hgrow="ALWAYS" />
+                <Label alignment="CENTER_RIGHT" prefWidth="100" styleClass="column-header" text="SCORE" />
+            </HBox>
+
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" styleClass="modern-scroll" VBox.vgrow="ALWAYS">
+                <content>
+                    <VBox fx:id="leaderboardContainer" spacing="0" style="-fx-background-color: transparent;">
+                        </VBox>
+                </content>
+            </ScrollPane>
+        </VBox>
+        
+        <Pane minHeight="20" />
+
+        <HBox fx:id="myRankBar" alignment="CENTER_LEFT" spacing="20" styleClass="my-rank-footer" visible="false">
+            <VBox alignment="CENTER" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 8; -fx-padding: 5 10;">
+                <Label style="-fx-font-size: 10px; -fx-text-fill: #cbd5e1;" text="RANK" />
+                <Label fx:id="myRankLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" text="--" />
+            </VBox>
+
+            <Circle radius="20" styleClass="avatar-profile" />
+            
+            <VBox alignment="CENTER_LEFT">
+                 <Label fx:id="myNameLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" text="Me" />
+                 <Label style="-fx-font-size: 12px; -fx-text-fill: #cbd5e1;" text="Current User" />
+            </VBox>
+
+            <Pane HBox.hgrow="ALWAYS" />
+
+            <VBox alignment="CENTER_RIGHT">
+                <Label style="-fx-font-size: 10px; -fx-text-fill: #cbd5e1;" text="YOUR SCORE" />
+                <Label fx:id="myScoreLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" text="0" />
+            </VBox>
+        </HBox>
+    </VBox>
+</StackPane>

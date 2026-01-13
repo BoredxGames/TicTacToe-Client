@@ -8,25 +8,25 @@ package com.boredxgames.tictactoeclient.domain.services.communication;
  *
  * @author Hazem
  */
+
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
-import com.boredxgames.tictactoeclient.domain.model.AuthResponseEntity;
+import com.boredxgames.tictactoeclient.domain.model.*;
 import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
-import static com.boredxgames.tictactoeclient.domain.services.communication.Action.INTERNAL_SERVER_ERROR;
-import static com.boredxgames.tictactoeclient.domain.services.communication.Action.INVALID_CREDENTIAL;
-import static com.boredxgames.tictactoeclient.domain.services.communication.Action.LOGIN_SUCCESS;
-import static com.boredxgames.tictactoeclient.domain.services.communication.Action.REGISTERATION_SUCCESS;
-import static com.boredxgames.tictactoeclient.domain.services.communication.Action.USERNAME_NOT_FOUND;
-import static com.boredxgames.tictactoeclient.domain.services.communication.Action.USER_IS_ONLINE;
+import com.boredxgames.tictactoeclient.domain.services.game.OnlinePVPService;
 import com.boredxgames.tictactoeclient.presentation.AuthenticationController;
+import com.boredxgames.tictactoeclient.presentation.HomeController;
 import com.google.gson.Gson;
+import javafx.application.Platform;
 
 public class MessageRouter {
 
     private static MessageRouter instance;
     private static ServerConnectionManager connection;
     private Gson gson = new Gson();
+    private static HomeController homeController;
+
     private MessageRouter() {
         connection = ServerConnectionManager.getInstance();
     }
@@ -43,17 +43,18 @@ public class MessageRouter {
         MessageType messageType = message.getHeader().getMsgType();
 
         assert messageType != null;
-        Message responseMessage;
         switch (messageType) {
-            case REQUEST -> responseMessage = handleRequest(message);
+            case REQUEST -> handleRequest(message);
             case RESPONSE -> handleResponse(message);
-            case EVENT -> {
-            }
+            case EVENT -> handleEvent(message);
             case ERROR -> handleError(message);
             default -> System.out.println("Unknown MessageType: " + messageType);
         }
-        // Handle event messages
-            }
+    }
+
+    public static void setHomeController(HomeController controller) {
+        homeController = controller;
+    }
 
     private Message handleRequest(Message msg) {
         Action action = msg.getHeader().getAction();
@@ -61,77 +62,177 @@ public class MessageRouter {
         assert action != null;
         return switch (action) {
 
-            default: {
+
+            default -> {
                 System.out.println("Unknown Action: " + action);
                 yield new Message();
             }
         };
     }
 
-    
+
     private void handleResponse(Message msg) {
         Action action = msg.getHeader().getAction();
-           System.out.println(action);
-       
+        System.out.println(action);
+
         switch (action) {
-            case LOGIN_SUCCESS ->
-            {
+            case LOGIN_SUCCESS -> {
                 System.out.println("Login Success");
-                AuthResponseEntity responseData = gson.fromJson(msg.getData(),AuthResponseEntity.class);
+                AuthResponseEntity responseData = gson.fromJson(msg.getData(), AuthResponseEntity.class);
+                ServerConnectionManager.getInstance().setPlayer(responseData);
                 System.out.println(responseData);
-                NavigationManager.navigate(Screens.SECONDARY, NavigationAction.REPLACE);
+                NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE);
 
             }
-            case REGISTERATION_SUCCESS->{
+            case REGISTERATION_SUCCESS -> {
                 System.out.println("Registration success");
-                AuthResponseEntity responseData = gson.fromJson(msg.getData(),AuthResponseEntity.class);
-               AuthenticationController.showUserAlert("Registration success");
-                        
+                AuthResponseEntity responseData = gson.fromJson(msg.getData(), AuthResponseEntity.class);
+                AuthenticationController.showUserAlert("Registration success");
+
             }
-            case USERNAME_NOT_FOUND->{
+            case USERNAME_NOT_FOUND -> {
                 System.out.println("Username not found");
                 AuthenticationController.showUserAlert("Username not found");
-                        
+
             }
+            case REQUEST_GAME -> {
+                System.out.println("Server acknowledged Game Request.");
+            }
+            case GET_AVAILABLE_PLAYERS -> {
+                AvailablePlayersInfo info = gson.fromJson(msg.getData(), AvailablePlayersInfo.class);
+                if (homeController != null) {
+                    Platform.runLater(() -> homeController.updatePlayersList(info));
+                }
+            }
+            case GAME_RESPONSE -> {
+                GameResponseInfo info = gson.fromJson(msg.getData(), GameResponseInfo.class);
+                if (homeController != null) {
+                    Platform.runLater(() -> homeController.handleServerGameResponse(info));
+                }
+            }
+            case GET_LEADERBOARD -> {
+                AvailablePlayersInfo info = gson.fromJson(msg.getData(), AvailablePlayersInfo.class);
+                if (homeController != null) {
+                    Platform.runLater(() -> homeController.updateLeaderboardUI(info));
+                }
+            }
+            case SEND_GAME_UPDATE -> {
+                MoveInfo moveInfo = gson.fromJson(msg.getData(), MoveInfo.class);
+                OnlinePVPService.onIncomingMove(moveInfo);
+            }
+
             default -> {
                 System.out.println("Unknown Action: " + action);
 
             }
-        };
+        }
+        ;
     }
-    
+
+    private void handleEvent(Message msg) {
+        Action action = msg.getHeader().getAction();
+        System.out.println(action);
+
+        switch (action) {
+            case REQUEST_GAME -> {
+                GameRequestInfo info = gson.fromJson(msg.getData(), GameRequestInfo.class);
+                if (homeController != null) {
+                    Platform.runLater(() -> homeController.showIncomingGameRequest(info));
+                }
+
+            }
+            case GAME_START -> {
+                OnlineGameState.info = gson.fromJson(msg.getData(), GameStartInfo.class);
+                String player1Name = "You";
+                String player2Name = "Opponent";
+                NavigationManager.navigate(Screens.GAME, NavigationAction.REPLACE, new GameNavigationParams(
+                        player1Name,player2Name, GameMode.ONLINE_PVP
+                ));
+
+            }
+
+            default -> {
+                System.out.println("Unknown Action: " + action);
+
+            }
+        }
+        ;
+    }
+
     private void handleError(Message msg) {
         System.out.println("my time has come");
         Action action = msg.getHeader().getAction();
-           System.out.println(action);
-       
+        System.out.println(action);
+
         switch (action) {
-           
-            case USERNAME_NOT_FOUND->{
+
+            case USERNAME_NOT_FOUND -> {
                 System.out.println("Username not found");
                 AuthenticationController.showUserAlert("Username not found");
-                        
+
             }
-            
-            case INTERNAL_SERVER_ERROR->{
+
+            case INTERNAL_SERVER_ERROR -> {
+                String errorMessage = "Server error. Please try again.";
                 System.out.println("Internal Server Error");
                 AuthenticationController.showUserAlert("Internal Server Error");
-                
+                if (homeController != null) {
+                    Platform.runLater(() -> homeController.showErrorAlert(errorMessage));
+                }
+
             }
-             case INVALID_CREDENTIAL->{
-                 System.out.println("INVALID_CREDENTIAL");
+            case PLAYER_BUSY -> {
+                String errorMsg = "That player is currently in a game.";
+                System.out.println(errorMsg);
+                if (homeController != null) {
+                    Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
+                }
+            }
+            case PENDING_REQUEST_EXISTS -> {
+                String errorMsg = "You already have a request pending.";
+                System.out.println(errorMsg);
+                if (homeController != null) {
+                    Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
+                }
+            }
+            case TARGET_HAS_PENDING_REQUEST -> {
+                String errorMsg = "That player is considering another challenge.";
+                System.out.println(errorMsg);
+                if (homeController != null) {
+                    Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
+                }
+            }
+
+            case ROOM_NOT_FOUND -> {
+                String errorMsg = "The game session is no longer available.";
+                if (homeController != null) {
+                    // Close the "Accept/Decline" popup if open
+                    homeController.dismissIncomingRequest();
+                    Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
+                }
+            }
+
+            case INVALID_OPPONENT -> {
+                String errorMsg = "Opponent disconnected.";
+                if (homeController != null) {
+                    homeController.dismissIncomingRequest();
+                    Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
+                }
+            }
+            case INVALID_CREDENTIAL -> {
+                System.out.println("INVALID_CREDENTIAL");
                 AuthenticationController.showUserAlert("INVALID CREDENTIAL");
-                
+
             }
-            case USER_IS_ONLINE->{
-                 System.out.println("User alread logged in");
+            case USER_IS_ONLINE -> {
+                System.out.println("User alread logged in");
                 AuthenticationController.showUserAlert("User alread logged in");
-                
+
             }
-            case USERNAME_ALREADY_EXIST->{
-                 System.out.println("USERNAME_ALREADY_EXIST");
+            case USERNAME_ALREADY_EXIST -> {
+                System.out.println("USERNAME_ALREADY_EXIST");
                 AuthenticationController.showUserAlert("USERNAME ALREADY EXIST");
-                
+
             }
             default -> {
                 System.out.println("Unknown Action: " + action);

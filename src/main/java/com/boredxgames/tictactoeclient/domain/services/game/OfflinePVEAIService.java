@@ -7,6 +7,7 @@ package com.boredxgames.tictactoeclient.domain.services.game;
 import com.boredxgames.tictactoeclient.domain.model.GameState;
 import com.boredxgames.tictactoeclient.domain.model.Move;
 import com.boredxgames.tictactoeclient.domain.services.AIService;
+import com.boredxgames.tictactoeclient.domain.services.GameService;
 
 /**
  *

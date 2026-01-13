@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane fx:id="rootStack" prefHeight="800" prefWidth="1280" styleClass="root" stylesheets="@../css/features/home.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boredxgames.tictactoeclient.presentation.HomeController">
+    
+    <Pane fx:id="backgroundPane" />
+
+    <BorderPane fx:id="mainContent">
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="top-bar">
+                <StackPane>
+                    <Label styleClass="app-icon" text="▦" />
+                </StackPane>
+                <Label styleClass="app-title" text="XO Online" />
+
+                <Pane HBox.hgrow="ALWAYS" />
+
+                <HBox alignment="CENTER" spacing="12">
+                    <VBox alignment="CENTER_RIGHT" spacing="2">
+                        <Label fx:id="usernameLabel" styleClass="username" text="Guest" />
+                        <Label fx:id="scoreLabel" styleClass="user-level" text="0 XP" />
+                    </VBox>
+                    
+                    <Circle radius="18" styleClass="avatar-profile" />
+                    
+                    <Button onAction="#openSettings" styleClass="icon-btn" text="⚙" />
+                    <Button onAction="#onSignOut" styleClass="signout-btn" text="Sign Out" />
+                </HBox>
+            </HBox>
+        </top>
+
+        <center>
+            <TabPane styleClass="flat-tabs" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+
+                <Tab text="Players">
+                    <content>
+                        <fx:include fx:id="playersView" source="players.fxml" />
+                    </content>
+                </Tab>
+
+                <Tab text="Leaderboard">
+                    <content>
+                        <fx:include fx:id="leaderboardView" source="leaderboard.fxml" />
+                    </content>
+                </Tab>
+
+        
+
+            </TabPane>
+        </center>
+    </BorderPane>
+</StackPane>

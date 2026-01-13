@@ -23,11 +23,7 @@ public class NavigationManager {
 
         current = new ScreenNavigationEntry(Screens.PRIMARY, null, null);
 
-        Parent root = initRoot(current.screen().getName());
-        scene = new Scene(root, 640, 480);
-
-       
-        ThemeManager.init(scene);
+        scene = new Scene(initRoot(current.screen().getName()), 1200, 800);
 
         return scene;
     }
@@ -105,7 +101,6 @@ public class NavigationManager {
 
         Parent root = loader.load();
 
-        current = new ScreenNavigationEntry(Screens.PRIMARY, null, loader.getController());
 
         return root;
     }

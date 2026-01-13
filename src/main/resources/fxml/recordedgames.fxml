@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.boredxgames.tictactoeclient.presentation.RecordedGamesController"
+      styleClass="content" spacing="20" alignment="TOP_CENTER">
+
+    <Label text="Your Match History" styleClass="online-count"/>
+    <Label text="No recordings found." style="-fx-text-fill: gray;"/>
+
+</VBox>

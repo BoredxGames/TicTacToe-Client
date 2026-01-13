@@ -9,8 +9,10 @@ public enum Action {
     LOGIN(10),
     REGISTER(20),
     REQUEST_GAME(30),
-    GAME_RESPONSE(40),
+    GAME_RESPONSE(35),
+    GAME_START(40),
     SEND_GAME_UPDATE(50),
+    GAME_END(55),
     USERNAME_NOT_FOUND(60),
     REGISTERATION_SUCCESS(70),
     INTERNAL_SERVER_ERROR(80),
@@ -24,7 +26,10 @@ public enum Action {
     INVALID_OPPONENT(160),
     NO_PENDING_REQUEST(170),
     GET_AVAILABLE_PLAYERS(180),
-    USER_IS_ONLINE(190);
+    USER_IS_ONLINE(190),
+    GET_LEADERBOARD(200);
+
+
     final int id;
 
     Action(int id) {

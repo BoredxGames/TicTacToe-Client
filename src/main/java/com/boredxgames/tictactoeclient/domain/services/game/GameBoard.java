@@ -28,6 +28,7 @@ public class GameBoard {
     
     private final List<RecordedMove> moveHistory;
 
+
     public GameBoard() {
         this(PLAYER_X);
     }
@@ -66,6 +67,10 @@ public class GameBoard {
     }
 
     public boolean makeMove(int row, int col, char player) {
+        if (player != currentPlayer) {
+            return false;
+        }
+
         if (!isValidMove(row, col)) {
             return false;
         }
@@ -78,7 +83,7 @@ public class GameBoard {
         updateGameState();
 
         if (gameState == GameState.IN_PROGRESS) {
-            currentPlayer = (player == PLAYER_X) ? PLAYER_O : PLAYER_X; 
+            currentPlayer = (player == PLAYER_X) ? PLAYER_O : PLAYER_X;
         }
 
         return true;
