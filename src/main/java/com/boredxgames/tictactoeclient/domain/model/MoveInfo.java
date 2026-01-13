@@ -4,6 +4,12 @@
  */
 package com.boredxgames.tictactoeclient.domain.model;
 
+import com.boredxgames.tictactoeclient.domain.services.communication.Action;
+import com.boredxgames.tictactoeclient.domain.services.communication.Header;
+import com.boredxgames.tictactoeclient.domain.services.communication.Message;
+import com.boredxgames.tictactoeclient.domain.services.communication.MessageType;
+import com.google.gson.Gson;
+
 /**
  *
  * @author mahmoud
@@ -11,9 +17,9 @@ package com.boredxgames.tictactoeclient.domain.model;
 public class MoveInfo {
     private final String roomId;
     private final String playerId;
-    private final Object move;
+    private final String move;
 
-    public MoveInfo(String playerId, Object move, String roomId) {
+    public MoveInfo(String playerId, String move, String roomId) {
         this.playerId = playerId;
         this.move = move;
         this.roomId = roomId;
@@ -27,8 +33,19 @@ public class MoveInfo {
         return playerId;
     }
 
-    public Object getMove() {
+    public String getMove() {
         return move;
     }
-    
+
+    public static MoveInfo createMoveInfo(String roomId, String playerId , Object data)
+    {
+        return new MoveInfo(playerId , toJson(data), roomId);
+    }
+
+    static private String toJson(Object data)
+    {
+        Gson gson = new Gson();
+        return  gson.toJson(data);
+
+    }
 }

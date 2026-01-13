@@ -1,7 +1,8 @@
-package com.boredxgames.tictactoeclient.domain.services.game;
+package com.boredxgames.tictactoeclient.domain.services;
 
 import com.boredxgames.tictactoeclient.domain.model.GameState;
 import com.boredxgames.tictactoeclient.domain.model.Move;
+import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
 
 /**
  * @author Tasneem
