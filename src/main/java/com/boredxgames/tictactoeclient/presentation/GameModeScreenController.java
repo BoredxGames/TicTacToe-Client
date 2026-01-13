@@ -14,34 +14,20 @@ import javafx.scene.layout.VBox;
 
 public class GameModeScreenController {
 
-    @FXML
-    private VBox offlineCard;
-    @FXML
-    private VBox onlineCard;
-    @FXML
-    private Button settingsBtn;
-    @FXML
-    private FlowPane cardsPane;
-    @FXML
-    private Label logoLabel;
-    @FXML
-    private Label titleLabel;
-    @FXML
-    private Label subtitleLabel;
-    @FXML
-    private Label offlineTitleLabel;
-    @FXML
-    private Label offlineDescLabel;
-    @FXML
-    private Label offlineActionLabel;
-    @FXML
-    private Label onlineTitleLabel;
-    @FXML
-    private Label onlineDescLabel;
-    @FXML
-    private Label onlineActionLabel;
-    @FXML
-    private Label footerLabel;
+    @FXML private VBox offlineCard;
+    @FXML private VBox onlineCard;
+    @FXML private Button settingsBtn;
+    @FXML private FlowPane cardsPane;
+    @FXML private Label logoLabel;
+    @FXML private Label titleLabel;
+    @FXML private Label subtitleLabel;
+    @FXML private Label offlineTitleLabel;
+    @FXML private Label offlineDescLabel;
+    @FXML private Label offlineActionLabel;
+    @FXML private Label onlineTitleLabel;
+    @FXML private Label onlineDescLabel;
+    @FXML private Label onlineActionLabel;
+    @FXML private Label footerLabel;
 
     public void initialize() {
         updateTexts();
@@ -49,24 +35,23 @@ public class GameModeScreenController {
     }
 
     private void setupActions() {
-
-        
         offlineCard.setOnMouseClicked(e -> {
-            System.out.println("Offline Mode Selected");
              NavigationManager.navigate(Screens.PVP_SETUP, NavigationAction.REPLACE);
         });
 
         onlineCard.setOnMouseClicked(e -> {
-            System.out.println("Online Mode Selected");
             NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE_ALL);
         });
-
     }
 
     @FXML
     private void openSettings(ActionEvent event) {
-        System.out.println("Settings Button Clicked");
         NavigationManager.navigate(Screens.SETTINGS, NavigationAction.PUSH);
+    }
+    
+    @FXML
+    private void openHistory(ActionEvent event) {
+        NavigationManager.navigate(Screens.RECORDINGS, NavigationAction.PUSH);
     }
 
     private String safeGet(ResourceBundle bundle, String key, String fallback) {

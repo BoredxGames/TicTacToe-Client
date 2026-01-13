@@ -15,10 +15,8 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.boredxgames.tictactoeclient.presentation.GameModeScreenController">
 
-    <!-- الخلفية -->
     <Pane styleClass="bg-grid" />
 
-    <!-- كل المحتوى -->
     <VBox alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" spacing="40">
 
         <VBox alignment="CENTER" spacing="6">
@@ -29,7 +27,6 @@
 
         <FlowPane fx:id="cardsPane" alignment="CENTER" hgap="30" prefWrapLength="800" vgap="30">
 
-            <!-- Offline Card -->
             <VBox fx:id="offlineCard" maxWidth="360" styleClass="card">
                 <StackPane styleClass="card-image">
                     <ImageView fitHeight="200" preserveRatio="true">
@@ -43,36 +40,41 @@
 
                 <VBox spacing="10" styleClass="card-content">
                     <Label fx:id="offlineTitleLabel" styleClass="card-title" text="Offline Mode" />
-                    <Label fx:id="offlineDescLabel" styleClass="card-desc" text="Play locally against a friend or challenge the CPU." wrapText="true" />
+                    <Label fx:id="offlineDescLabel" styleClass="card-desc" text="Play locally against a friend or challenge the CPU."
+                           wrapText="true" />
                     <Label fx:id="offlineActionLabel" styleClass="card-action" text="PLAY OFFLINE →" />
                 </VBox>
             </VBox>
 
-            <!-- Online Card -->
             <VBox fx:id="onlineCard" maxWidth="360" styleClass="card">
                 <StackPane styleClass="card-image">
-                    <ImageView fitHeight="200" preserveRatio="true" style="-fx-fit-width: 400;" styleClass="card-image">
+                    <ImageView fitHeight="200" preserveRatio="true" style="-fx-fit-width: 400;"
+                               styleClass="card-image">
                         <image>
                             <Image url="@../assets/icons/online.png" />
                         </image>
                     </ImageView>
-                    <Pane style="-fx-border-radius: 18;" styleClass="image-overlay" />
+                    <Pane style="-fx-border-radius: 18;"
+                          styleClass="image-overlay" />
                     <Label styleClass="card-icon" text="🌍" StackPane.alignment="TOP_LEFT" />
                 </StackPane>
 
                 <VBox spacing="10" styleClass="card-content">
                     <Label fx:id="onlineTitleLabel" styleClass="card-title" text="Online Mode" />
-                    <Label fx:id="onlineDescLabel" styleClass="card-desc" text="Play against players worldwide in real-time matches." wrapText="true" />
+                    <Label fx:id="onlineDescLabel" styleClass="card-desc" text="Play against players worldwide in real-time matches."
+                           wrapText="true" />
                     <Label fx:id="onlineActionLabel" styleClass="card-action" text="PLAY ONLINE →" />
                 </VBox>
             </VBox>
 
         </FlowPane>
+        
+        <Button text="📜 Match History" onAction="#openHistory" 
+                styleClass="secondary-button" style="-fx-font-size: 14px; -fx-padding: 8 20;"/>
 
         <Label fx:id="footerLabel" styleClass="footer" text="© BoredxGames" />
     </VBox>
 
-    <!-- زرار الإعدادات فوق كل شيء -->
     <StackPane alignment="TOP_RIGHT" pickOnBounds="false">
         <padding>
             <Insets right="20" top="20" />
