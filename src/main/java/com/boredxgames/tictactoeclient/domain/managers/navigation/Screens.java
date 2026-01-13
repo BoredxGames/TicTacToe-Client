@@ -9,7 +9,8 @@ public enum Screens {
     AUTHENTICATION("authentication"),
     Home("home"),
     PVP_SETUP("pvp_setup"),
-    GAME("game_screen");
+    GAME("game_screen"),
+    DifficultySelection("difficulty_selection");
 
 
     private final String name;

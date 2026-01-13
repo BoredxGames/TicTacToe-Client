@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" styleClass="root-scroll" stylesheets="@../css/features/difficulty_selection.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.Difficulty_selectionController">
+<ScrollPane fitToHeight="true" fitToWidth="true" styleClass="root-scroll" stylesheets="@../css/features/difficulty_selection.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boredxgames.tictactoeclient.presentation.Difficulty_selectionController">
        <Pane fx:id="backgroundPane" opacity="0.6" />
 
    <StackPane styleClass="main-background">
