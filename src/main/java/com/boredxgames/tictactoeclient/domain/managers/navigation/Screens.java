@@ -7,8 +7,10 @@ public enum Screens {
     GAME_MODE("GameModeScreen"),
     SERVER_CONNECTION("server_connection"),
     AUTHENTICATION("authentication"),
-     Home("home"),
-    GAME("game_screen");
+    GAME("game_screen"),
+    Home("home"),
+    PVP_SETUP("pvp_setup"),
+    DifficultySelection("difficulty_selection");
 
 
     private final String name;
