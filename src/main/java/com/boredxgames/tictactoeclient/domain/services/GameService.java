@@ -79,4 +79,8 @@ public class GameService {
         Message msg = Message.createMessage(MessageType.RESPONSE, Action.GAME_RESPONSE, responseInfo);
         connection.sendMessage(msg);
     }
+ public void requestLeaderboard() {
+        Message msg = Message.createMessage(MessageType.REQUEST, Action.GET_LEADERBOARD, "");
+        connection.sendMessage(msg);
+    }
 }

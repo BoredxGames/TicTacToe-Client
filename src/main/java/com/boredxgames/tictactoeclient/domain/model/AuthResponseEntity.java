@@ -11,12 +11,12 @@ package com.boredxgames.tictactoeclient.domain.model;
 public class AuthResponseEntity {
     private String id ;
     private String userName ;
-    private int Score;
+    private int score;
 
     public AuthResponseEntity(String id, String userName, int Score) {
         this.id = id;
         this.userName = userName;
-        this.Score = Score;
+        this.score = Score;
     }
 
     public AuthResponseEntity() {
@@ -31,7 +31,7 @@ public class AuthResponseEntity {
     }
 
     public void setScore(int Score) {
-        this.Score = Score;
+        this.score = Score;
     }
 
     public String getId() {
@@ -43,7 +43,7 @@ public class AuthResponseEntity {
     }
 
     public int getScore() {
-        return Score;
+        return score;
     }
 
    public static AuthResponseEntity createAuthEntity(String id ,String username , int score)
@@ -53,7 +53,7 @@ public class AuthResponseEntity {
     
     @Override
     public String toString() {
-        return "AuthRequestEntity{" + "id=" + id + ", userName=" + userName + ", Score=" + Score + '}';
+        return "AuthRequestEntity{" + "id=" + id + ", userName=" + userName + ", Score=" + score + '}';
     }
     
 }

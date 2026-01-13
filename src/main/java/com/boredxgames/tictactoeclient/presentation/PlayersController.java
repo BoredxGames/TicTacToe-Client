@@ -37,7 +37,7 @@ public class PlayersController {
     
         if (info.getPendingPlayers() != null) {
             for (PlayerEntity p : info.getPendingPlayers()) {
-                playersContainer.getChildren().add(createPlayerCard(p, "BUSY", "busy", false));
+                playersContainer.getChildren().add(createPlayerCard(p, "Pending", "pending", false));
             }
         }
 
@@ -91,7 +91,7 @@ public class PlayersController {
             actionBtn.getStyleClass().add("btn-challenge");
             
             actionBtn.setOnAction(e -> {
-             
+                System.out.println("response tyepeeeeeeeeeeeeeeeeeee : "+GameService.getInstance().isWaiting());
                 if (GameService.getInstance().isWaiting()) {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.setTitle("Please Wait");

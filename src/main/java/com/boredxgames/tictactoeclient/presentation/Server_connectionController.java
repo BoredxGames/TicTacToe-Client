@@ -28,15 +28,13 @@ public class Server_connectionController implements Initializable {
     @FXML private VBox contentContainer;
 
     private Thread connectionThread;
-    public static String pendingErrorMessage = null;
     
     private final Map<String, String> serverPresets = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
-        
-         
+        backgroundPane.getChildren().clear();
+
         Platform.runLater(() -> { 
             BackgroundAnimation.animateCardEntry(contentContainer);
             BackgroundAnimation.startWarpAnimation(
@@ -44,6 +42,7 @@ public class Server_connectionController implements Initializable {
                 backgroundPane.getWidth(),
                 backgroundPane.getHeight()
             );
+
         });
         
         serverPresets.put("Local Server", "127.0.0.1");
@@ -53,14 +52,9 @@ public class Server_connectionController implements Initializable {
         ipComboBox.getSelectionModel().select("Local Server");
         ipComboBox.setEditable(true);
 
-        if (pendingErrorMessage != null) {
-            statusLabel.setText("Status: " + pendingErrorMessage);
-            statusLabel.setStyle("-fx-text-fill: #ff5555;");
-            pendingErrorMessage = null;
-        }
 
-       
     }
+
 
     @FXML
     private void connect() {
@@ -84,6 +78,7 @@ public class Server_connectionController implements Initializable {
                          ipComboBox.getItems().add(input);
                     }
                     
+                    stopConnectionThread();
                     NavigationManager.navigate(Screens.AUTHENTICATION, NavigationAction.REPLACE);
                 });
             } catch (IOException ex) {
@@ -100,10 +95,13 @@ public class Server_connectionController implements Initializable {
 
     @FXML
     private void onBackClicked() {
+        stopConnectionThread();
+        NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
+    }
+
+    private void stopConnectionThread() {
         if (connectionThread != null && connectionThread.isAlive()) {
             connectionThread.interrupt();
         }
-        ServerConnectionManager.getInstance().disconnect();
-        NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE);
     }
 }

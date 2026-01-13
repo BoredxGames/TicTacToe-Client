@@ -69,9 +69,6 @@ public class MessageRouter {
 
         assert action != null;
         return switch (action) {
-//            case SEND_GAME_UPDATE ->
-//            {
-//            }
 
 
             default -> {
@@ -107,6 +104,9 @@ public class MessageRouter {
                 AuthenticationController.showUserAlert("Username not found");
                         
             }
+            case REQUEST_GAME -> {
+            System.out.println("Server acknowledged Game Request.");
+        }
             case GET_AVAILABLE_PLAYERS -> {
                 AvailablePlayersInfo info = gson.fromJson(msg.getData(), AvailablePlayersInfo.class);
             if (homeController != null) {
@@ -119,6 +119,12 @@ public class MessageRouter {
                     Platform.runLater(() -> homeController.handleServerGameResponse(info));
                 }
             }
+            case GET_LEADERBOARD -> {
+    AvailablePlayersInfo info = gson.fromJson(msg.getData(), AvailablePlayersInfo.class);
+    if (homeController != null) {
+        Platform.runLater(() -> homeController.updateLeaderboardUI(info));
+    }
+}
 
             default -> {
                 System.out.println("Unknown Action: " + action);
@@ -195,10 +201,20 @@ public class MessageRouter {
                     Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
                 }
             }
+
             case ROOM_NOT_FOUND -> {
-                String errorMsg = "Game room no longer exists.";
-                System.out.println(errorMsg);
+                String errorMsg = "The game session is no longer available.";
                 if (homeController != null) {
+                    // Close the "Accept/Decline" popup if open
+                    homeController.dismissIncomingRequest();
+                    Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
+                }
+            }
+
+            case INVALID_OPPONENT -> {
+                String errorMsg = "Opponent disconnected.";
+                if (homeController != null) {
+                    homeController.dismissIncomingRequest();
                     Platform.runLater(() -> homeController.showErrorAlert(errorMsg));
                 }
             }

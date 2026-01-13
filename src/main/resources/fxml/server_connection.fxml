@@ -44,17 +44,17 @@
                                         <SVGPath content="M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5zm0 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2z" fill="#4f5ef7" scaleX="1.2" scaleY="1.2" />
                                     </StackPane>
                                     <Label styleClass="card-title" text="Connect to Server" />
-                                    <Label styleClass="card-subtitle" text="Select a saved server or enter a new Host IP." textAlignment="CENTER" wrapText="true" />
+                                    <Label styleClass="card-subtitle" text="welcome to BoredXGames" textAlignment="CENTER" wrapText="true" />
                                 </children>
                             </VBox>
 
                             <VBox alignment="CENTER_LEFT" spacing="10.0">
                                 <children>
-                                    <Label styleClass="field-label" text="Server Address" />
+                                    <Label styleClass="field-label" />
                                     
                                     <HBox alignment="CENTER_LEFT" styleClass="input-field-container">
                                         <children>
-                                            <ComboBox fx:id="ipComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Select or type IP..." styleClass="combo-box-transparent" HBox.hgrow="ALWAYS" />
+                                            <ComboBox fx:id="ipComboBox" editable="true" maxWidth="1.7976931348623157E308" promptText="Select Server" styleClass="combo-box-transparent" HBox.hgrow="ALWAYS" />
                                         </children>
                                     </HBox>
                                 </children>

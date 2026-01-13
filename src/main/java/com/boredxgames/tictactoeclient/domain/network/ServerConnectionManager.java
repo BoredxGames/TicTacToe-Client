@@ -28,8 +28,7 @@ public class ServerConnectionManager {
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
-    private Thread th;
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     private AuthResponseEntity player;
     private volatile boolean isIntentionalDisconnect = false;
 
@@ -52,13 +51,12 @@ public class ServerConnectionManager {
 
     public void connect(String host, int port  ) throws IOException {
         isIntentionalDisconnect = false;
-       InetAddress ip = InetAddress.getByName(host);
+       InetAddress ip = InetAddress.getByName("localhost");
         socket = new Socket(ip, port);
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
-        th = new Thread(this::readMessages);
+        Thread th = new Thread(this::readMessages);
         th.start();
-
     }
 
     private void readMessages() {
@@ -77,12 +75,12 @@ public class ServerConnectionManager {
                 }
 
                 close();
-
                 Platform.runLater(() -> {
                     AuthenticationController.showUserAlert("Connection to server lost.");
-                    NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE_ALL);
+                    NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
                 });
                 break;
+
             }
 
         }
@@ -128,6 +126,7 @@ public class ServerConnectionManager {
         }
 
     }
+
 
     public boolean isConnected() {
         return !socket.isClosed();

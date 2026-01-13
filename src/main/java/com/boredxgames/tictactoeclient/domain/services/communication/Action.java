@@ -26,7 +26,10 @@ public enum Action {
     INVALID_OPPONENT(160),
     NO_PENDING_REQUEST(170),
     GET_AVAILABLE_PLAYERS(180),
-    USER_IS_ONLINE(190);
+    USER_IS_ONLINE(190),
+    GET_LEADERBOARD(200);
+
+
     final int id;
 
     Action(int id) {
