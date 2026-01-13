@@ -16,8 +16,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
-<ScrollPane fitToHeight="true" fitToWidth="true" styleClass="root-scroll" stylesheets="@../css/features/difficulty_selection.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   
+<ScrollPane fitToHeight="true" fitToWidth="true" styleClass="root-scroll" stylesheets="@../css/features/difficulty_selection.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxml.Difficulty_selectionController">
+       <Pane fx:id="backgroundPane" opacity="0.6" />
+
    <StackPane styleClass="main-background">
       
       <VBox alignment="CENTER" spacing="50.0" maxWidth="1200">
