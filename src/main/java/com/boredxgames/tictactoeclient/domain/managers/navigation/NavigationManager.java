@@ -20,6 +20,7 @@ public class NavigationManager {
     private static final Stack<ScreenNavigationEntry> screenStack = new Stack<>();
 
     public static Scene init() throws IOException {
+
         current = new ScreenNavigationEntry(Screens.PRIMARY, null, null);
 
         scene = new Scene(initRoot(current.screen().getName()), 1200, 800);

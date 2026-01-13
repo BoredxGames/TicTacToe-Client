@@ -7,6 +7,8 @@ package com.boredxgames.tictactoeclient.presentation;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
+import com.boredxgames.tictactoeclient.domain.model.GameMode;
+import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -69,16 +71,17 @@ public class Pvp_setupController implements Initializable {
         if (playerOneName.isEmpty()) {
             playerOneName = "Player 1";
         }
+
         if (playerTwoName.isEmpty()) {
             playerTwoName = "Player 2";
         }
 
-        boolean isPlayerOneStarter = true;
-        ToggleButton selected = (ToggleButton) starterGroup.getSelectedToggle();
+        GameNavigationParams params = new GameNavigationParams(
+                playerOneName,
+                playerTwoName,
+                GameMode.OFFLINE_PVP
+        );
 
-        if (selected != null) {
-            isPlayerOneStarter = selected.getText().contains("Player 1");
-        }
-        //TODO : Navigate to game board 
+        NavigationManager.navigate(Screens.GAME, NavigationAction.REPLACE, params);
     }
 }

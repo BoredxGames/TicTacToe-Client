@@ -50,6 +50,7 @@ public class GameModeScreenController {
 
     private void setupActions() {
 
+
         offlineCard.setOnMouseClicked(e -> {
              NavigationManager.navigate(Screens.OFFLINE_MODE_SELECTION, NavigationAction.PUSH);
         });
