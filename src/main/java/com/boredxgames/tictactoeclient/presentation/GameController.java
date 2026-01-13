@@ -351,6 +351,8 @@ public class GameController implements Initializable, NavigationParameterAware {
             opponentScore++;
             opponentScoreLabel.setText(String.valueOf(opponentScore));
             playVictoryVideo("loser");
+        } else if (state == GameState.DRAW) {
+            playVictoryVideo("handshake");
         }
 
         PauseTransition pause = new PauseTransition(Duration.millis(800));
