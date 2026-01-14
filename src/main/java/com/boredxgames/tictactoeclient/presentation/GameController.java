@@ -304,7 +304,7 @@ public class GameController implements Initializable, NavigationParameterAware {
         if (checkGameEnd()) {
             return;
         }
-
+        updateTurnIndicator();
         scheduleAiTurn();
     }
 
@@ -326,6 +326,7 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void performMove(int row, int col, char player) {
         gameBoard.makeMove(row, col, player);
         updateCell(row, col, player);
+
     }
 
     private void scheduleAiTurn() {
@@ -344,8 +345,8 @@ public class GameController implements Initializable, NavigationParameterAware {
         }
 
         if (!checkGameEnd()) {
-            enableBoard();
-            updateTurnIndicator();
+
+            updateTurnIndicator();enableBoard();
         }
     }
 
@@ -376,19 +377,24 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void updateTurnIndicator() {
         char currentPlayer = gameBoard.getCurrentPlayer();
 
-        if (gameMode == GameMode.ONLINE_PVP) {
+    switch (gameMode) {
+
+        case ONLINE_PVP -> {
             if (currentPlayer == localPlayerId) {
                 setActiveCard(playerCard, opponentCard);
             } else {
                 setActiveCard(opponentCard, playerCard);
             }
-        } else {
+        }
+
+        case OFFLINE_PVP, OFFLINE_PVE, REPLAY -> {
             if (currentPlayer == GameBoard.PLAYER_X) {
                 setActiveCard(playerCard, opponentCard);
             } else {
                 setActiveCard(opponentCard, playerCard);
             }
         }
+    }
     }
 
     private void setActiveCard(VBox activeCard, VBox inactiveCard) {

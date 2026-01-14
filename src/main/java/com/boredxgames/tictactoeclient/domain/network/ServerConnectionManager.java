@@ -51,7 +51,6 @@ public class ServerConnectionManager {
 
     public void connect(String host, int port  ) throws IOException {
         isIntentionalDisconnect = false;
-//       InetAddress ip = InetAddress.getByName("localhost");
         socket = new Socket(host, port);
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
