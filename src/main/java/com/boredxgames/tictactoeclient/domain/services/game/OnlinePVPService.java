@@ -1,5 +1,8 @@
 package com.boredxgames.tictactoeclient.domain.services.game;
 
+import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
+import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
+import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import com.boredxgames.tictactoeclient.domain.model.*;
 import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import com.boredxgames.tictactoeclient.domain.services.GameService;
@@ -42,9 +45,18 @@ public class OnlinePVPService implements GameService {
         return this;
     }
 
-    public static void onIncomingMove(MoveInfo moveInfo) {
+ public static void onIncomingMove(MoveInfo moveInfo) {
         Gson gson = new Gson();
-        Move move = gson.fromJson(moveInfo.getMove(), Move.class);
+        Object moveData = moveInfo.getMove();
+        Move move;
+
+        if (moveData instanceof String) {
+            move = gson.fromJson((String) moveData, Move.class);
+        } else {
+            String json = gson.toJson(moveData);
+            move = gson.fromJson(json, Move.class);
+        }
+
         if (moveListener != null) {
             moveListener.accept(move);
         }
@@ -56,10 +68,8 @@ public class OnlinePVPService implements GameService {
         ServerConnectionManager connectionManager = ServerConnectionManager.getInstance();
         AuthResponseEntity player = connectionManager.getPlayer();
         GameStartInfo sessionInfo = OnlineGameState.info;
-        // Prepare the data
         MoveInfo info = MoveInfo.createMoveInfo(sessionInfo.getRoomId(), player.getId(), move);
 
-        // Send SEND_GAME_UPDATE action to server
         Message msg = Message.createMessage(
                 MessageType.RESPONSE,
                 Action.SEND_GAME_UPDATE,
@@ -67,7 +77,24 @@ public class OnlinePVPService implements GameService {
         );
         connectionManager.sendMessage(msg);
     }
+    
+    public void sendGameEnd(String winnerId) {
+                ServerConnectionManager connectionManager = ServerConnectionManager.getInstance();
 
+        if (OnlineGameState.info == null) return;
+
+        String roomId = OnlineGameState.info.getRoomId();
+        GameEndInfo endInfo = new GameEndInfo(roomId, winnerId);
+
+        Message msg = Message.createMessage(
+                MessageType.RESPONSE,
+                Action.GAME_END, 
+                endInfo
+        );
+        
+        connectionManager.sendMessage(msg);
+             NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE);
+    }
     @Override
     public void makeMove(Move move, char currentPlayer, GameBoard board) {
 
