@@ -1,8 +1,5 @@
 package com.boredxgames.tictactoeclient.domain.services.game;
 
-import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationAction;
-import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationManager;
-import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import com.boredxgames.tictactoeclient.domain.model.*;
 import com.boredxgames.tictactoeclient.domain.network.ServerConnectionManager;
 import com.boredxgames.tictactoeclient.domain.services.GameService;
@@ -79,19 +76,19 @@ public class OnlinePVPService implements GameService {
     }
     
     public void sendGameEnd(String winnerId) {
-                ServerConnectionManager connectionManager = ServerConnectionManager.getInstance();
+        ServerConnectionManager connectionManager = ServerConnectionManager.getInstance();
 
         if (OnlineGameState.info == null) return;
 
         String roomId = OnlineGameState.info.getRoomId();
         GameEndInfo endInfo = new GameEndInfo(roomId, winnerId);
-
+       
         Message msg = Message.createMessage(
                 MessageType.RESPONSE,
                 Action.GAME_END, 
                 endInfo
         );
-        
+         System.out.println("rafaaaaaaaaaaaat"+msg);
         connectionManager.sendMessage(msg);
     }
     @Override
