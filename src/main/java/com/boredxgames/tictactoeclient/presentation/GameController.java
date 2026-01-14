@@ -258,7 +258,7 @@ public class GameController implements Initializable, NavigationParameterAware {
         });
 
         backButton.setOnAction(e -> {
-            if (gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
+            if (gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP || gameMode == GameMode.REPLAY) {
                 NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
             }
         });
