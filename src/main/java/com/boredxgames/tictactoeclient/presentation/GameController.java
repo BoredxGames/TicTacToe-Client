@@ -171,6 +171,8 @@ public class GameController implements Initializable, NavigationParameterAware {
                 opponentTypeLabel.setText(player2Name);
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
+                backButton.setVisible(false);
+                backButton.setManaged(false);
 
                 boolean amIPlayer1 = OnlinePVPService.getInstance().shouldPlayFirst();
                 localPlayerId = amIPlayer1 ? GameBoard.PLAYER_X : GameBoard.PLAYER_O;
@@ -228,13 +230,16 @@ public class GameController implements Initializable, NavigationParameterAware {
         playAgainButton.setOnAction(e -> resetGame());
 
         mainMenuButton.setOnAction(e -> {
-            NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE_ALL);
-        });
+            if(gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
+                NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
+            } else {
+                NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE_ALL);
+            }
+         });
+
 
         backButton.setOnAction(e -> {
-            if (gameMode == GameMode.ONLINE_PVP) {
-                NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE_ALL);
-            } else if (gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
+            if (gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
                 NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
             }
         });
@@ -459,7 +464,6 @@ public class GameController implements Initializable, NavigationParameterAware {
                     title = "Victory!";
                     message = "You won the match!";
                 } else {
-                    icon = "sentiment_dissatisfied";
                     title = "Defeat!";
                     message = "Better luck next time.";
                 }
