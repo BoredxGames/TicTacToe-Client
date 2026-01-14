@@ -6,7 +6,7 @@ import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import com.boredxgames.tictactoeclient.domain.model.GameMode;
 import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
 import com.boredxgames.tictactoeclient.domain.model.GameRecord;
-import com.boredxgames.tictactoeclient.domain.services.storage.GameRecordingService;
+import com.boredxgames.tictactoeclient.domain.services.GameRecordingService;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
