@@ -16,6 +16,8 @@ import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVEAIService;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVPService;
 import com.boredxgames.tictactoeclient.domain.services.game.OnlinePVPService;
 import com.boredxgames.tictactoeclient.domain.model.GameRecord;
+import com.boredxgames.tictactoeclient.domain.model.OnlineGameState;
+import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
 import com.boredxgames.tictactoeclient.domain.services.storage.GameRecordingService;
 import java.net.URL;
 import java.util.Objects;
@@ -97,6 +99,27 @@ public class GameController implements Initializable, NavigationParameterAware {
         gameBoard = new GameBoard();
         setupCellHandlers();
         setupButtonHandlers();
+        MessageRouter.setGameController(this);
+    }
+    public void showErrorAlert(String message) {
+        Platform.runLater(() -> {
+            modalIcon.setText("error"); 
+            modalTitle.setText("Connection Error");
+            modalMessage.setText(message);
+
+            playAgainButton.setVisible(false);
+            playAgainButton.setManaged(false);
+            
+            if (saveGameButton != null) {
+                saveGameButton.setVisible(false);
+                saveGameButton.setManaged(false);
+            }
+            
+            mainMenuButton.setVisible(true);
+            mainMenuButton.setManaged(true);
+            modalOverlay.setVisible(true);
+                        disableBoard();
+        });
     }
 
     @Override
@@ -270,7 +293,6 @@ public class GameController implements Initializable, NavigationParameterAware {
         performMove(row, col, currentPlayer);
 
         if (!checkGameEnd()) {
-            gameBoard.switchPlayer();
             updateTurnIndicator();
         }
     }
@@ -313,20 +335,19 @@ public class GameController implements Initializable, NavigationParameterAware {
         pause.play();
     }
 
-    private void executeAiMove() {
-        Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
+  private void executeAiMove() {
+    Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
 
-        if (aiMove != null) {
-            gameService.makeMove(aiMove, GameBoard.PLAYER_O, gameBoard);
-            performMove(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
-        }
-
-        if (!checkGameEnd()) {
-            enableBoard();
-            gameBoard.switchPlayer();
-            updateTurnIndicator();
-        }
+    if (aiMove != null) {
+        
+        performMove(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
     }
+
+    if (!checkGameEnd()) {
+        enableBoard();
+        updateTurnIndicator();
+    }
+}
 
 
 
@@ -378,6 +399,8 @@ public class GameController implements Initializable, NavigationParameterAware {
         inactiveCard.getStyleClass().remove("active-card");
     }
 
+ // In GameController.java, update handleGameEnd:
+
     private void handleGameEnd() {
         GameState state = gameBoard.getGameState();
 
@@ -389,57 +412,102 @@ public class GameController implements Initializable, NavigationParameterAware {
                 cells[row][col].getStyleClass().add("cell-winning");
             }
         }
+        char winnerChar = GameBoard.EMPTY;
+        if (state == GameState.X_WINS) winnerChar = GameBoard.PLAYER_X;
+        else if (state == GameState.O_WINS) winnerChar = GameBoard.PLAYER_O;
 
-        if (state == GameState.X_WINS) {
+        if (winnerChar == GameBoard.PLAYER_X) {
             if (gameMode != GameMode.REPLAY) {
                 playerScore++;
                 playerScoreLabel.setText(String.valueOf(playerScore));
             }
-            playVictoryVideo();
-        } else if (state == GameState.O_WINS) {
+        } else if (winnerChar == GameBoard.PLAYER_O) {
             if (gameMode != GameMode.REPLAY) {
                 opponentScore++;
                 opponentScoreLabel.setText(String.valueOf(opponentScore));
             }
         }
 
+        if (gameMode == GameMode.ONLINE_PVP) {
+             
+            
+            String winnerId = "DRAW";
+            if (state == GameState.X_WINS) {
+                // Player 1 is always X
+                winnerId = OnlineGameState.info.getPlayer1();
+            } else if (state == GameState.O_WINS) {
+                winnerId = OnlineGameState.info.getPlayer2();
+            }
+            
+            OnlinePVPService.getInstance().sendGameEnd(winnerId);
+            
+            // Play video check (Keep existing logic)
+            boolean amIWinner = (winnerChar == localPlayerId);
+            if (amIWinner) playVictoryVideo();
+            
+        } else {
+            // Offline Video Logic (Keep existing logic)
+            if (winnerChar == GameBoard.PLAYER_X) playVictoryVideo();
+        }
+
+        // 4. Show Modal (Keep existing code)
         PauseTransition pause = new PauseTransition(Duration.millis(800));
         pause.setOnFinished(e -> showGameOverModal(state));
         pause.play();
     }
 
-    private void showGameOverModal(GameState state) {
-        switch (state) {
-            case X_WINS:
-                modalIcon.setText("emoji_events");
-                modalTitle.setText("Victory!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
-                        ? "The CPU didn't stand a chance against your moves."
-                        : "Player 1 wins the game!");
-                break;
-            case O_WINS:
-                modalIcon.setText("sentiment_dissatisfied");
-                modalTitle.setText("Defeat!");
-                modalMessage.setText(gameMode == GameMode.OFFLINE_PVE
-                        ? "The CPU outsmarted you this time."
-                        : "Player 2 wins the game!");
-                break;
-            case DRAW:
-                modalIcon.setText("handshake");
-                modalTitle.setText("Draw!");
-                modalMessage.setText("It's a tie! Both players played well.");
-                break;
+   private void showGameOverModal(GameState state) {
+        String title = "";
+        String message = "";
+        String icon = "";
+
+        if (state == GameState.DRAW) {
+            icon = "handshake";
+            title = "Draw!";
+            message = "It's a tie! Both players played well.";
+        } else {
+            char winner = (state == GameState.X_WINS) ? GameBoard.PLAYER_X : GameBoard.PLAYER_O;
+
+            if (gameMode == GameMode.ONLINE_PVP) {
+                if (winner == localPlayerId) {
+                    icon = "emoji_events";
+                    title = "Victory!";
+                    message = "You won the match!";
+                } else {
+                    icon = "sentiment_dissatisfied";
+                    title = "Defeat!";
+                    message = "Better luck next time.";
+                }
+            } 
+            else {
+                if (winner == GameBoard.PLAYER_X) {
+                    icon = "emoji_events";
+                    title = "Victory!";
+                    message = (gameMode == GameMode.OFFLINE_PVE) 
+                            ? "The CPU didn't stand a chance." 
+                            : "Player 1 wins!";
+                } else {
+                    icon = "sentiment_dissatisfied";
+                    title = (gameMode == GameMode.OFFLINE_PVE) ? "Defeat!" : "Player 2 Wins!";
+                    message = (gameMode == GameMode.OFFLINE_PVE)
+                            ? "The CPU outsmarted you."
+                            : "Player 2 takes the round.";
+                }
+            }
         }
+
+        modalIcon.setText(icon);
+        modalTitle.setText(title);
+        modalMessage.setText(message);
 
         if (saveGameButton != null) {
             saveGameButton.setText("Save Replay");
             saveGameButton.setDisable(false);
-            
             boolean canSave = (gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP);
             saveGameButton.setVisible(canSave);
             saveGameButton.setManaged(canSave);
         }
-        
+
         if (gameMode == GameMode.REPLAY) {
             playAgainButton.setVisible(false);
             playAgainButton.setManaged(false);
