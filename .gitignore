@@ -28,4 +28,4 @@ target/
 *.swp
 *.swo
 *~
-*.dat
+recordings/
