@@ -263,7 +263,7 @@ public class GameController implements Initializable, NavigationParameterAware {
             }
         });
 
-        settingsButton.setOnAction(e -> NavigationManager.navigate(Screens.SETTINGS, NavigationAction.REPLACE_ALL));
+        settingsButton.setOnAction(e -> NavigationManager.navigate(Screens.SETTINGS, NavigationAction.PUSH));
 
         if (saveGameButton != null) {
             saveGameButton.setOnAction(e -> handleSaveGame());
