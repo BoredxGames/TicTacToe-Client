@@ -31,7 +31,7 @@
                         <SVGPath content="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4v-4h4V18z M8,12H4V8h4V12z M14,18h-4v-4h4V18z M14,12h-4V8h4V12z M20,18h-4v-4h4V18z M20,12h-4V8h4V12z"
                                  scaleX="0.8" scaleY="0.8"/>
                     </StackPane>
-                    <Label text="TIC-TAC-TOE" styleClass="logo-text">
+                    <Label text="TIC-TAC-TOE" styleClass="logo-text" fx:id="logoText">
                         <font>
                             <Font name="System Bold" size="18"/>
                         </font>
@@ -40,7 +40,7 @@
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <Button styleClass="icon-button" prefWidth="40" prefHeight="40" onAction="#handleSettings">
+                <Button styleClass="icon-button" prefWidth="40" prefHeight="40" onAction="#handleSettings" fx:id="settingsButton">
                     <graphic>
                         <SVGPath content="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"
                                  scaleX="0.9" scaleY="0.9"/>
@@ -56,12 +56,12 @@
                 </padding>
 
                 <VBox alignment="CENTER" spacing="8">
-                    <Label text="Select Mode" styleClass="title">
+                    <Label text="Select Mode" styleClass="title" fx:id="titleLabel">
                         <font>
                             <Font name="System Bold" size="48"/>
                         </font>
                     </Label>
-                    <Label text="Choose your opponent to begin the game" styleClass="subtitle">
+                    <Label text="Choose your opponent to begin the game" styleClass="subtitle" fx:id="subtitleLabel">
                         <font>
                             <Font size="16"/>
                         </font>
@@ -91,12 +91,12 @@
                                 </padding>
 
                                 <VBox spacing="4">
-                                    <Label text="Player vs Player" styleClass="card-title">
+                                    <Label text="Player vs Player" styleClass="card-title" fx:id="pvpCardTitle">
                                         <font>
                                             <Font name="System Bold" size="28"/>
                                         </font>
                                     </Label>
-                                    <Label text="Local match on the same device" styleClass="card-description">
+                                    <Label text="Local match on the same device" styleClass="card-description" fx:id="pvpCardDesc">
                                         <font>
                                             <Font size="14"/>
                                         </font>
@@ -107,14 +107,14 @@
                                     <padding>
                                         <Insets top="16" bottom="0"/>
                                     </padding>
-                                    <Label text="OFFLINE" styleClass="card-badge">
+                                    <Label text="OFFLINE" styleClass="card-badge" fx:id="pvpCardBadge">
                                         <font>
                                             <Font name="System Bold" size="11"/>
                                         </font>
                                     </Label>
                                     <Region HBox.hgrow="ALWAYS"/>
                                     <HBox alignment="CENTER_RIGHT" spacing="4" styleClass="card-action">
-                                        <Label text="Start Game" styleClass="action-text">
+                                        <Label text="Start Game" styleClass="action-text" fx:id="pvpActionText">
                                             <font>
                                                 <Font name="System Bold" size="13"/>
                                             </font>
@@ -148,12 +148,12 @@
                                 </padding>
 
                                 <VBox spacing="4">
-                                    <Label text="Player vs CPU" styleClass="card-title">
+                                    <Label text="Player vs CPU" styleClass="card-title" fx:id="pveCardTitle">
                                         <font>
                                             <Font name="System Bold" size="28"/>
                                         </font>
                                     </Label>
-                                    <Label text="Challenge the artificial intelligence" styleClass="card-description">
+                                    <Label text="Challenge the artificial intelligence" styleClass="card-description" fx:id="pveCardDesc">
                                         <font>
                                             <Font size="14"/>
                                         </font>
@@ -164,14 +164,14 @@
                                     <padding>
                                         <Insets top="16" bottom="0"/>
                                     </padding>
-                                    <Label text="SINGLE PLAYER" styleClass="card-badge">
+                                    <Label text="SINGLE PLAYER" styleClass="card-badge" fx:id="pveCardBadge">
                                         <font>
                                             <Font name="System Bold" size="11"/>
                                         </font>
                                     </Label>
                                     <Region HBox.hgrow="ALWAYS"/>
                                     <HBox alignment="CENTER_RIGHT" spacing="4" styleClass="card-action">
-                                        <Label text="Start Game" styleClass="action-text">
+                                        <Label text="Start Game" styleClass="action-text" fx:id="pveActionText">
                                             <font>
                                                 <Font name="System Bold" size="13"/>
                                             </font>
@@ -187,12 +187,12 @@
                 </HBox>
 
                 <HBox alignment="CENTER" spacing="8" styleClass="back-button-container">
-                    <Button styleClass="back-button" mnemonicParsing="false" onAction="#handleBackToMainMenu">
+                    <Button styleClass="back-button" mnemonicParsing="false" onAction="#handleBackToMainMenu" fx:id="backButton">
                         <graphic>
                             <HBox alignment="CENTER" spacing="8">
                                 <SVGPath content="M20,11H7.83l5.59-5.59L12,4l-8,8l8,8l1.41-1.41L7.83,13H20V11z"
                                          scaleX="0.8" scaleY="0.8"/>
-                                <Label text="Back to Main Menu" styleClass="back-text">
+                                <Label text="Back to Main Menu" styleClass="back-text" fx:id="backButtonText">
                                     <font>
                                         <Font name="System Bold" size="13"/>
                                     </font>

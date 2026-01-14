@@ -16,11 +16,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.SVGPath;
 
 /**
  * FXML Controller class
@@ -43,9 +47,54 @@ public class Pvp_setupController implements Initializable {
     private Button startGameBtn;
     @FXML
     private Button backBtn;
+    @FXML
+    private HBox topBar;
+    @FXML
+    private Label logoLabel;
+    @FXML
+    private HBox navLinks;
+    @FXML
+    private VBox titleContainer;
+    @FXML
+    private SVGPath pvpIcon;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Label subtitleLabel;
+    @FXML
+    private VBox setupCard;
+    @FXML
+    private Label player1Label;
+    @FXML
+    private Label player1Badge;
+    @FXML
+    private HBox player1Container;
+    @FXML
+    private StackPane vsSeparator;
+    @FXML
+    private Label vsLabel;
+    @FXML
+    private Label player2Label;
+    @FXML
+    private Label player2Badge;
+    @FXML
+    private HBox player2Container;
+    @FXML
+    private Label starterLabel;
+    @FXML
+    private HBox starterToggleContainer;
+    @FXML
+    private ToggleButton player1StarterBtn;
+    @FXML
+    private ToggleButton player2StarterBtn;
+
+    private ResourceBundle langBundle;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.langBundle = rb;
+        updateTexts();
+
         backgroundPane.getChildren().clear();
 
         Platform.runLater(() -> {
@@ -83,5 +132,32 @@ public class Pvp_setupController implements Initializable {
         );
 
         NavigationManager.navigate(Screens.GAME, NavigationAction.REPLACE, params);
+    }
+
+    private void updateTexts() {
+        if (langBundle == null) {
+            return;
+        }
+
+        logoLabel.setText(langBundle.getString("pvp.logo"));
+        titleLabel.setText(langBundle.getString("pvp.title"));
+        subtitleLabel.setText(langBundle.getString("pvp.subtitle"));
+
+        player1Label.setText(langBundle.getString("pvp.player1.label"));
+        player1Badge.setText(langBundle.getString("pvp.player1.badge"));
+        player1Field.setPromptText(langBundle.getString("pvp.player1.prompt"));
+
+        player2Label.setText(langBundle.getString("pvp.player2.label"));
+        player2Badge.setText(langBundle.getString("pvp.player2.badge"));
+        player2Field.setPromptText(langBundle.getString("pvp.player2.prompt"));
+
+        vsLabel.setText(langBundle.getString("pvp.vs"));
+
+        starterLabel.setText(langBundle.getString("pvp.starter.label"));
+        player1StarterBtn.setText(langBundle.getString("pvp.starter.player1"));
+        player2StarterBtn.setText(langBundle.getString("pvp.starter.player2"));
+
+        startGameBtn.setText(langBundle.getString("pvp.start"));
+        backBtn.setText(langBundle.getString("pvp.back"));
     }
 }
