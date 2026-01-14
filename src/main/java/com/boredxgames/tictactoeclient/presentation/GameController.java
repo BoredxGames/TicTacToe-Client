@@ -16,7 +16,7 @@ import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVEAIService;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVPService;
 import com.boredxgames.tictactoeclient.domain.services.game.OnlinePVPService;
-import com.boredxgames.tictactoeclient.domain.services.storage.GameRecordingService;
+import com.boredxgames.tictactoeclient.domain.services.GameRecordingService;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
