@@ -67,6 +67,8 @@ public class OnlinGameSession {
     }
 
     public void sendGameResponse(GameRequestInfo originalRequest, boolean accepted) {
+                        setWaiting(false);
+
         AuthResponseEntity me = connection.getPlayer();
 
         GameResponseInfo responseInfo = new GameResponseInfo(

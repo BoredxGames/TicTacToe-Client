@@ -6,23 +6,20 @@ import com.boredxgames.tictactoeclient.domain.managers.navigation.NavigationPara
 import com.boredxgames.tictactoeclient.domain.managers.navigation.Screens;
 import com.boredxgames.tictactoeclient.domain.model.GameMode;
 import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
-
+import com.boredxgames.tictactoeclient.domain.model.GameRecord;
 import com.boredxgames.tictactoeclient.domain.model.GameState;
 import com.boredxgames.tictactoeclient.domain.model.Move;
+import com.boredxgames.tictactoeclient.domain.model.OnlineGameState;
 import com.boredxgames.tictactoeclient.domain.services.GameService;
+import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
 import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVEAIService;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVPService;
 import com.boredxgames.tictactoeclient.domain.services.game.OnlinePVPService;
-import com.boredxgames.tictactoeclient.domain.model.GameRecord;
-import com.boredxgames.tictactoeclient.domain.model.OnlineGameState;
-import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
 import com.boredxgames.tictactoeclient.domain.services.storage.GameRecordingService;
-
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -47,33 +44,56 @@ public class GameController implements Initializable, NavigationParameterAware {
 
     public GridPane gameGrid;
 
-    @FXML private Button backButton;
-    @FXML private Button settingsButton;
-    @FXML private HBox difficultyBadge;
-    @FXML private Label difficultyLabel;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button settingsButton;
+    @FXML
+    private HBox difficultyBadge;
+    @FXML
+    private Label difficultyLabel;
 
-    @FXML private VBox playerCard;
-    @FXML private VBox opponentCard;
-    @FXML private Label playerNameLabel;
-    @FXML private Label opponentNameLabel;
-    @FXML private Label playerScoreLabel;
-    @FXML private Label opponentScoreLabel;
-    @FXML private Label opponentTypeLabel;
+    @FXML
+    private VBox playerCard;
+    @FXML
+    private VBox opponentCard;
+    @FXML
+    private Label playerNameLabel;
+    @FXML
+    private Label opponentNameLabel;
+    @FXML
+    private Label playerScoreLabel;
+    @FXML
+    private Label opponentScoreLabel;
+    @FXML
+    private Label opponentTypeLabel;
 
-    @FXML private Button cell00, cell01, cell02;
-    @FXML private Button cell10, cell11, cell12;
-    @FXML private Button cell20, cell21, cell22;
+    @FXML
+    private Button cell00, cell01, cell02;
+    @FXML
+    private Button cell10, cell11, cell12;
+    @FXML
+    private Button cell20, cell21, cell22;
     private Button[][] cells;
 
-    @FXML private StackPane modalOverlay;
-    @FXML private Text modalIcon;
-    @FXML private Label modalTitle;
-    @FXML private Label modalMessage;
-    @FXML private MediaView victoryVideo;
-    @FXML private Button playAgainButton;
-    @FXML private Button changeDifficultyButton;
-    @FXML private Button mainMenuButton;
-    @FXML private Button saveGameButton;
+    @FXML
+    private StackPane modalOverlay;
+    @FXML
+    private Text modalIcon;
+    @FXML
+    private Label modalTitle;
+    @FXML
+    private Label modalMessage;
+    @FXML
+    private MediaView victoryVideo;
+    @FXML
+    private Button playAgainButton;
+    @FXML
+    private Button changeDifficultyButton;
+    @FXML
+    private Button mainMenuButton;
+    @FXML
+    private Button saveGameButton;
 
     private GameBoard gameBoard;
     private GameMode gameMode;
@@ -93,9 +113,9 @@ public class GameController implements Initializable, NavigationParameterAware {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cells = new Button[][]{
-                {cell00, cell01, cell02},
-                {cell10, cell11, cell12},
-                {cell20, cell21, cell22}
+            {cell00, cell01, cell02},
+            {cell10, cell11, cell12},
+            {cell20, cell21, cell22}
         };
         gameBoard = new GameBoard();
         setupCellHandlers();
@@ -230,13 +250,12 @@ public class GameController implements Initializable, NavigationParameterAware {
         playAgainButton.setOnAction(e -> resetGame());
 
         mainMenuButton.setOnAction(e -> {
-            if(gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
+            if (gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
                 NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
             } else {
                 NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE_ALL);
             }
-         });
-
+        });
 
         backButton.setOnAction(e -> {
             if (gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
@@ -274,17 +293,24 @@ public class GameController implements Initializable, NavigationParameterAware {
     }
 
     private void handleCellClick(int row, int col) {
-        if (!gameBoard.isValidMove(row, col)) return;
-        if (gameMode == GameMode.REPLAY) return;
+        if (!gameBoard.isValidMove(row, col)) {
+            return;
+        }
+        if (gameMode == GameMode.REPLAY) {
+            return;
+        }
 
         if (gameMode == GameMode.ONLINE_PVP && gameBoard.getCurrentPlayer() != localPlayerId) {
             return;
         }
 
         switch (gameMode) {
-            case OFFLINE_PVP -> handleOfflinePvp(row, col);
-            case OFFLINE_PVE -> handleOfflinePve(row, col);
-            case ONLINE_PVP -> handleOnlinePvp(row, col);
+            case OFFLINE_PVP ->
+                handleOfflinePvp(row, col);
+            case OFFLINE_PVE ->
+                handleOfflinePve(row, col);
+            case ONLINE_PVP ->
+                handleOnlinePvp(row, col);
         }
     }
 
@@ -346,7 +372,8 @@ public class GameController implements Initializable, NavigationParameterAware {
 
         if (!checkGameEnd()) {
 
-            updateTurnIndicator();enableBoard();
+            updateTurnIndicator();
+            enableBoard();
         }
     }
 
@@ -377,24 +404,24 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void updateTurnIndicator() {
         char currentPlayer = gameBoard.getCurrentPlayer();
 
-    switch (gameMode) {
+        switch (gameMode) {
 
-        case ONLINE_PVP -> {
-            if (currentPlayer == localPlayerId) {
-                setActiveCard(playerCard, opponentCard);
-            } else {
-                setActiveCard(opponentCard, playerCard);
+            case ONLINE_PVP -> {
+                if (currentPlayer == localPlayerId) {
+                    setActiveCard(playerCard, opponentCard);
+                } else {
+                    setActiveCard(opponentCard, playerCard);
+                }
+            }
+
+            case OFFLINE_PVP, OFFLINE_PVE, REPLAY -> {
+                if (currentPlayer == GameBoard.PLAYER_X) {
+                    setActiveCard(playerCard, opponentCard);
+                } else {
+                    setActiveCard(opponentCard, playerCard);
+                }
             }
         }
-
-        case OFFLINE_PVP, OFFLINE_PVE, REPLAY -> {
-            if (currentPlayer == GameBoard.PLAYER_X) {
-                setActiveCard(playerCard, opponentCard);
-            } else {
-                setActiveCard(opponentCard, playerCard);
-            }
-        }
-    }
     }
 
     private void setActiveCard(VBox activeCard, VBox inactiveCard) {
@@ -415,8 +442,11 @@ public class GameController implements Initializable, NavigationParameterAware {
         }
 
         char winnerChar = GameBoard.EMPTY;
-        if (state == GameState.X_WINS) winnerChar = GameBoard.PLAYER_X;
-        else if (state == GameState.O_WINS) winnerChar = GameBoard.PLAYER_O;
+        if (state == GameState.X_WINS) {
+            winnerChar = GameBoard.PLAYER_X;
+        } else if (state == GameState.O_WINS) {
+            winnerChar = GameBoard.PLAYER_O;
+        }
 
         if (gameMode != GameMode.REPLAY) {
             if (winnerChar == GameBoard.PLAYER_X) {
@@ -431,7 +461,13 @@ public class GameController implements Initializable, NavigationParameterAware {
         String videoToPlay = "draw";
 
         if (state == GameState.DRAW) {
-            videoToPlay = "draw";
+            {
+                videoToPlay = "draw";
+                if (gameMode == GameMode.ONLINE_PVP) {
+                    OnlinePVPService.getInstance().sendGameEnd(null);
+                }
+            }
+
         } else if (gameMode == GameMode.ONLINE_PVP) {
             boolean amIWinner = (winnerChar == localPlayerId);
             videoToPlay = amIWinner ? "victory" : "defeat";
@@ -441,17 +477,20 @@ public class GameController implements Initializable, NavigationParameterAware {
                 winnerId = OnlineGameState.info.getPlayer1();
             } else if (state == GameState.O_WINS) {
                 winnerId = OnlineGameState.info.getPlayer2();
+            } else {
+                winnerId = null;
             }
+            System.out.println("sending sendgin " + winnerId);
             OnlinePVPService.getInstance().sendGameEnd(winnerId);
         } else {
             videoToPlay = (winnerChar == GameBoard.PLAYER_X) ? "victory" : "defeat";
         }
 
         playVictoryVideo(videoToPlay);
-
-        PauseTransition pause = new PauseTransition(Duration.millis(800));
-        pause.setOnFinished(e -> showGameOverModal(state));
-        pause.play();
+        showGameOverModal(state);
+//        PauseTransition pause = new PauseTransition(Duration.millis(800));
+//        pause.setOnFinished(e -> showGameOverModal(state));
+//        pause.play();
     }
 
     private void showGameOverModal(GameState state) {
@@ -572,7 +611,9 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void disableBoard() {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                if (gameBoard.getCellValue(row, col) == GameBoard.EMPTY) cells[row][col].setDisable(true);
+                if (gameBoard.getCellValue(row, col) == GameBoard.EMPTY) {
+                    cells[row][col].setDisable(true);
+                }
             }
         }
     }
@@ -580,7 +621,9 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void enableBoard() {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                if (gameBoard.getCellValue(row, col) == GameBoard.EMPTY) cells[row][col].setDisable(false);
+                if (gameBoard.getCellValue(row, col) == GameBoard.EMPTY) {
+                    cells[row][col].setDisable(false);
+                }
             }
         }
     }
