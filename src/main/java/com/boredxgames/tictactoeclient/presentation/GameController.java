@@ -9,7 +9,6 @@ import com.boredxgames.tictactoeclient.domain.model.GameNavigationParams;
 
 import com.boredxgames.tictactoeclient.domain.model.GameState;
 import com.boredxgames.tictactoeclient.domain.model.Move;
-import com.boredxgames.tictactoeclient.domain.services.AIService;
 import com.boredxgames.tictactoeclient.domain.services.GameService;
 import com.boredxgames.tictactoeclient.domain.services.game.GameBoard;
 import com.boredxgames.tictactoeclient.domain.services.game.OfflinePVEAIService;
@@ -19,11 +18,12 @@ import com.boredxgames.tictactoeclient.domain.model.GameRecord;
 import com.boredxgames.tictactoeclient.domain.model.OnlineGameState;
 import com.boredxgames.tictactoeclient.domain.services.communication.MessageRouter;
 import com.boredxgames.tictactoeclient.domain.services.storage.GameRecordingService;
+
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import javafx.animation.KeyFrame;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -88,9 +88,10 @@ public class GameController implements Initializable, NavigationParameterAware {
     private final GameRecordingService recordingService = new GameRecordingService();
     private GameRecord replayData;
 
+    private MediaPlayer currentMediaPlayer;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         cells = new Button[][]{
                 {cell00, cell01, cell02},
                 {cell10, cell11, cell12},
@@ -101,24 +102,25 @@ public class GameController implements Initializable, NavigationParameterAware {
         setupButtonHandlers();
         MessageRouter.setGameController(this);
     }
+
     public void showErrorAlert(String message) {
         Platform.runLater(() -> {
-            modalIcon.setText("error"); 
+            modalIcon.setText("error");
             modalTitle.setText("Connection Error");
             modalMessage.setText(message);
 
             playAgainButton.setVisible(false);
             playAgainButton.setManaged(false);
-            
+
             if (saveGameButton != null) {
                 saveGameButton.setVisible(false);
                 saveGameButton.setManaged(false);
             }
-            
+
             mainMenuButton.setVisible(true);
             mainMenuButton.setManaged(true);
             modalOverlay.setVisible(true);
-                        disableBoard();
+            disableBoard();
         });
     }
 
@@ -152,11 +154,9 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void applyGameModeSettings() {
         switch (gameMode) {
             case OFFLINE_PVP -> {
-                opponentTypeLabel.setText("PLAYER 2");
+                opponentTypeLabel.setText(player2Name);
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
-                changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);
 
                 gameService = new OfflinePVPService();
             }
@@ -164,17 +164,15 @@ public class GameController implements Initializable, NavigationParameterAware {
                 opponentTypeLabel.setText("CPU (O)");
                 difficultyBadge.setVisible(true);
                 difficultyBadge.setManaged(true);
-                changeDifficultyButton.setVisible(true);
-                changeDifficultyButton.setManaged(true);
 
                 gameService = new OfflinePVEAIService();
             }
             case ONLINE_PVP -> {
-                opponentTypeLabel.setText("ONLINE PLAYER");
+                opponentTypeLabel.setText(player2Name);
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
-                changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);
+                backButton.setVisible(false);
+                backButton.setManaged(false);
 
                 boolean amIPlayer1 = OnlinePVPService.getInstance().shouldPlayFirst();
                 localPlayerId = amIPlayer1 ? GameBoard.PLAYER_X : GameBoard.PLAYER_O;
@@ -209,8 +207,6 @@ public class GameController implements Initializable, NavigationParameterAware {
                 opponentTypeLabel.setText("REPLAY");
                 difficultyBadge.setVisible(false);
                 difficultyBadge.setManaged(false);
-                changeDifficultyButton.setVisible(false);
-                changeDifficultyButton.setManaged(false);
                 if (saveGameButton != null) {
                     saveGameButton.setVisible(false);
                     saveGameButton.setManaged(false);
@@ -234,17 +230,22 @@ public class GameController implements Initializable, NavigationParameterAware {
         playAgainButton.setOnAction(e -> resetGame());
 
         mainMenuButton.setOnAction(e -> {
-            NavigationManager.navigate(Screens.PRIMARY, NavigationAction.REPLACE_ALL);
-        });
+            if(gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
+                NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
+            } else {
+                NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE_ALL);
+            }
+         });
+
 
         backButton.setOnAction(e -> {
-            NavigationManager.pop();
+            if (gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.OFFLINE_PVP) {
+                NavigationManager.navigate(Screens.GAME_MODE, NavigationAction.REPLACE_ALL);
+            }
         });
 
-        backButton.setOnAction(e -> NavigationManager.pop());
         settingsButton.setOnAction(e -> NavigationManager.navigate(Screens.SETTINGS, NavigationAction.REPLACE_ALL));
-        changeDifficultyButton.setOnAction(e -> {});
-        
+
         if (saveGameButton != null) {
             saveGameButton.setOnAction(e -> handleSaveGame());
         }
@@ -254,17 +255,17 @@ public class GameController implements Initializable, NavigationParameterAware {
         String p1 = player1Name.replaceAll("[^a-zA-Z0-9]", "");
         String p2 = player2Name.replaceAll("[^a-zA-Z0-9]", "");
         long timestamp = System.currentTimeMillis();
-        
+
         String filename = String.format("REC_%s_vs_%s_%d", p1, p2, timestamp);
 
         try {
             recordingService.saveGame(
-                gameBoard, 
-                player1Name, 
-                player2Name, 
-                filename
+                    gameBoard,
+                    player1Name,
+                    player2Name,
+                    filename
             );
-            
+
             saveGameButton.setText("Saved!");
             saveGameButton.setDisable(true);
         } catch (Exception ex) {
@@ -325,7 +326,7 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void performMove(int row, int col, char player) {
         gameBoard.makeMove(row, col, player);
         updateCell(row, col, player);
-        
+
     }
 
     private void scheduleAiTurn() {
@@ -336,21 +337,18 @@ public class GameController implements Initializable, NavigationParameterAware {
         pause.play();
     }
 
-  private void executeAiMove() {
-    Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
+    private void executeAiMove() {
+        Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
 
-    if (aiMove != null) {
-        performMove(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
+        if (aiMove != null) {
+            performMove(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
+        }
+
+        if (!checkGameEnd()) {
+
+            updateTurnIndicator();enableBoard();
+        }
     }
-
-    if (!checkGameEnd()) {
-        updateTurnIndicator();
-        enableBoard();
-    }
-}
-
-
-
 
     private boolean checkGameEnd() {
         GameState state = gameBoard.getGameState();
@@ -404,8 +402,6 @@ public class GameController implements Initializable, NavigationParameterAware {
         inactiveCard.getStyleClass().remove("active-card");
     }
 
- // In GameController.java, update handleGameEnd:
-
     private void handleGameEnd() {
         GameState state = gameBoard.getGameState();
 
@@ -417,57 +413,53 @@ public class GameController implements Initializable, NavigationParameterAware {
                 cells[row][col].getStyleClass().add("cell-winning");
             }
         }
+
         char winnerChar = GameBoard.EMPTY;
         if (state == GameState.X_WINS) winnerChar = GameBoard.PLAYER_X;
         else if (state == GameState.O_WINS) winnerChar = GameBoard.PLAYER_O;
 
-        if (winnerChar == GameBoard.PLAYER_X) {
-            if (gameMode != GameMode.REPLAY) {
+        if (gameMode != GameMode.REPLAY) {
+            if (winnerChar == GameBoard.PLAYER_X) {
                 playerScore++;
                 playerScoreLabel.setText(String.valueOf(playerScore));
-            }
-        } else if (winnerChar == GameBoard.PLAYER_O) {
-            if (gameMode != GameMode.REPLAY) {
+            } else if (winnerChar == GameBoard.PLAYER_O) {
                 opponentScore++;
                 opponentScoreLabel.setText(String.valueOf(opponentScore));
             }
         }
 
-        if (gameMode == GameMode.ONLINE_PVP) {
-             
-            
+        String videoToPlay = "draw";
+
+        if (state == GameState.DRAW) {
+            videoToPlay = "draw";
+        } else if (gameMode == GameMode.ONLINE_PVP) {
+            boolean amIWinner = (winnerChar == localPlayerId);
+            videoToPlay = amIWinner ? "victory" : "defeat";
+
             String winnerId = "DRAW";
             if (state == GameState.X_WINS) {
-                // Player 1 is always X
                 winnerId = OnlineGameState.info.getPlayer1();
             } else if (state == GameState.O_WINS) {
                 winnerId = OnlineGameState.info.getPlayer2();
             }
-            
             OnlinePVPService.getInstance().sendGameEnd(winnerId);
-            
-            // Play video check (Keep existing logic)
-            boolean amIWinner = (winnerChar == localPlayerId);
-            if (amIWinner) playVictoryVideo();
-            
         } else {
-            // Offline Video Logic (Keep existing logic)
-            if (winnerChar == GameBoard.PLAYER_X) playVictoryVideo();
+            videoToPlay = (winnerChar == GameBoard.PLAYER_X) ? "victory" : "defeat";
         }
 
-        // 4. Show Modal (Keep existing code)
+        playVictoryVideo(videoToPlay);
+
         PauseTransition pause = new PauseTransition(Duration.millis(800));
         pause.setOnFinished(e -> showGameOverModal(state));
         pause.play();
     }
 
-   private void showGameOverModal(GameState state) {
+    private void showGameOverModal(GameState state) {
         String title = "";
         String message = "";
         String icon = "";
 
         if (state == GameState.DRAW) {
-            icon = "handshake";
             title = "Draw!";
             message = "It's a tie! Both players played well.";
         } else {
@@ -475,24 +467,19 @@ public class GameController implements Initializable, NavigationParameterAware {
 
             if (gameMode == GameMode.ONLINE_PVP) {
                 if (winner == localPlayerId) {
-                    icon = "emoji_events";
                     title = "Victory!";
                     message = "You won the match!";
                 } else {
-                    icon = "sentiment_dissatisfied";
                     title = "Defeat!";
                     message = "Better luck next time.";
                 }
-            } 
-            else {
+            } else {
                 if (winner == GameBoard.PLAYER_X) {
-                    icon = "emoji_events";
                     title = "Victory!";
-                    message = (gameMode == GameMode.OFFLINE_PVE) 
-                            ? "The CPU didn't stand a chance." 
+                    message = (gameMode == GameMode.OFFLINE_PVE)
+                            ? "The CPU didn't stand a chance."
                             : "Player 1 wins!";
                 } else {
-                    icon = "sentiment_dissatisfied";
                     title = (gameMode == GameMode.OFFLINE_PVE) ? "Defeat!" : "Player 2 Wins!";
                     message = (gameMode == GameMode.OFFLINE_PVE)
                             ? "The CPU outsmarted you."
@@ -513,7 +500,7 @@ public class GameController implements Initializable, NavigationParameterAware {
             saveGameButton.setManaged(canSave);
         }
 
-        if (gameMode == GameMode.REPLAY) {
+        if (gameMode == GameMode.REPLAY || gameMode == GameMode.ONLINE_PVP) {
             playAgainButton.setVisible(false);
             playAgainButton.setManaged(false);
         } else {
@@ -524,17 +511,28 @@ public class GameController implements Initializable, NavigationParameterAware {
         modalOverlay.setVisible(true);
     }
 
-    private void playVictoryVideo() {
+    private void playVictoryVideo(String videoName) {
         try {
-            String videoPath = Objects.requireNonNull(getClass().getResource("/assets/videos/you_win.mp4")).toExternalForm();
+            String videoPath = Objects.requireNonNull(
+                    getClass().getResource("/assets/videos/" + videoName + ".mp4")
+            ).toExternalForm();
+
+            if (currentMediaPlayer != null) {
+                currentMediaPlayer.stop();
+                currentMediaPlayer.dispose();
+            }
+
             Media media = new Media(videoPath);
-            MediaPlayer player = new MediaPlayer(media);
-            victoryVideo.setMediaPlayer(player);
+            currentMediaPlayer = new MediaPlayer(media);
+
+            victoryVideo.setMediaPlayer(currentMediaPlayer);
+            currentMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            currentMediaPlayer.setAutoPlay(true);
             victoryVideo.setVisible(true);
-            player.setAutoPlay(true);
-            player.setOnEndOfMedia(() -> victoryVideo.setVisible(false));
+
         } catch (Exception e) {
-            System.out.println("Error getting the video: " + e);
+            System.out.println("Video error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -548,6 +546,15 @@ public class GameController implements Initializable, NavigationParameterAware {
             }
         }
         modalOverlay.setVisible(false);
+
+        if (currentMediaPlayer != null) {
+            currentMediaPlayer.stop();
+            currentMediaPlayer.dispose();
+            currentMediaPlayer = null;
+        }
+
+        victoryVideo.setVisible(false);
+        victoryVideo.setMediaPlayer(null);
 
         updateTurnIndicator();
 

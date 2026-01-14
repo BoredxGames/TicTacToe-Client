@@ -93,7 +93,6 @@ public class OnlinePVPService implements GameService {
         );
         
         connectionManager.sendMessage(msg);
-             NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE);
     }
     @Override
     public void makeMove(Move move, char currentPlayer, GameBoard board) {

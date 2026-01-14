@@ -10,6 +10,7 @@ import com.boredxgames.tictactoeclient.domain.services.game.OnlinGameSession;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,37 +24,44 @@ import javafx.scene.layout.StackPane;
 
 public class HomeController implements Initializable {
 
-    @FXML private StackPane rootStack; 
-    @FXML private BorderPane mainContent;
-    @FXML private Pane backgroundPane; 
-    @FXML private Label usernameLabel; 
-    @FXML private Label scoreLabel;    
-    @FXML private PlayersController playersViewController; 
-@FXML private LeaderboardController leaderboardViewController; 
+    @FXML
+    private StackPane rootStack;
+    @FXML
+    private BorderPane mainContent;
+    @FXML
+    private Pane backgroundPane;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label scoreLabel;
+    @FXML
+    private PlayersController playersViewController;
+    @FXML
+    private LeaderboardController leaderboardViewController;
     private Alert currentIncomingRequestAlert;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
+
         MessageRouter.setHomeController(this);
 
         AuthResponseEntity currentUser = ServerConnectionManager.getInstance().getPlayer();
         if (currentUser != null) {
-            if(usernameLabel != null) usernameLabel.setText(currentUser.getUserName());
-            if(scoreLabel != null) scoreLabel.setText("Score: " + currentUser.getScore());
+            if (usernameLabel != null) usernameLabel.setText(currentUser.getUserName());
+            if (scoreLabel != null) scoreLabel.setText("Score: " + currentUser.getScore());
         }
 
-      
-         OnlinGameSession.getInstance().requestLeaderboard();
-                OnlinGameSession.getInstance().requestAvailablePlayers();
+
+        OnlinGameSession.getInstance().requestLeaderboard();
+        OnlinGameSession.getInstance().requestAvailablePlayers();
 
 
     }
 
- public void updatePlayersList(AvailablePlayersInfo info) {
+    public void updatePlayersList(AvailablePlayersInfo info) {
         if (playersViewController != null) {
-        playersViewController.updateList(info);
-    }
+            playersViewController.updateList(info);
+        }
     }
 
     public void handleServerGameResponse(GameResponseInfo info) {
@@ -66,9 +74,9 @@ public class HomeController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Challenge Declined");
                 alert.setHeaderText(null);
-                alert.setContentText("Player " + info.getResponderUserName()+ " declined your challenge.");
+                alert.setContentText("Player " + info.getResponderUserName() + " declined your challenge.");
                 alert.showAndWait();
-                
+
                 OnlinGameSession.getInstance().requestAvailablePlayers();
             });
         }
@@ -83,13 +91,13 @@ public class HomeController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Incoming Challenge");
             alert.setHeaderText("Game Request");
-            alert.setContentText(info.getRequesterUserName()+ " wants to play Tic-Tac-Toe!");
+            alert.setContentText(info.getRequesterUserName() + " wants to play Tic-Tac-Toe!");
 
             ButtonType acceptBtn = new ButtonType("Accept");
             ButtonType declineBtn = new ButtonType("Decline");
             alert.getButtonTypes().setAll(acceptBtn, declineBtn);
-            
-            this.currentIncomingRequestAlert = alert; 
+
+            this.currentIncomingRequestAlert = alert;
 
             alert.showAndWait().ifPresent(type -> {
                 this.currentIncomingRequestAlert = null;
@@ -99,7 +107,7 @@ public class HomeController implements Initializable {
         });
     }
 
-   
+
     public void dismissIncomingRequest() {
         Platform.runLater(() -> {
             if (currentIncomingRequestAlert != null && currentIncomingRequestAlert.isShowing()) {
@@ -117,24 +125,27 @@ public class HomeController implements Initializable {
             alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText(message);
-            alert.showAndWait();
-            
+            alert.showAndWait().ifPresent(type -> {
+                NavigationManager.navigate(Screens.Home, NavigationAction.REPLACE_ALL);
+            });
+
             OnlinGameSession.getInstance().requestAvailablePlayers();
         });
     }
-    
+
     @FXML
     private void onSignOut() {
         ServerConnectionManager.getInstance().disconnect();
-        ServerConnectionManager.getInstance().setPlayer(null); 
+        ServerConnectionManager.getInstance().setPlayer(null);
         NavigationManager.navigate(Screens.SERVER_CONNECTION, NavigationAction.REPLACE);
     }
-    
+
     public void updateLeaderboardUI(AvailablePlayersInfo info) {
-    if (leaderboardViewController != null) {
-        leaderboardViewController.updateLeaderboard(info);
+        if (leaderboardViewController != null) {
+            leaderboardViewController.updateLeaderboard(info);
+        }
     }
-}
+
     @FXML
     private void openSettings(ActionEvent event) {
         System.out.println("Settings Button Clicked");
