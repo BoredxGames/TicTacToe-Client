@@ -303,7 +303,7 @@ public class GameController implements Initializable, NavigationParameterAware {
         if (checkGameEnd()) {
             return;
         }
-
+        updateTurnIndicator();
         scheduleAiTurn();
     }
 
@@ -325,6 +325,7 @@ public class GameController implements Initializable, NavigationParameterAware {
     private void performMove(int row, int col, char player) {
         gameBoard.makeMove(row, col, player);
         updateCell(row, col, player);
+        
     }
 
     private void scheduleAiTurn() {
@@ -339,13 +340,12 @@ public class GameController implements Initializable, NavigationParameterAware {
     Move aiMove = gameService.getNextMove(gameBoard, GameBoard.PLAYER_O);
 
     if (aiMove != null) {
-        
         performMove(aiMove.getRow(), aiMove.getCol(), GameBoard.PLAYER_O);
     }
 
     if (!checkGameEnd()) {
-        enableBoard();
         updateTurnIndicator();
+        enableBoard();
     }
 }
 
@@ -378,20 +378,25 @@ public class GameController implements Initializable, NavigationParameterAware {
 
     private void updateTurnIndicator() {
         char currentPlayer = gameBoard.getCurrentPlayer();
-  
-      if (currentPlayer == GameBoard.PLAYER_X) {
-            setActiveCard(playerCard, opponentCard);
-        } 
-      else {
-            setActiveCard(opponentCard, playerCard);
-      }
-        if (gameMode == GameMode.OFFLINE_PVP || gameMode == GameMode.OFFLINE_PVE || gameMode == GameMode.REPLAY) {
-            if (localPlayerId == GameBoard.PLAYER_X) {
+
+    switch (gameMode) {
+
+        case ONLINE_PVP -> {
+            if (currentPlayer == localPlayerId) {
                 setActiveCard(playerCard, opponentCard);
             } else {
                 setActiveCard(opponentCard, playerCard);
             }
         }
+
+        case OFFLINE_PVP, OFFLINE_PVE, REPLAY -> {
+            if (currentPlayer == GameBoard.PLAYER_X) {
+                setActiveCard(playerCard, opponentCard);
+            } else {
+                setActiveCard(opponentCard, playerCard);
+            }
+        }
+    }
     }
 
     private void setActiveCard(VBox activeCard, VBox inactiveCard) {

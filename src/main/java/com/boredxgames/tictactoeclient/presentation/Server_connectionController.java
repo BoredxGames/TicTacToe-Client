@@ -46,7 +46,7 @@ public class Server_connectionController implements Initializable {
         });
         
         serverPresets.put("Local Server", "127.0.0.1");
-        serverPresets.put("Network Server", "192.168.1.3");
+        serverPresets.put("Network Server", "10.145.0.124");
 
         ipComboBox.getItems().addAll(serverPresets.keySet());
         ipComboBox.getSelectionModel().select("Local Server");
